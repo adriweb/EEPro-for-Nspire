@@ -11,7 +11,7 @@ Adriweb, Critor, Jim Bauwens, Levak, NeoCrisis.
 We welcome everybody, so if you want to help us, contact us by email (see down there)
 
 ## What .... ?
-This is the reference document : [Link](https://docs.google.com/document/d/1LBjZiKBB3k_bAIDWjTVRH9zTrX5DUQZ6BOXLhKveqJk).
+###Please READ (and comment if you want) this reference document : [Link](https://docs.google.com/document/d/1LBjZiKBB3k_bAIDWjTVRH9zTrX5DUQZ6BOXLhKveqJk).
 
 ![The overall organization](http://i.imgur.com/Uj6QS.png)
  
