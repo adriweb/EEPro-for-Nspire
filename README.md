@@ -7,7 +7,9 @@
 
 ## Who .... ?
 For now, here are the participants to this project :
+
 Adriweb, Critor, Jim Bauwens, Levak, NeoCrisis.
+
 We welcome everybody, so if you want to help us, contact us by email (see down there)
 
 ## What .... ?
@@ -18,9 +20,12 @@ We welcome everybody, so if you want to help us, contact us by email (see down t
 The only requirement to run the .tns files is to have an Nspire OS >= 3.0. Updates [here](http://education.ti.com).
 
 ## What do we have to do, for now ?
-First, the formula/equation manager/solver part.
+First, the formula/equation manager/solver part.  (Look at this specific part on the linked document)
+
 Please refer to the document linked in the previous paragraph.
+
 Once that's done, we can quickly do the Reference part.
+
 Then, the *big* part is the Analysis one. (See the [EEPro Manual](http://tiplanet.org/modules/archives/eepro.pdf))
 
 ## Meet us on IRC :
