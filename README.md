@@ -13,7 +13,7 @@ We welcome everybody, so if you want to help us, contact us by email (see down t
 ## What .... ?
 This is the reference document : [Link](https://docs.google.com/document/d/1LBjZiKBB3k_bAIDWjTVRH9zTrX5DUQZ6BOXLhKveqJk).
 
-[The overall organization](http://i.imgur.com/Uj6QS.png)
+![The overall organization](http://i.imgur.com/Uj6QS.png)
  
 The only requirement to run the .tns files is to have an Nspire OS >= 3.0. Updates [here](http://education.ti.com).
 
