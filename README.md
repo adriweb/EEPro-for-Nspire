@@ -8,7 +8,7 @@
 ## Who .... ?
 For now, here are the participants to this project :
 
-Adriweb, Critor, Jim Bauwens, Levak, NeoCrisis.
+Adriweb, Critor, Excale, Jim Bauwens, Levak, NeoCrisis.
 
 We welcome everybody, so if you want to help us, contact us by email (see down there)
 
