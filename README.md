@@ -1,6 +1,7 @@
 # EEPro for Nspire  *(temporary name)*.
 
 ### This is a [TI-Planet.org](http://tiplanet.org) project.
+## Announce topic here : [FR](http://tiplanet.org/forum/viewtopic.php?t=8446) / EN (coming soon)
 
 ### Licence : Creative Commons 2.0 BY-SA : [fr](http://creativecommons.org/licenses/by-sa/2.0/fr/legalcode)/[en](http://creativecommons.org/licenses/by-sa/2.0/legalcode)
 
@@ -17,7 +18,7 @@ We welcome everybody, so if you want to help us, contact us by email (see down t
 
 ![The overall organization](http://i.imgur.com/UhHn7.png)
  
-The only requirement to run the .tns files is to have an Nspire OS >= 3.0. Updates [here](http://education.ti.com).
+The only requirement to run the .tns files is to have an Nspire OS >= 3.0. You can find the latest updates [here](http://education.ti.com).
 
 ## What do we have to do, for now ?
 First, the formula/equation manager/solver part.  (Look at this specific part on the linked document)
