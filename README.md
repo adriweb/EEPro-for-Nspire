@@ -1,9 +1,9 @@
 # EEPro for Nspire  *(temporary name)*.
 
 ### This is a [TI-Planet.org](http://tiplanet.org) project.
-## Announce topic here : [FR](http://tiplanet.org/forum/viewtopic.php?t=8446) / EN (coming soon)
+### Announce topic here : [FR](http://tiplanet.org/forum/viewtopic.php?t=8446) / EN (coming soon)
 
-### Licence : Creative Commons 2.0 BY-SA : [fr](http://creativecommons.org/licenses/by-sa/2.0/fr/legalcode)/[en](http://creativecommons.org/licenses/by-sa/2.0/legalcode)
+### Licence : [LGPL](http://www.gnu.org/licenses/lgpl.html)
 
 
 ## Who .... ?
