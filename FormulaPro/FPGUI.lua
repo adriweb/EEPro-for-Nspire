@@ -1,5 +1,6 @@
---------------------------------------
-
+------------------------------------------------------------------
+--                        Screen  Class                         --
+------------------------------------------------------------------
 Screen	=	class()
 
 Screens	=	{}
@@ -166,7 +167,9 @@ end
 
 
 
-------------------------------------------------
+------------------------------------------------------------------
+--                        Widget  Class                         --
+------------------------------------------------------------------
 
 Widget	=	class()
 
@@ -198,7 +201,9 @@ function Widget:backspaceKey() end
 function Widget:tx() return self.parent.x + self.x end
 function Widget:ty() return self.parent.y + self.y end
 
-----------------------------------------
+------------------------------------------------------------------
+--                   Bindings to the on events                  --
+------------------------------------------------------------------
 
 
 function on.paint(gc)	
@@ -221,6 +226,7 @@ function on.mouseMove(x,y)	current_screen():mouseMove(x,y)	end
 
 
 ------------------------------------------------------------------
+--                        Sample Widget                         --
 ------------------------------------------------------------------
 
 
@@ -234,6 +240,7 @@ function box:paint(gc)
 end
 
 ------------------------------------------------------------------
+--                         List Widget                          --
 ------------------------------------------------------------------
 
 sList	=	class(Widget)
@@ -325,6 +332,7 @@ end
 
 
 ------------------------------------------------------------------
+--                         Input Widget                         --
 ------------------------------------------------------------------
 
 
@@ -388,46 +396,52 @@ function sInput:backspaceKey()
 	self.value	=	self.value:sub(1,-2)
 end
 
-----------------------------------------------------------
-----------------------------------------------------------
-----------------------------------------------------------
-----------------------------------------------------------
+------------------------------------------------------------------
+--                        Example usage                         --
+------------------------------------------------------------------
 
 
 
-
+--Create main screen
 main	=	Screen(0,0)
 
+--Main's paint event, draws msg to the screen
 function main:paint(gc)
 	if msg then
 		gc:drawString(msg, 0, 0, "top")
 	end
 end
 
+--Create a List widget
 llist	=	sList()
 llist.items = {"Adriweb","and","Levak","...","Lost","The","Game"}
 
+--Add an action to the list
 function llist:action(n, item)
 	msg	=	"You pressed item n." .. tostring(n) .. " with \"" .. item .. "\" as value"
 end
 
+--Create a sample widget
 box1	=	box()
 
+--Create a input that only accepts numbers
 inp1	=	sInput()
-inp1.number	=	true --limit only to numbers
+inp1.number	=	true
 inp1.value	=	"42"
 
+--Create two other inputs that accept anything
 inp2	=	sInput()
 inp2.value	=	"Hello"
 
 inp3	=	sInput()
 
 
-
+--Append all the widgets to the main screen
 main:appendWidget(llist, 40, 40)
 main:appendWidget(box1, 80, 150)
 main:appendWidget(inp1, 200, 40)
 main:appendWidget(inp2, 200, 70)
 main:appendWidget(inp3, 200, 100)
 
+--Push the main screen into the Screens table so that it will be displayed
 push_screen(main)
