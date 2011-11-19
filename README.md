@@ -1,7 +1,7 @@
 # EEPro for Nspire  *(temporary name)*.
 
 ### This is a [TI-Planet.org](http://tiplanet.org) project.
-### Announce topic here : [FR](http://tiplanet.org/forum/viewtopic.php?t=8446) / EN (coming soon)
+### Announce topic here : [FR](http://tiplanet.org/forum/viewtopic.php?t=8446) / [EN](http://tiplanet.org/forum/viewtopic.php?f=50&t=8455)
 ### Google Groups "tinspire" topic : [here](https://groups.google.com/forum/#!topic/tinspire/dYWb0poANyo).
 
 
