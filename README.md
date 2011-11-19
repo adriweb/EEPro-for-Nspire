@@ -2,6 +2,8 @@
 
 ### This is a [TI-Planet.org](http://tiplanet.org) project.
 ### Announce topic here : [FR](http://tiplanet.org/forum/viewtopic.php?t=8446) / EN (coming soon)
+### Google Groups "tinspire" topic : [here](https://groups.google.com/forum/#!topic/tinspire/dYWb0poANyo).
+
 
 ### Licence : [LGPL](http://www.gnu.org/licenses/lgpl.html)
 
