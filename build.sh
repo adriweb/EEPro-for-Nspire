@@ -20,7 +20,7 @@ cd Global\ Libraries
 cd ..
 
 
-cat lib.big.lua FormulaPro.big.lua Analysis.big.lua Reference.big.lua main.lua>EEPro.big.lua
+cat lib.big.lua FormulaPro.big.lua Analysis.big.lua Reference.big.lua main.lua > EEPro.big.lua
 luna EEPro.big.lua EEPro.tns
 
 echo "Done building"
