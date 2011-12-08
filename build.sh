@@ -2,15 +2,16 @@
 
 echo "Building EEPro"
 
-cd FormulaPro
+
+cd ..
+cd 1\ -\ Analysis\ Part
+./build.sh
+
+cd 2\ -\ FormulaPro
 ./build.sh
 
 cd ..
-cd Analysis\ Part
-./build.sh
-
-cd ..
-cd Reference\ Part
+cd 3\ -\ Reference\ Part
 ./build.sh
 
 cd ..
