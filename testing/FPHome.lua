@@ -84,8 +84,9 @@ end
 
 
 function on.paint(gc)
+	gc:setFont("sansserif","b",18)
+	gc:drawString("EEProNspire",5,-8,"top")
 	gc:setFont("sansserif","b",10)
-	gc:drawString("EEProNspire",5,4,"top")
 	gc:drawString("Welcome !",pww()-gc:getStringWidth("Welcome !")-5,4,"top")
 	gc:setFont("serif","r",12)
 	horizontalBar(gc,30)
@@ -94,11 +95,24 @@ function on.paint(gc)
 	gc:setColorRGB(0,0,0)
 	horizontalBar(gc,pwh()-25)
 	drawXCenteredString(gc,"v0.1 The EEProNspire Team - TI-Planet.org",pwh()-22)
-	drawRoundRect(gc,pww()/6+5,pwh()/3.3,pww()/3.5-6,pwh()/10,8)
-	drawRoundRect(gc,3*pww()/6+5,pwh()/3.3,pww()/3.5-6,pwh()/10,8)
-	drawRoundRect(gc,5*pww()/6+5,pwh()/3.3,pww()/3.5-6,pwh()/10,8)
+	
+	
+	
+    gc:setColorRGB(0,0,0)
+	drawRoundRect(gc,pww()/6+2,pwh()/3.3+50,pww()/4.5,pwh()/2.5,8)
+	drawRoundRect(gc,3*pww()/6+2,pwh()/3.3+50,pww()/4.5,pwh()/2.5,8)
+	drawRoundRect(gc,5*pww()/6+2,pwh()/3.3+50,pww()/4.5,pwh()/2.5,8)
+	gc:setColorRGB(0xd6ba00)
+	fillRoundRect(gc,pww()/6+3,pwh()/3.3+50,pww()/4.5,pwh()/2.5-1,7)
+	fillRoundRect(gc,3*pww()/6+3,pwh()/3.3+50,pww()/4.5,pwh()/2.5-1,7)
+	fillRoundRect(gc,5*pww()/6+3,pwh()/3.3+50,pww()/4.5,pwh()/2.5-1,7)
+	
+    gc:setColorRGB(0,0,0)
+	drawRoundRect(gc,pww()/6+1,pwh()/3.3,pww()/3.5-6,pwh()/10,8)
+	drawRoundRect(gc,3*pww()/6+1,pwh()/3.3,pww()/3.5-6,pwh()/10,8)
+	drawRoundRect(gc,5*pww()/6+1,pwh()/3.3,pww()/3.5-6,pwh()/10,8)
 	gc:setColorRGB(0,180,0)
-	fillRoundRect(gc,pww()/6+5.5,pwh()/3.3,pww()/3.5-7,pwh()/10-1,7)
-	fillRoundRect(gc,3*pww()/6+5.5,pwh()/3.3,pww()/3.5-7,pwh()/10-1,7)
-	fillRoundRect(gc,5*pww()/6+5.5,pwh()/3.3,pww()/3.5-7,pwh()/10-1,7)
+	fillRoundRect(gc,pww()/6+1.5,pwh()/3.3,pww()/3.5-7,pwh()/10-1,7)
+	fillRoundRect(gc,3*pww()/6+1.5,pwh()/3.3,pww()/3.5-7,pwh()/10-1,7)
+	fillRoundRect(gc,5*pww()/6+1.5,pwh()/3.3,pww()/3.5-7,pwh()/10-1,7)
 end
