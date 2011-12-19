@@ -1,6 +1,7 @@
 ------------------------------------------------------------------
 --                        Screen  Class                         --
 ------------------------------------------------------------------
+
 function Pr(n, d, s)
 	local t	=	type(n)
 	if t == "number" then
@@ -200,14 +201,14 @@ function on.paint(gc)
 	end	
 end
 
-function on.timer()			current_screen():timer()		end
-function on.arrowKey(arrw)	current_screen():arrowKey(arrw)	end
-function on.enterKey()		current_screen():enterKey()		end
-function on.escapeKey()		current_screen():escapeKey()	end
-function on.tabKey()		current_screen():tabKey()		end
-function on.backtabKey()	current_screen():backtabKey()	end
-function on.charIn(ch)		current_screen():charIn(ch)		end
-function on.backspaceKey()	current_screen():backspaceKey() end
-function on.mouseDown(x,y)	current_screen():mouseDown(x,y)	end
-function on.mouseUp(x,y)	current_screen():mouseUp(x,y)	end
-function on.mouseMove(x,y)	current_screen():mouseMove(x,y)	end
+function on.timer()			current_screen():timer()		 end
+function on.arrowKey(arrw)	current_screen():arrowKey(arrw)  end
+function on.enterKey()		current_screen():enterKey()		 end
+function on.escapeKey()		current_screen():escapeKey()	 end
+function on.tabKey()		current_screen():tabKey()		 end
+function on.backtabKey()	current_screen():backtabKey()	 end
+function on.charIn(ch)		current_screen():charIn(ch)		 end
+function on.backspaceKey()	current_screen():backspaceKey()  end
+function on.mouseDown(x,y)	current_screen():mouseDown(x,y)	 end
+function on.mouseUp(x,y)	current_screen():mouseUp(x,y)	 end
+function on.mouseMove(x,y)	current_screen():mouseMove(x,y)  end

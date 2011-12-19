@@ -1,11 +1,8 @@
 --This document should contain the glue for all the plugins
 
-
 ------------------------------------------------------------------
 --                        Example usage                         --
 ------------------------------------------------------------------
-
-
 
 --Create main screen
 main	=	Screen(0,0)

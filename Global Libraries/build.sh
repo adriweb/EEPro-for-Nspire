@@ -1,3 +1,3 @@
 #!/bin/sh
 
-cat screen.lua widgets.lua>../lib.big.lua
+cat globals.lua screen.lua widgets.lua > ../lib.big.lua

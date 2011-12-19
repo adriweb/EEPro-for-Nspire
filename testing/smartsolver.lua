@@ -22,10 +22,10 @@ end
 f{{1,1}, "P=I*U", {U=true,I=true, P=true}}
 f{{1,1}, "U=R*I", {U=true, R=true, I=true}}
 
-u{"I", "Current", {{"val", "A"}, {"val/1000", "mA"}}
-u{"U", "Voltage", {{"val", "V"}, {"val/1000", "mV"}}
-u{"P", "Power", {{"val", "W"}, {"val*1000", "kW"}, {"val*750", "hp"}}
-u{"R", "Resistance", {{"val", "Ω"}, {"val*1000", "kΩ"}}
+u{"I", "Current", {{"val", "A"}, {"val/1000", "mA"}}}
+u{"U", "Voltage", {{"val", "V"}, {"val/1000", "mV"}}}
+u{"P", "Power", {{"val", "W"}, {"val*1000", "kW"}, {"val*750", "hp"}}}
+u{"R", "Resistance", {{"val", "Ω"}, {"val*1000", "kΩ"}}}
 
 done={}
 
