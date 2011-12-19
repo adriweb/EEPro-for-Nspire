@@ -115,7 +115,7 @@ function setColor(gc,theColor)
 		theColor = string.lower(theColor)
 		if type(Color[theColor]) == "table" then gc:setColorRGB(unpack(Color[theColor])) end
 	elseif type(theColor) == "table" then
-		myGC:setColorRGB(unpack(theColor))
+		gc:setColorRGB(unpack(theColor))
 	end
 end
 
@@ -128,7 +128,7 @@ function horizontalBar(gc,y)
 end
 
 function drawSquare(gc,x,y,l)
-	drawPolyLine(gc,{(x-l/2),(y-l/2), (x+l/2),(y-l/2), (x+l/2),(y+l/2), (x-l/2),(y+l/2), (x-l/2),(y-l/2)})
+	gc:drawPolyLine(gc,{(x-l/2),(y-l/2), (x+l/2),(y-l/2), (x+l/2),(y+l/2), (x-l/2),(y+l/2), (x-l/2),(y-l/2)})
 end
 
 function drawRoundRect(gc,x,y,wd,ht,rd)  -- wd = width, ht = height, rd = radius of the rounded corner
