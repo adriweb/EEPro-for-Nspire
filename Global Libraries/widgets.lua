@@ -5,14 +5,24 @@
 Widget	=	class()
 
 function Widget:init()
-	self.x	=	0
-	self.y	=	0
-	self.w	=	10
-	self.h	=	10
-	
-	self.parent	=	nil
+	self.dw	=	10
+	self.dh	=	10
 end
 
+
+function Widget:size()
+	self.rx	=	Pr(self.xx, 0, self.parent.w)
+	self.ry	=	Pr(self.yy, 0, self.parent.h)
+	self.x	=	self.parent.x + self.rx
+	self.y	=	self.parent.y + self.ry
+	
+	self.w	=	Pr(self.ww, self.dw, self.parent.w)
+	self.h	=	Pr(self.hh, self.dh, self.parent.h)
+end
+
+function Widget:prePaint()
+
+end
 
 function Widget:paint(gc) 
 	--gc:drawRect(self.x, self.y, self.w, self.h)
@@ -29,31 +39,7 @@ function Widget:charIn() end
 function Widget:escapeKey() end
 function Widget:backspaceKey() end
 
-function Widget:tx() return self.parent.x + self.x end
-function Widget:ty() return self.parent.y + self.y end
 
-------------------------------------------------------------------
---                   Bindings to the on events                  --
-------------------------------------------------------------------
-
-
-function on.paint(gc)	
-	for _, screen in pairs(Screens) do
-		screen:draw(gc)	
-	end	
-end
-
-function on.timer()			current_screen():timer()		end
-function on.arrowKey(arrw)	current_screen():arrowKey(arrw)	end
-function on.enterKey()		current_screen():enterKey()		end
-function on.escapeKey()		current_screen():escapeKey()	end
-function on.tabKey()		current_screen():tabKey()		end
-function on.backtabKey()	current_screen():backtabKey()	end
-function on.charIn(ch)		current_screen():charIn(ch)		end
-function on.backspaceKey()	current_screen():backspaceKey() end
-function on.mouseDown(x,y)	current_screen():mouseDown(x,y)	end
-function on.mouseUp(x,y)	current_screen():mouseUp(x,y)	end
-function on.mouseMove(x,y)	current_screen():mouseMove(x,y)	end
 
 
 ------------------------------------------------------------------
@@ -62,11 +48,18 @@ function on.mouseMove(x,y)	current_screen():mouseMove(x,y)	end
 
 
 box	=	class(Widget)
+function box:init(ww,hh)
+	self.dy	=	10
+	self.dx	=	10
+	self.ww	=	ww
+	self.hh	=	hh
+end
+
 function box:paint(gc)
 	if self.hasFocus then
-		gc:fillRect(self:tx(), self:ty(), self.w, self.h)
+		gc:fillRect(self.x, self.y, self.w, self.h)
 	else
-		gc:drawRect(self:tx(), self:ty(), self.w, self.h)
+		gc:drawRect(self.x, self.y, self.w, self.h)
 	end
 end
 
@@ -77,12 +70,8 @@ end
 sList	=	class(Widget)
 
 function sList:init()
-	self.x	=	0
-	self.y	=	0
-	self.w	=	100
-	self.h	=	10
-	
-	self.parent	=	nil
+	self.dw	=	100
+	self.dh	=	10
 	
 	self.items	=	{}
 	self.sel	=	1
@@ -90,7 +79,7 @@ function sList:init()
 	self.itemh	=	18
 	self.hitems	=	4
 	
-	self.h	=	self.hitems * 18 + 1
+	self.dh	=	self.hitems * 18 + 1
 	
 	self.color1	=	{160,160,160} 
 	self.color2	=	{200,200,200}
@@ -102,9 +91,13 @@ function sList:init()
 	self.offset	=	0
 end
 
+function sList:prePaint()
+	self.dh	=	self.hitems * 18 + 1
+end
+
 function sList:paint(gc)
-	local x	=	self:tx()
-	local y = 	self:ty()
+	local x	=	self.x
+	local y = 	self.y
 	local n	=	#self.items
 	
 	gc:setFont(unpack(self.font))
@@ -170,21 +163,17 @@ end
 sInput	=	class(Widget)
 
 function sInput:init()
-	self.x	=	0
-	self.y	=	0
-	self.w	=	100
-	self.h	=	20
+	self.dw	=	100
+	self.dh	=	20
 	
-	self.parent	=	nil
-
 	self.value	=	""	
 	self.bgcolor	=	{255,255,255}
 end
 
 function sInput:paint(gc)
 	self.gc	=	gc
-	local x	=	self:tx()
-	local y = 	self:ty()
+	local x	=	self.x
+	local y = 	self.y
 	
 	gc:setColorRGB(unpack(self.bgcolor))
 	gc:fillRect(x, y, self.w, self.h)
@@ -224,6 +213,6 @@ function sInput:charIn(char)
 end
 
 function sInput:backspaceKey()
-	self.value	=	self.value:sub(1,-2)
+	self.value	=	self.value:usub(1,-2)
 end
 

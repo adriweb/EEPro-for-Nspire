@@ -1,0 +1,23 @@
+platform.apilevel = "1.0"
+
+formulas	=	{}
+units	=	{}
+
+function f(t)
+	table.insert(formulas, t)
+end
+
+function u(t)
+	table.insert(units, t)
+end
+
+-- syntax :  {{category,subcategory}, equationString, {var1=true, var2=true, var3=true...}}
+
+f{{1,1}, "P=I*U", {U=true,I=true, P=true}}
+f{{1,1}, "U=R*I", {U=true, R=true, I=true}}
+
+-- Units, NEEDS FIXING OR ADRIWEB IS GOING TO KILL ME
+u{"I", "Current", {{"val", "A"}, {"val/1000", "mA"}}
+u{"U", "Voltage", {{"val", "V"}, {"val/1000", "mV"}}
+u{"P", "Power", {{"val", "W"}, {"val*1000", "kW"}, {"val*750", "hp"}}
+u{"R", "Resistance", {{"val", "Ω"}, {"val*1000", "kΩ"}}

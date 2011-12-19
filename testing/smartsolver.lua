@@ -7,16 +7,25 @@ function print(s)
 	table.insert(pr, s)
 end
 
-formulas = {}
+formulas	=	{}
+units	=	{}
 
 function f(t)
 	table.insert(formulas, t)
+end
+
+function u(t)
+	table.insert(units, t)
 end
 
 -- syntax :  {{category,subcategory}, equationString, {var1=true, var2=true, var3=true...}}
 f{{1,1}, "P=I*U", {U=true,I=true, P=true}}
 f{{1,1}, "U=R*I", {U=true, R=true, I=true}}
 
+u{"I", "Current", {{"val", "A"}, {"val/1000", "mA"}}
+u{"U", "Voltage", {{"val", "V"}, {"val/1000", "mV"}}
+u{"P", "Power", {{"val", "W"}, {"val*1000", "kW"}, {"val*750", "hp"}}
+u{"R", "Resistance", {{"val", "Ω"}, {"val*1000", "kΩ"}}
 
 done={}
 
@@ -72,7 +81,7 @@ function find_data(known)
 end
 
 function on.create()
-	known={R=5, I=2} -- START VALUE'S
+	known={U=5, I=2} -- START VALUE'S
 	find_data(known)
 end
 
