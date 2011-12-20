@@ -10,7 +10,7 @@ function Pr(n, d, s)
 		return s*n/100
 	else
 		return d
-	end
+	return (type(n)=="number" and n or (type(n)=="string" and .01*s*n or d))
 end
 
 
