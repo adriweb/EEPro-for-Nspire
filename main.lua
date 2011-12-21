@@ -23,4 +23,4 @@ main:appendWidget(inp3, 10, "50")
 main:appendWidget(inp4, 10, "70")
 
 --Push the main screen into the Screens table so that it will be displayed
-push_screen(main)
+push_screen(FormulaPro)

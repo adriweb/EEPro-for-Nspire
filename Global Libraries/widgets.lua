@@ -56,6 +56,7 @@ function box:init(ww,hh)
 end
 
 function box:paint(gc)
+	gc:setColorRGB(0,0,0)
 	if self.hasFocus then
 		gc:fillRect(self.x, self.y, self.w, self.h)
 	else
@@ -79,20 +80,20 @@ function sList:init()
 	self.itemh	=	18
 	self.hitems	=	4
 	
-	self.dh	=	self.hitems * 18 + 1
+	self.dh	=	4 * self.itemh + 1
 	
 	self.color1	=	{160,160,160} 
 	self.color2	=	{200,200,200}
 	self.scolor	=	{40,40,40}
-	
+	self.bgcolor	=	{240,240,245}
 	self.textc	=	{0,0,0}
 	self.texts	=	{220,220,220}
 	
 	self.offset	=	0
 end
 
-function sList:prePaint()
-	self.dh	=	self.hitems * 18 + 1
+function sList:prePaint(gc)
+	self.hitems	=	math.floor((self.h-1)/self.itemh)
 end
 
 function sList:paint(gc)
@@ -100,7 +101,10 @@ function sList:paint(gc)
 	local y = 	self.y
 	local n	=	#self.items
 	
+	gc:setColorRGB(unpack(self.bgcolor))
 	gc:setFont(unpack(self.font))
+	gc:fillRect(self.x, self.y, self.w, self.h)
+	gc:setColorRGB(0,0,0)
 	gc:drawRect(x, y, self.w, self.h)
 	
 	for i=1, math.min(n, self.hitems) do
