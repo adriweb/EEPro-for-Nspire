@@ -97,7 +97,6 @@ function on.paint(gc)
 	drawXCenteredString(gc,"v0.1 The EEProNspire Team - TI-Planet.org",pwh()-22)
 	
 	
-	
     gc:setColorRGB(0,0,0)
 	drawRoundRect(gc,pww()/6+2,pwh()/3.3+50,pww()/4.5,pwh()/2.5,8)
 	drawRoundRect(gc,3*pww()/6+2,pwh()/3.3+50,pww()/4.5,pwh()/2.5,8)

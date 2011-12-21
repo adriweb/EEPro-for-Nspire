@@ -3,14 +3,7 @@
 ------------------------------------------------------------------
 
 function Pr(n, d, s)
-	local t	=	type(n)
-	if t == "number" then
-		return n
-	elseif t == "string" then
-		return s*n/100
-	else
-		return d
-	end
+	return (type(n)=="number" and n or (type(n)=="string" and .01*s*n or d))
 end
 
 
