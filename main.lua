@@ -13,7 +13,7 @@ end
 
 function showPro()
 		remove_screen()
-		push_screen(Greek)
+		push_screen(FormulaPro)
 end
  
 menu = {

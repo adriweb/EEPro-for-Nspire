@@ -1,3 +1,3 @@
 #!/bin/sh
-echo "">../Reference.big.lua
+cat *.lua>../Reference.big.lua
 #needs to be updated

@@ -13,6 +13,7 @@ Screens	=	{}
 
 function push_screen(screen)
 	table.insert(Screens, screen)
+	platform.window:invalidate()
 end
 
 function remove_screen(screen)
