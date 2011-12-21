@@ -17,6 +17,7 @@ function push_screen(screen)
 end
 
 function remove_screen(screen)
+	platform.window:invalidate()
 	return table.remove(Screens)
 end
 
@@ -24,7 +25,7 @@ function current_screen()
 	return Screens[#Screens]
 end
 
-function Screen:init(yy,xx,hh,ww)
+function Screen:init(xx,yy,ww,hh)
 	self.yy	=	yy
 	self.xx	=	xx
 	self.hh	=	hh

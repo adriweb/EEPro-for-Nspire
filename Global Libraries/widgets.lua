@@ -48,19 +48,26 @@ function Widget:backspaceKey() end
 
 
 box	=	class(Widget)
-function box:init(ww,hh)
+function box:init(ww,hh,t)
 	self.dy	=	10
 	self.dx	=	10
 	self.ww	=	ww
 	self.hh	=	hh
+	self.t	=	t
 end
 
 function box:paint(gc)
+
+	
 	gc:setColorRGB(0,0,0)
 	if self.hasFocus then
 		gc:fillRect(self.x, self.y, self.w, self.h)
 	else
 		gc:drawRect(self.x, self.y, self.w, self.h)
+	end
+	gc:setColorRGB(128,128,128)
+	if self.t then
+		gc:drawString(self.t,self.x+2,self.y+2,"top")
 	end
 end
 
