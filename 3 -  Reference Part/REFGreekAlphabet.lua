@@ -55,4 +55,5 @@ end
  
 function Greek:enterKey()
     font = font == "serif" and "sansserif" or "serif"
+    Greek:invalidate()
 end
