@@ -1,26 +1,38 @@
 --This document should contain the glue for all the plugins
 
-------------------------------------------------------------------
---                        Example usage                         --
-------------------------------------------------------------------
+main	=	Screen()
 
---Create main screen
-main	=	Screen(0,0)
-
-function main:paint(gc)
-	gc:setColorRGB(230,230,255)
-	gc:fillRect(self.x, self.y, self.w, self.h)
+function notDone()
+		print("Not Done Yet")
+end
+ 
+function showGreek()
+		remove_screen()
+		push_screen(Greek)
 end
 
-inp1	=	sInput()
-inp2	=	sInput()
-inp3	=	sInput()
-inp4	=	sInput()
-
-main:appendWidget(inp1, 10, "10")
-main:appendWidget(inp2, 10, "30")
-main:appendWidget(inp3, 10, "50")
-main:appendWidget(inp4, 10, "70")
+function showPro()
+		remove_screen()
+		push_screen(Greek)
+end
+ 
+menu = {
+ 
+	{"Analysis",
+	   {"Not done Yet", notDone},
+	   "-",
+	   {"Not done Yet", notDone}
+	},
+	{"FormulaPro",
+	   {"Formula Pro", showPro}
+	},
+	{"Reference",
+	   {"GreekAlphabet", showGreek}
+	}
+ 
+}
+ 
+toolpalette.register(menu)
 
 --Push the main screen into the Screens table so that it will be displayed
-push_screen(FormulaPro)
+push_screen(main)
