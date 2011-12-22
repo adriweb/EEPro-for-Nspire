@@ -2,6 +2,10 @@
 
 main	=	Screen()
 
+function main:paint(gc)
+	gc:drawString("Press menu...",10,10,"top")
+end
+
 function notDone()
 		print("Not Done Yet")
 end

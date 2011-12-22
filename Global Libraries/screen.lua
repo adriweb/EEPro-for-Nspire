@@ -14,6 +14,7 @@ Screens	=	{}
 function push_screen(screen)
 	table.insert(Screens, screen)
 	platform.window:invalidate()
+	current_screen():pushed()
 end
 
 function remove_screen(screen)
@@ -57,6 +58,8 @@ function Screen:drawWidgets(gc)
 	end
 end
 
+function Screen:pushed() end
+
 function Screen:appendWidget(widget, xx, yy) 
 	widget.xx	=	xx
 	widget.yy	=	yy
@@ -64,6 +67,7 @@ function Screen:appendWidget(widget, xx, yy)
 	widget:size()
 	
 	table.insert(self.widgets, widget)
+	widget.pid	=	#self.widgets
 end
 
 function Screen:getWidget()
@@ -158,7 +162,7 @@ function Screen:getWidgetIn(x, y)
 end
 
 function Screen:mouseDown(x, y) 
-	local n, widget	=	self:getWidgetIn(x-self.x, y-self.y)
+	local n, widget	=	self:getWidgetIn(x, y)
 	if n then
 		if self.focus~=0 then self:getWidget().hasFocus = false self:getWidget():loseFocus()  end
 		self.focus	=	n
@@ -166,7 +170,7 @@ function Screen:mouseDown(x, y)
 		widget.hasFocus	=	true
 		widget:getFocus()
 
-		widget:mouseDown(x-self.x, y-self.y)
+		widget:mouseDown(x, y)
 	else
 		if self.focus~=0 then self:getWidget().hasFocus = false self:getWidget():loseFocus()  end
 		self.focus	=	0
@@ -174,16 +178,61 @@ function Screen:mouseDown(x, y)
 end
 function Screen:mouseUp(x, y)
 	if self.focus~=0 then
-		self:getWidget():mouseUp(x-self.x, y-self.y)
+		self:getWidget():mouseUp(x, y)
 	end
 	self:invalidate()
 end
 function Screen:mouseMove(x, y)
 	if self.focus~=0 then
-		self:getWidget():mouseMove(x-self.x, y-self.y)
+		self:getWidget():mouseMove(x, y)
 	end
 end
 
+
+--Dialog screen
+
+Dialog	=	class(Screen)
+
+function Dialog:init(title,xx,yy,ww,hh)
+	self.yy	=	yy
+	self.xx	=	xx
+	self.hh	=	hh
+	self.ww	=	ww
+	self.title	=	title
+	self:size()
+	
+	self.widgets	=	{}
+	self.focus	=	0
+end
+
+function Dialog:paint(gc)
+	gc:setColorRGB(224,224,224)
+	gc:fillRect(self.x, self.y, self.w, self.h)
+
+	for i=1, 14,2 do
+		gc:setColorRGB(32+i*3, 32+i*4, 32+i*3)
+		gc:fillRect(self.x, self.y+i, self.w,2)
+	end
+	gc:setColorRGB(32+16*3, 32+16*4, 32+16*3)
+	gc:fillRect(self.x, self.y+15, self.w, 10)
+	
+	gc:setColorRGB(128,128,128)
+	gc:drawRect(self.x, self.y, self.w, self.h)
+	gc:drawRect(self.x-1, self.y-1, self.w+2, self.h+2)
+	
+	gc:setColorRGB(96,100,96)
+	gc:fillRect(self.x+self.w+1, self.y, 1, self.h+2)
+	gc:fillRect(self.x, self.y+self.h+2, self.w+3, 1)
+	
+	gc:setColorRGB(104,108,104)
+	gc:fillRect(self.x+self.w+2, self.y+1, 1, self.h+2)
+	gc:fillRect(self.x+1, self.y+self.h+3, self.w+3, 1)
+	gc:fillRect(self.x+self.w+3, self.y+2, 1, self.h+2)
+	gc:fillRect(self.x+2, self.y+self.h+4, self.w+3, 1)
+			
+	gc:setColorRGB(255,255,255)
+	gc:drawString(self.title, self.x + 4, self.y+2, "top")
+end
 
 ------------------------------------------------------------------
 --                   Bindings to the on events                  --
