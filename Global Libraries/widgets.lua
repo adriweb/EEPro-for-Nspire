@@ -146,16 +146,14 @@ function sList:paint(gc)
 	end
 	local i	=	math.min(n, self.hitems)+1
 	local color	= ((i+self.offset)%2==0) and self.color1 or self.color2
-	if n>self.hitems then
+	if n>self.hitems and not self.shrink then
 		gc:setColorRGB(unpack(color))
 		gc:fillRect(x+1, y + 1 + i*self.itemh-self.itemh , self.w-1, self.he)
 	end
 	
 	gc:setColorRGB(0,0,0)
 	local selp	=	math.max(n/self.hitems,1)
-	if not self.shrink then
-		gc:fillRect(x+self.w+2, 2 + y + (self.offset*self.itemh)/selp, 3, (self.hitems*18)/selp)
-	end
+	gc:fillRect(x+self.w+2, 2 + y + (self.offset*self.itemh)/selp, 3, (self.hitems*18)/selp)
 end
 
 function sList:arrowKey(arrow)

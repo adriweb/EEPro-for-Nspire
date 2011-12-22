@@ -2,9 +2,9 @@ FormulaPro	=	Screen()
 FormulaPro.known	=	{}
 
 function FormulaPro:paint(gc)
-	for i=1,200 do
+	for i=1,100 do
 		gc:setColorRGB(255,255,255-i)
-		gc:fillRect(0,(i-1)*(self.h/200),self.w,3)
+		gc:fillRect(0,(i-1)*(self.h/100),self.w,3)
 	end
 end
 
