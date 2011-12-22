@@ -228,7 +228,7 @@ function Dialog:paint(gc)
 	gc:fillRect(self.x+self.w+2, self.y+1, 1, self.h+2)
 	gc:fillRect(self.x+1, self.y+self.h+3, self.w+3, 1)
 	gc:fillRect(self.x+self.w+3, self.y+2, 1, self.h+2)
-	gc:fillRect(self.x+2, self.y+self.h+4, self.w+3, 1)
+	gc:fillRect(self.x+2, self.y+self.h+4, self.w+2, 1)
 			
 	gc:setColorRGB(255,255,255)
 	gc:drawString(self.title, self.x + 4, self.y+2, "top")
