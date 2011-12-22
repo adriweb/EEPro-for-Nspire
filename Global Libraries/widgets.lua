@@ -108,12 +108,17 @@ function sList:init()
 	self.textc	=	{0,0,0}
 	self.texts	=	{220,220,220}
 	
+	self.shrink	=	false
 	self.offset	=	0
 end
 
 function sList:prePaint(gc)
 	self.hitems	=	math.floor((self.h-1)/self.itemh)
-	self.h	=	self.hitems*self.itemh+1
+	local height	=	self.hitems*self.itemh+1
+	self.he	=	self.h-height
+	if self.shrink then
+		self.h	=	height
+	end
 end
 
 function sList:paint(gc)
@@ -139,10 +144,18 @@ function sList:paint(gc)
 		gc:setColorRGB(unpack(tcolor))
 		gc:drawString(self.items[i+self.offset], x+1, y+1 + i*self.itemh-self.itemh*1.15, "top")
 	end
+	local i	=	math.min(n, self.hitems)+1
+	local color	= ((i+self.offset)%2==0) and self.color1 or self.color2
+	if n>self.hitems then
+		gc:setColorRGB(unpack(color))
+		gc:fillRect(x+1, y + 1 + i*self.itemh-self.itemh , self.w-1, self.he)
+	end
 	
 	gc:setColorRGB(0,0,0)
 	local selp	=	math.max(n/self.hitems,1)
-	gc:fillRect(x+self.w+2, 2 + y + (self.offset*self.itemh)/selp, 3, (self.hitems*18)/selp)
+	if not self.shrink then
+		gc:fillRect(x+self.w+2, 2 + y + (self.offset*self.itemh)/selp, 3, (self.hitems*18)/selp)
+	end
 end
 
 function sList:arrowKey(arrow)

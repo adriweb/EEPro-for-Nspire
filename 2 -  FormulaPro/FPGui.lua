@@ -3,7 +3,7 @@ FormulaPro.known	=	{}
 
 function FormulaPro:paint(gc)
 	for i=1,200 do
-		gc:setColorRGB(255-i,255-i,255)
+		gc:setColorRGB(255,255,255-i)
 		gc:fillRect(0,(i-1)*(self.h/200),self.w,3)
 	end
 end
@@ -53,8 +53,9 @@ unit_value.ww	=	"77"
 unit_value.number	=	true
 
 units_list	=	sList()
-units_list.hh	=	"50"
+units_list.hh	=	"41"
 units_list.ww	=	"77"
+units_list.shrink	=	true
 
 lbl1	=	sLabel("Value:", unit_value)
 lbl2	=	sLabel("Unit:", units_list)
