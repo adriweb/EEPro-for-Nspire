@@ -11,13 +11,13 @@ end
 
 
 function Widget:size()
-	self.rx	=	Pr(self.xx, 0, self.parent.w)
-	self.ry	=	Pr(self.yy, 0, self.parent.h)
+	self.rx	=	math.floor(Pr(self.xx, 0, self.parent.w)+.5)
+	self.ry	=	math.floor(Pr(self.yy, 0, self.parent.h)+.5)
 	self.x	=	self.parent.x + self.rx
 	self.y	=	self.parent.y + self.ry
 	
-	self.w	=	Pr(self.ww, self.dw, self.parent.w)
-	self.h	=	Pr(self.hh, self.dh, self.parent.h)
+	self.w	=	math.floor(Pr(self.ww, self.dw, self.parent.w)+.5)
+	self.h	=	math.floor(Pr(self.hh, self.dh, self.parent.h)+.5)
 end
 
 function Widget:prePaint()

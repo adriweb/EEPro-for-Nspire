@@ -42,10 +42,10 @@ function Screen:size()
 	local screenH	=	platform.window:height()
 	local screenW	=	platform.window:width()
 
-	self.x	=	Pr(self.xx, 0, screenW)
-	self.y	=	Pr(self.yy, 0, screenH)
-	self.w	=	Pr(self.ww, screenW, screenW)
-	self.h	=	Pr(self.hh, screenH, screenH)
+	self.x	=	math.floor(Pr(self.xx, 0, screenW)+.5)
+	self.y	=	math.floor(Pr(self.yy, 0, screenH)+.5)
+	self.w	=	math.floor(Pr(self.ww, screenW, screenW)+.5)
+	self.h	=	math.floor(Pr(self.hh, screenH, screenH)+.5)
 end
 
 function Screen:drawWidgets(gc) 

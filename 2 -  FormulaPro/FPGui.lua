@@ -46,7 +46,7 @@ function compute()
 end
 
 
-add_unit	=	Dialog("Add unit","10","10","80","85")
+add_unit	=	Dialog("Add unit","10","7.5","80","85")
 
 unit_value	=	sInput()
 unit_value.ww	=	"77"
