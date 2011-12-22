@@ -3,8 +3,8 @@ FormulaPro.known	=	{}
 
 function FormulaPro:paint(gc)
 	for i=1,100 do
-		gc:setColorRGB(255,255,255-i)
-		gc:fillRect(0,(i-1)*2.12,318,3)
+		gc:setColorRGB(255-i,255-i,255)
+		gc:fillRect(0,(i-1)*(self.h/100),self.w,3)
 	end
 end
 
