@@ -244,7 +244,7 @@ sLabel	=	class(Widget)
 function sLabel:init(text, widget)
 	self.widget	=	widget
 	self.text	=	text
-	self.dw	=	100
+	self.dw	=	30
 	self.dh	=	20
 	self.lim	=	false
 	self.color	=	{0,0,0}
@@ -258,6 +258,7 @@ function sLabel:paint(gc)
 	local ttext
 	if self.lim then
 		if gc:getStringWidth(self.text)<self.w then
+			self.dw	=	gc:getStringWidth(self.text)
 			text	=	self.text
 		else
 			for i=1, #self.text do

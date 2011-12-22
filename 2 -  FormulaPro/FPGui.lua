@@ -56,8 +56,8 @@ units_list	=	sList()
 units_list.hh	=	"50"
 units_list.ww	=	"77"
 
-lbl1	=	sLabel("Value:", addD)
-lbl2	=	sLabel("Unit:", addU)
+lbl1	=	sLabel("Value:", unit_value)
+lbl2	=	sLabel("Unit:", units_list)
 
 button_ok	=	sButton("OK", compute)
 button_esc	=	sButton("Cancel", remove_screen)
