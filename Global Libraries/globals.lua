@@ -78,6 +78,10 @@ function deepcopy(t) -- This function recursively copies a table's contents, and
 	return res
 end -- from http://snippets.luacode.org/snippets/Deep_copy_of_a_Lua_Table_2
 
+function utf8(nbr)
+	return string.uchar(nbr)
+end
+
 function test(arg)
 	return arg and 1 or 0
 end
@@ -103,11 +107,11 @@ function drawCircle(gc, x, y, diameter)
 end
 
 function drawCenteredString(gc, str)
-	gc:drawString(str, (pww() - myGC:getStringWidth(str)) / 2, pwh() / 2, "middle")
+	gc:drawString(str, (pww() - gc:getStringWidth(str)) / 2, pwh() / 2, "middle")
 end
 
-function drawXCenteredString(gc, str,y)
-	gc:drawString(str, (pww() - myGC:getStringWidth(str)) / 2, y, "top")
+function drawXCenteredString(gc, str, y)
+	gc:drawString(str, (pww() - gc:getStringWidth(str)) / 2, y, "top")
 end
 
 function setColor(gc,theColor)

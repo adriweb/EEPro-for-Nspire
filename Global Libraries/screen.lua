@@ -245,6 +245,11 @@ function on.paint(gc)
 	end	
 end
 
+function on.resize(x, y)
+	kXRatio = x/320
+	kYRatio = y/212
+end
+
 function on.timer()			current_screen():timer()		 end
 function on.arrowKey(arrw)	current_screen():arrowKey(arrw)  end
 function on.enterKey()		current_screen():enterKey()		 end

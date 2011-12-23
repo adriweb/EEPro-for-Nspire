@@ -1,11 +1,7 @@
-Greek=Screen()
+Greek = Screen()
  
 font = "serif"
- 
-function utf8(nbr)
-        return string.uchar(nbr)
-end
- 
+  
 alphabet1 = {
  { utf8(913), utf8(945), "Alpha" },
  { utf8(914), utf8(946), "Beta" },
@@ -40,16 +36,16 @@ alphabet3 = {
 function Greek:paint(gc)
         msg = "Greek Alphabet"
         gc:setFont("sansserif","b",12)
-        gc:drawString(msg,.5*(platform.window:width()-gc:getStringWidth(msg)),5,"top")
+        drawXCenteredString(gc,msg,5)
         gc:setFont(font,"r",12)
-        for k,v in pairs(alphabet1) do
+        for k,v in ipairs(alphabet1) do
                 gc:drawString(v[3] .. " : " .. v[1] .. " " .. v[2], 5, 10+22*k, "top")
         end
-        for k,v in pairs(alphabet2) do
-                gc:drawString(v[3] .. " : " .. v[1] .. " " .. v[2], 5+.34*platform.window:width(), 10+22*k, "top")
+        for k,v in ipairs(alphabet2) do
+                gc:drawString(v[3] .. " : " .. v[1] .. " " .. v[2], 5+.34*pww(), 10+22*k, "top")
         end
-        for k,v in pairs(alphabet3) do
-                gc:drawString(v[3] .. " : " .. v[1] .. " " .. v[2], 5+.67*platform.window:width(), 10+22*k, "top")
+        for k,v in ipairs(alphabet3) do
+                gc:drawString(v[3] .. " : " .. v[1] .. " " .. v[2], 5+.67*pww(), 10+22*k, "top")
         end
 end
  

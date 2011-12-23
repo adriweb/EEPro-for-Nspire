@@ -19,6 +19,11 @@ function showPro()
 		remove_screen()
 		push_screen(FormulaPro)
 end
+
+function showSIPref()
+		remove_screen()
+		push_screen(SIPrefixes)
+end
  
 menu = {
  
@@ -31,7 +36,8 @@ menu = {
 	   {"Formula Pro", showPro}
 	},
 	{"Reference",
-	   {"GreekAlphabet", showGreek}
+	   {"Greek Alphabet", showGreek},
+	   {"SI Prefixes", showSIPref}
 	}
  
 }
