@@ -24,6 +24,11 @@ function showSIPref()
 		remove_screen()
 		push_screen(SIPrefixes)
 end
+
+function showPhysConst()
+		remove_screen()
+		push_screen(RefConstants)
+end
  
 menu = {
  
@@ -37,6 +42,7 @@ menu = {
 	},
 	{"Reference",
 	   {"Greek Alphabet", showGreek},
+	   {"Physical Constants", showPhysConst},
 	   {"SI Prefixes", showSIPref}
 	}
  
