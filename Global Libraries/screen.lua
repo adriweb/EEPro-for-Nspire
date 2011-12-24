@@ -246,6 +246,7 @@ function on.paint(gc)
 end
 
 function on.resize(x, y)
+	-- Global Ratio Constants (shouldn't be used often though...)
 	kXRatio = x/320
 	kYRatio = y/212
 end

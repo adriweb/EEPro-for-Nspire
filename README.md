@@ -9,9 +9,9 @@
 
 
 ## Who .... ?
-For now, here are the participants to this project :
+For now, here are the contributors to this project :
 
-Adriweb, Critor, Excale, Jim Bauwens, Levak, NeoCrisis.
+Adriweb, Critor, Excale, Jim Bauwens, Levak, NeoCrisis, Nick Steen.
 
 We welcome everybody, so if you want to help us, contact us by email (see down there)
 
@@ -25,9 +25,11 @@ The only requirement to run the .tns files is to have an Nspire OS >= 3.0. You c
 ## What do we have to do, for now ?
 First, the formula/equation manager/solver part.  (Look at this specific part on the linked document)
 
+![An early preview look at a part of FormulaPro](http://i.imgur.com/mQULJ.jpg)
+
 Please refer to the document linked in the previous paragraph.
 
-Once that's done, we can quickly do the Reference part.
+At the same time, if you don't feel to be involved in a big thing, you can help by doing some of the Reference part :-)
 
 Then, the *big* part is the Analysis one. (See the [EEPro Manual](http://tiplanet.org/modules/archives/eepro.pdf))
 
