@@ -30,6 +30,11 @@ function showPhysConst()
 		push_screen(RefConstants)
 end
  
+ function showResColor()
+		remove_screen()
+		push_screen(ResColor)
+end
+ 
 menu = {
  
 	{"Analysis",
@@ -41,6 +46,7 @@ menu = {
 	   {"Formula Pro", showPro}
 	},
 	{"Reference",
+	   {"Resistor Color Code", showResColor},
 	   {"Greek Alphabet", showGreek},
 	   {"Physical Constants", showPhysConst},
 	   {"SI Prefixes", showSIPref}
