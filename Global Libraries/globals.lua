@@ -14,9 +14,9 @@ e_acute = string.uchar(233)
 e_grave = string.uchar(232)
 o_acute = string.uchar(243) 
 o_circ  = string.uchar(244)
-alpha = string.uchar(945)
-beta = string.uchar(946)
-omega = string.uchar(2126)
+l_alpha = string.uchar(945)
+l_beta = string.uchar(946)
+l_omega = string.uchar(2126)
 sup_plus = string.uchar(8314)
 sup_minus = string.uchar(8315)
 right_arrow = string.uchar(8594)
@@ -24,10 +24,10 @@ right_arrow = string.uchar(8594)
 
 Color = {
 	["black"] = {0, 0, 0},
-	["red"] = {0xff, 0, 0},
-	["green"] = {0, 0xff, 0},
-	["blue "] = {0, 0, 0xff},
-	["white"] = {0xff, 0xff, 0xff},
+	["red"] = {255, 0, 0},
+	["green"] = {0, 255, 0},
+	["blue "] = {0, 0, 255},
+	["white"] = {255, 255, 255},
 	["brown"] = {165,42,42},
 	["cyan"] = {0,255,255},
 	["darkblue"] = {0,0,139},
@@ -107,11 +107,11 @@ function drawCircle(gc, x, y, diameter)
 end
 
 function drawCenteredString(gc, str)
-	gc:drawString(str, (pww() - gc:getStringWidth(str)) / 2, pwh() / 2, "middle")
+	gc:drawString(str, .5*(pww() - gc:getStringWidth(str)), .5*pwh(), "middle")
 end
 
 function drawXCenteredString(gc, str, y)
-	gc:drawString(str, (pww() - gc:getStringWidth(str)) / 2, y, "top")
+	gc:drawString(str, .5*(pww() - gc:getStringWidth(str)), y, "top")
 end
 
 function setColor(gc,theColor)

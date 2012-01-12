@@ -255,12 +255,12 @@ sLabel	=	class(Widget)
 function sLabel:init(text, widget)
 	self.widget	=	widget
 	self.text	=	text
-	self.dw	=	30
-	self.dh	=	20
+	self.dw		=	30
+	self.dh		=	20
 	self.lim	=	false
 	self.color	=	{0,0,0}
 	self.font	=	{"sansserif", "r", 11}
-	self.p	=	"top"
+	self.p		=	"top"
 	
 end
 
@@ -269,20 +269,20 @@ function sLabel:paint(gc)
 	local ttext
 	if self.lim then
 		if gc:getStringWidth(self.text)<self.w then
-			self.dw	=	gc:getStringWidth(self.text)
-			text	=	self.text
+			self.dw	= gc:getStringWidth(self.text)
+			text = self.text
 		else
 			for i=1, #self.text do
 				ttext	=	self.text:sub(1,i)
 				if gc:getStringWidth(ttext .. "..")>self.w then
 					break
 				end
-				text	=	ttext
+				text = ttext
 			end
-			text	=	text .. ".."
+			text = text .. ".."
 		end
 	else
-		text	=	self.text
+		text = self.text
 	end
 	
 	gc:setFont(unpack(self.font))

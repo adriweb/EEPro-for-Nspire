@@ -99,7 +99,7 @@ function Screen:switchFocus(n)
 end
 
 function Screen:paint(gc)
-	
+	-- will be overriden
 end
 
 function Screen:invalidate()
@@ -246,7 +246,7 @@ function on.paint(gc)
 end
 
 function on.resize(x, y)
-	-- Global Ratio Constants (shouldn't be used often though...)
+	-- Global Ratio Constants for On-Calc (shouldn't be used often though...)
 	kXRatio = x/320
 	kYRatio = y/212
 end
