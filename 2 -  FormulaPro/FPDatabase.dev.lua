@@ -22,11 +22,25 @@ end
 ----------------------------------
 
 AddCat(1, "Resistive Circuits", "")
+
 AddSubCat(1, 1, "Resistance Formulas", "")
+aF(1, 1, "R=(ρ*len)/A", {r=true, ρ=true, len=true, a=true})
+aF(1, 1, "G=(σ*A)/len", {g=true, σ=true, len=true, a=true})
+aF(1, 1, "G=1/R", {g=true, r=true})
+aF(1, 1, "σ=1/ρ", {ρ=true, σ=true})
+
 AddSubCat(1, 2, "Ohm\'s Law and Power", "")
+aF(1, 2, "U=I*R", {r=true, u=true, i=true})
+aF(1, 2, "P=I*U", {p=true, u=true, i=true})
+aF(1, 2, "P=(U*U)/R", {p=true, u=true, r=true})
+aF(1, 2, "P=U*U*G", {p=true, u=true, g=true})
+aF(1, 2, "R=1/G", {r=true, g=true})
+
 AddSubCat(1, 3, "Temperature Effect", "")
 AddSubCat(1, 4, "Maximum Power Transfer", "")
 AddSubCat(1, 5, "V, I Source", "")
+
+
 
 AddCat(2, "Capacitors, E-Fields", "")
 AddSubCat(2, 1, "Point Charge", "")
