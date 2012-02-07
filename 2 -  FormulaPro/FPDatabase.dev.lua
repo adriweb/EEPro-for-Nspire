@@ -16,6 +16,13 @@ function aF(cid, sid, formula, units) --Add Formula
 	table.insert(Categories[cid].sub[sid], fr)
 end
 
+function U(...)
+	out	= {}
+	for i, p in ipairs({...}) do
+		out[p]	= true
+	end
+	return out
+end
 
 ----------------------------------
 -- Categories && Sub-Categories --
@@ -24,19 +31,21 @@ end
 AddCat(1, "Resistive Circuits", "")
 
 AddSubCat(1, 1, "Resistance Formulas", "")
-aF(1, 1, "R=(ρ*len)/A", {r=true, ρ=true, len=true, a=true})
-aF(1, 1, "G=(σ*A)/len", {g=true, σ=true, len=true, a=true})
-aF(1, 1, "G=1/R", {g=true, r=true})
-aF(1, 1, "σ=1/ρ", {ρ=true, σ=true})
+aF(1, 1, "R=(ρ*len)/A", U("r","ρ","len","a") )
+aF(1, 1, "G=(σ*A)/len", U("g","σ","len","a") )
+aF(1, 1, "G=1/R",       U("g","r")           )
+aF(1, 1, "σ=1/ρ",       U("ρ","σ")           )
 
 AddSubCat(1, 2, "Ohm\'s Law and Power", "")
-aF(1, 2, "U=I*R", {r=true, u=true, i=true})
-aF(1, 2, "P=I*U", {p=true, u=true, i=true})
-aF(1, 2, "P=(U*U)/R", {p=true, u=true, r=true})
-aF(1, 2, "P=U*U*G", {p=true, u=true, g=true})
-aF(1, 2, "R=1/G", {r=true, g=true})
+aF(1, 2, "U=I*R",     U("r","u","i") )
+aF(1, 2, "P=I*U",     U("p","u","i") )
+aF(1, 2, "P=(U*U)/R", U("p","u","r") )
+aF(1, 2, "P=U*U*G",   U("p","u","g") )
+aF(1, 2, "R=1/G",     U("r","g",)    )
 
 AddSubCat(1, 3, "Temperature Effect", "")
+aF(1, 3, "RR2=RR1*(1+α*(T2-T1))", U("rr2","rr1","α") )
+
 AddSubCat(1, 4, "Maximum Power Transfer", "")
 AddSubCat(1, 5, "V, I Source", "")
 
