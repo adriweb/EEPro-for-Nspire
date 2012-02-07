@@ -46,10 +46,16 @@ aF(1, 2, "R=1/G",     U("r","g",)    )
 AddSubCat(1, 3, "Temperature Effect", "")
 aF(1, 3, "RR2=RR1*(1+α*(T2-T1))", U("rr2","rr1","α") )
 
-AddSubCat(1, 4, "Maximum Power Transfer", "")
+AddSubCat(1, 4, "Maximum DC Power Transfer", "")
+aF(1, 4, "Vl=(Vs*Rl)/(Rs+Rl)",  U("vl","vs","rl","rs") )
+aF(1, 4, "Il=Vs/(Rs+Rl)",       U("il","vs","rs","rl") )
+aF(1, 4, "P=Il*Vl",             U("p","il", "vl")      )
+aF(1, 3, "Pmax=(Vs*Vs)/(4*Rs)", U("pmax","vs","rs")    )
+aF(1, 3, "Rlm=Rs",              U("rlm","rs")          )
+
 AddSubCat(1, 5, "V, I Source", "")
-
-
+aF(1, 5, "Is=Vs/Rs", U("is","vs","rs") )
+aF(1, 5, "Vs=Is*Rs", U("vs","is","rs") )
 
 AddCat(2, "Capacitors, E-Fields", "")
 AddSubCat(2, 1, "Point Charge", "")
