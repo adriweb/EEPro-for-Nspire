@@ -58,11 +58,28 @@ aF(1, 5, "Is=Vs/Rs",              U("is","vs","rs") )
 aF(1, 5, "Vs=Is*Rs",              U("vs","is","rs") )
 
 AddCat(2, "Capacitors, E-Fields", "")
+
 AddSubCat(2, 1, "Point Charge", "")
+aF(2, 1, "Er=Q/(4*π*ε0*εr*r*r)",  U("er","q","π","ε0","εr") )
+aF(2, 1, "V=Q/(4*π*ε0*εr*r)",     U("v","q","π","ε0","εr")  )
+
 AddSubCat(2, 2, "Long Charged Line", "")
+aF(2, 2, "Er=ρl/(2*π*ε0*εr)",     U("er","ρl","π","ε0","εr")  )
+
 AddSubCat(2, 3, "Charged Disk", "")
+aF(2, 3, "Ez=(ρs/(2*ε0*εr))*(1-abs(z)/sqrt(ra*ra+z*z))",     U("ez","ρs","ε0","εr","z","ra")  )
+aF(2, 3, "Vz=(ρs/(2*ε0*εr))*(sqrt(ra*ra+z*z)-abs(z))",       U("ez","ρs","ε0","εr","z","ra")  )
+
 AddSubCat(2, 4, "Parallel Plates", "")
+aF(2, 4, "E=V/d",                 U("e","v","d")           )
+aF(2, 4, "C=(ε0*εr*A)/d",         U("c","ε0","εr","a","d") )
+aF(2, 4, "Q=C*V",                 U("q","c","v")           )
+aF(2, 4, "F=-0.5*(V*V*C)/d",      U("f","v","c","d")       )
+aF(2, 4, "W=0.5*V*V*C",           U("w","v","c")           )
+
 AddSubCat(2, 5, "Parallel Wires", "")
+--aF(2, 5, "W=0.5*V*V*C",           U("w","v","c")           )
+
 AddSubCat(2, 6, "Coaxial Cable", "")
 AddSubCat(2, 7, "Sphere", "")
 
