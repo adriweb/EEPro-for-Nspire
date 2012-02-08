@@ -123,13 +123,17 @@ aF(6, 3, "vL=(Vs-I0*R)*exp(-t/τ)",   		U("vl","i0","r","t","τ") 	    )
 aF(6, 3, "iL=Vs/R+(I0-Vs/R)*exp(-t/τ)",		U("il","vs","r","i0","t","τ")	)
 
 AddSubCat(6, 4, "RC Step Response", "")
-aF(6, 4, "",                 U("","","")           )
+aF(6, 3, "τ=R*C",                			U("τ","r","c")           	    )
+aF(6, 3, "vC=Vs+(V0-Vs)*exp(-t/τ)",   		U("vc","vs","v0","t","τ") 	    )
+aF(6, 3, "iC=(Vs-V0)/R*exp(-t/τ)",			U("ic","vs","v0","r","t","τ")	)
 
 AddSubCat(6, 5, "RL Series to Parallel", "")
 aF(6, 5, "",                 U("","","")           )
+-- 11 formulas here :o --
 
 AddSubCat(6, 6, "RC Series to Parallel", "")
 aF(6, 6, "",                 U("","","")           )
+-- 11 formulas here :o --
 
 
 AddCat(7, "RLC Circuits", "")
