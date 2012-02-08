@@ -2,7 +2,7 @@ Categories	=	{}
 Formulas	=	{}
 
 function addCat(id,name,info)
-	return table.insert(Categories, id,{id=id, name=name, info=info, sub={}})
+	return table.insert(Categories, id, {id=id, name=name, info=info, sub={}})
 end
 
 function addSubCat(cid, id, name, info)
@@ -24,9 +24,9 @@ function U(...)
 	return out
 end
 
-----------------------------------
--- Categories && Sub-Categories --
-----------------------------------
+----------------------------------------------
+-- Categories && Sub-Categories && Formulas --
+----------------------------------------------
 
 AddCat(1, "Resistive Circuits", "")
 
