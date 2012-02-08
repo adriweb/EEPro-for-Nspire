@@ -118,7 +118,9 @@ aF(6, 2, "iC=V0/R*exp(-t/τ)",       		U("iC","v0","r","t","τ")      )
 aF(6, 2, "W=1/2*C*V0^2*(1-exp(-2*t/τ))",	U("w","c","v0","t","τ")       )
 
 AddSubCat(6, 3, "RL Step response", "")
-aF(6, 3, "",                 U("","","")           )
+aF(6, 3, "τ=L/R",                			U("τ","l","r")           	    )
+aF(6, 3, "vL=(Vs-I0*R)*exp(-t/τ)",   		U("vl","i0","r","t","τ") 	    )
+aF(6, 3, "iL=Vs/R+(I0-Vs/R)*exp(-t/τ)",		U("il","vs","r","i0","t","τ")	)
 
 AddSubCat(6, 4, "RC Step Response", "")
 aF(6, 4, "",                 U("","","")           )
