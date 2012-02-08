@@ -112,7 +112,10 @@ aF(6, 1, "iL=I0*exp(-t/τ)",       			U("il","i0","t","τ")          )
 aF(6, 1, "W=1/2*L*I0^2*(1-exp(-2*t/τ))",    U("w","l","i0","t","τ")       )
 
 AddSubCat(6, 2, "RC Natural Response", "")
-aF(6, 2, "",                 U("","","")           )
+aF(6, 2, "τ=R*C",                			U("τ","r","c")           	  )
+aF(6, 2, "vC=V0*exp(-t/τ)",    				U("vc","v0","t","τ")      	  )
+aF(6, 2, "iC=V0/R*exp(-t/τ)",       		U("iC","v0","r","t","τ")      )
+aF(6, 2, "W=1/2*C*V0^2*(1-exp(-2*t/τ))",	U("w","c","v0","t","τ")       )
 
 AddSubCat(6, 3, "RL Step response", "")
 aF(6, 3, "",                 U("","","")           )
