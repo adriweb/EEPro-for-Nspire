@@ -106,11 +106,26 @@ AddSubCat(5, 6, "Attenuators - Unsym R", "")
 
 AddCat(6, "RL and RC Circuits", "")
 AddSubCat(6, 1, "RL Natural Response", "")
+aF(6, 1, "τ=L/R",                			U("τ","l","r")           	  )
+aF(6, 1, "vL=I0*R*exp(-t/τ)",    			U("vl","i0","r","t","τ")      )
+aF(6, 1, "iL=I0*exp(-t/τ)",       			U("il","i0","t","τ")          )
+aF(6, 1, "W=1/2*L*I0^2*(1-exp(-2*t/τ))",    U("w","l","i0","t","τ")       )
+
 AddSubCat(6, 2, "RC Natural Response", "")
+aF(6, 2, "",                 U("","","")           )
+
 AddSubCat(6, 3, "RL Step response", "")
+aF(6, 3, "",                 U("","","")           )
+
 AddSubCat(6, 4, "RC Step Response", "")
+aF(6, 4, "",                 U("","","")           )
+
 AddSubCat(6, 5, "RL Series to Parallel", "")
+aF(6, 5, "",                 U("","","")           )
+
 AddSubCat(6, 6, "RC Series to Parallel", "")
+aF(6, 6, "",                 U("","","")           )
+
 
 AddCat(7, "RLC Circuits", "")
 AddSubCat(7, 1, "Series Impedance", "")
