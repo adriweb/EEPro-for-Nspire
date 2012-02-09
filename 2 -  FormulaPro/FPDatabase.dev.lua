@@ -81,11 +81,14 @@ AddSubCat(2, 5, "Parallel Wires", "")
 aF(2, 5, "scl=π*ε0*εr/arccosh(d/(2*ra))", U("cl","π","ε0","εr","d","ra")  )
 
 AddSubCat(2, 6, "Coaxial Cable", "")
-aF(2, 6, "V=(ρl/(2*π*ε0*εr))*ln(rb/ra)",  U("v","π","ε0","εr","d","ra")   )
-aF(2, 6, "Er=V/(r*ln(rb/ra))",            U("er","v","r","rb","ra")       )
-aF(2, 6, "cl=(2*π*ε0*εr)/ln(rb/ra)",      U("cl","π","ε0","εr","rb","ra") )
+aF(2, 6, "V=(ρl/(2*π*ε0*εr))*ln(rb/ra)",  U("v","ρl","π","ε0","εr","ra")     )
+aF(2, 6, "Er=V/(r*ln(rb/ra))",            U("er","v","r","rb","ra")          )
+aF(2, 6, "cl=(2*π*ε0*εr)/ln(rb/ra)",      U("cl","π","ε0","εr","rb","ra")    )
 
 AddSubCat(2, 7, "Sphere", "")
+aF(2, 6, "V=(Q/(4*π*ε0*εr))*(1/ra-1/rb)", U("v","q","π","ε0","εr","ra","rb")        )
+aF(2, 6, "Er=Q/(4*π*ε0*εr*r*r)",          U("er","q","r","π","ε0","εr")             )
+aF(2, 6, "cl=(4*π*ε0*εr*ra*rb)/(rb-ra)",  U("cl","π","ε0","εr","rb","ra")           )
 
 AddCat(3, "Inductors and Magnetism", "")
 AddSubCat(3, 1, "Long Line", "")
