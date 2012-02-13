@@ -86,14 +86,14 @@ aF(2, 6, "Er=V/(r*ln(rb/ra))",            U("er","v","r","rb","ra")          )
 aF(2, 6, "cl=(2*π*ε0*εr)/ln(rb/ra)",      U("cl","π","ε0","εr","rb","ra")    )
 
 AddSubCat(2, 7, "Sphere", "")
-aF(2, 6, "V=(Q/(4*π*ε0*εr))*(1/ra-1/rb)", U("v","q","π","ε0","εr","ra","rb") )
-aF(2, 6, "Er=Q/(4*π*ε0*εr*r*r)",          U("er","q","r","π","ε0","εr")      )
-aF(2, 6, "cl=(4*π*ε0*εr*ra*rb)/(rb-ra)",  U("cl","π","ε0","εr","rb","ra")    )
+aF(2, 7, "V=(Q/(4*π*ε0*εr))*(1/ra-1/rb)", U("v","q","π","ε0","εr","ra","rb") )
+aF(2, 7, "Er=Q/(4*π*ε0*εr*r*r)",          U("er","q","r","π","ε0","εr")      )
+aF(2, 7, "cl=(4*π*ε0*εr*ra*rb)/(rb-ra)",  U("cl","π","ε0","εr","rb","ra")    )
 
 AddCat(3, "Inductors and Magnetism", "")
 
 AddSubCat(3, 1, "Long Line", "")
-aF(3, 1, "B=()", U() )
+aF(3, 1, "B=(μ0*I)/(2*π*r)", U("b", "μ0", "i", "r", "π") )
 
 AddSubCat(3, 2, "Long Strip", "")
 AddSubCat(3, 3, "Parallel Wires", "")
