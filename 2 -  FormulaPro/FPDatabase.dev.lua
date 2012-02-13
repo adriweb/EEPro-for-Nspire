@@ -93,9 +93,12 @@ aF(2, 7, "cl=(4*π*ε0*εr*ra*rb)/(rb-ra)",  U("cl","π","ε0","εr","rb","ra") 
 AddCat(3, "Inductors and Magnetism", "")
 
 AddSubCat(3, 1, "Long Line", "")
-aF(3, 1, "B=(μ0*I)/(2*π*r)", U("b", "μ0", "i", "r", "π") )
+aF(3, 1, "B=(μ0*I)/(2*π*r)", U("b","μ0","i","r","π") )
 
 AddSubCat(3, 2, "Long Strip", "")
+aF(3, 2, "Bx=((-μ0*Is)/(2*π))*(atan((x+d/2)/y)-atan((x-d/2)/y))", U("bx","μ0","is","π","x","d","y") )
+aF(3, 2, "By=((μ0*Is)/(4*π))*ln((y*y-(x+d/2))/(y*y-(x-d/2)))",    U("by","μ0","is","π","x","d","y") )
+
 AddSubCat(3, 3, "Parallel Wires", "")
 AddSubCat(3, 4, "Loop", "")
 AddSubCat(3, 5, "Coaxial Cable", "")
