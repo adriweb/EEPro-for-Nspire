@@ -100,6 +100,10 @@ aF(3, 2, "Bx=((-μ0*Is)/(2*π))*(atan((x+d/2)/y)-atan((x-d/2)/y))", U("bx","μ0"
 aF(3, 2, "By=((μ0*Is)/(4*π))*ln((y*y-(x+d/2))/(y*y-(x-d/2)))",    U("by","μ0","is","π","x","d","y") )
 
 AddSubCat(3, 3, "Parallel Wires", "")
+aF(3, 3, "Fw=(μ0*I1*I2)/2*π*D",               U("fw","μ0","I1","I2","π","D")       )
+aF(3, 3, "Bx=(μ0/(2*π))*(I1/x-I2/(D-x))",     U("bx","μ0","I1","I2","π","D","x" )  )
+aF(3, 3, "L=(μ0/(4*π))+(μ0/(π))*acos(D/2*a)", U("L","μ0","a","π","D" )             )
+
 AddSubCat(3, 4, "Loop", "")
 AddSubCat(3, 5, "Coaxial Cable", "")
 AddSubCat(3, 6, "Skin Effect", "")
