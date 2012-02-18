@@ -25,12 +25,17 @@ function showSIPref()
 		push_screen(SIPrefixes)
 end
 
+function showBoolExpr()
+		remove_screen()
+		push_screen(RefBoolExpr)
+end
+
 function showPhysConst()
 		remove_screen()
 		push_screen(RefConstants)
 end
  
- function showResColor()
+function showResColor()
 		remove_screen()
 		push_screen(ResColor)
 end
@@ -47,6 +52,7 @@ menu = {
 	},
 	{"Reference",
 	   {"Resistor Color Code", showResColor},
+	   {"Boolean Expressions", showBoolExpr},
 	   {"Greek Alphabet", showGreek},
 	   {"Physical Constants", showPhysConst},
 	   {"SI Prefixes", showSIPref}

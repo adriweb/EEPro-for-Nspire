@@ -1,8 +1,8 @@
 Greek = Screen()
  
-font = "serif"
+Greek.font = "serif"
   
-alphabet1 = {
+Greek.alphabet1 = {
  { utf8(913), utf8(945), "Alpha" },
  { utf8(914), utf8(946), "Beta" },
  { utf8(915), utf8(947), "Gamma" },
@@ -12,7 +12,7 @@ alphabet1 = {
  { utf8(919), utf8(951), "Eta" },
  { utf8(920), utf8(952), "Theta" }
 }
-alphabet2 = {
+Greek.alphabet2 = {
  { utf8(921), utf8(953), "Iota" },
  { utf8(922), utf8(954), "Kappa" },
  { utf8(923), utf8(955), "Lambda" },
@@ -22,7 +22,7 @@ alphabet2 = {
  { utf8(927), utf8(959), "Omicron" },
  { utf8(928), utf8(960), "Pi" }
 }
-alphabet3 = {
+Greek.alphabet3 = {
  { utf8(929), utf8(961), "Rho" },
  { utf8(931), utf8(963), "Sigma" },
  { utf8(932), utf8(964), "Tau" },
@@ -34,22 +34,22 @@ alphabet3 = {
 }
  
 function Greek:paint(gc)
-        msg = "Greek Alphabet"
+        local msg = "Greek Alphabet"
         gc:setFont("sansserif","b",12)
         drawXCenteredString(gc,msg,5)
-        gc:setFont(font,"r",12)
-        for k,v in ipairs(alphabet1) do
+        gc:setFont(Greek.font,"r",12)
+        for k,v in ipairs(Greek.alphabet1) do
                 gc:drawString(v[3] .. " : " .. v[1] .. " " .. v[2], 5, 10+22*k, "top")
         end
-        for k,v in ipairs(alphabet2) do
+        for k,v in ipairs(Greek.alphabet2) do
                 gc:drawString(v[3] .. " : " .. v[1] .. " " .. v[2], 5+.34*pww(), 10+22*k, "top")
         end
-        for k,v in ipairs(alphabet3) do
+        for k,v in ipairs(Greek.alphabet3) do
                 gc:drawString(v[3] .. " : " .. v[1] .. " " .. v[2], 5+.67*pww(), 10+22*k, "top")
         end
 end
  
 function Greek:enterKey()
-    font = font == "serif" and "sansserif" or "serif"
+    Greek.font = Greek.font == "serif" and "sansserif" or "serif"
     Greek:invalidate()
 end

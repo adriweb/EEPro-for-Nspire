@@ -13,7 +13,7 @@ RefConstants.data = {
 {"Electron mass energy (MeV)","mec2","0.511 MeV"},
 {"Electron rest mass","me","9.109 x 10^-31 kg"},
 {"Faraday constant","F","9.649 x 10^4 C mol^-1"},
-{"Fine-structure constant","_","7.297 x 10^-3"},
+{"Fine-structure constant",utf8(945),"7.297 x 10^-3"},
 {"Gas constant","R","8.314 J mol-1 K^-1"},
 {"Gravitational constant","G","6.67 x 10^-11 Nm^2 kg^-2"},
 {"Neutron mass energy (J)","mnc2","1.505 x 10^-10 J"},
@@ -21,8 +21,8 @@ RefConstants.data = {
 {"Neutron rest mass","mn","1.675 x 10^-27 kg"},
 {"Neutron-electron mass ratio","mn/me","1838.68"},
 {"Neutron-proton mass ratio","mn/mp","1.0014"},
-{"Permeability of a vacuum","mu0","4*pi x 10^-7 N A^-2"},
-{"Permittivity of a vacuum","eps0","8.854 x 10^-12 F m^-1"},
+{"Permeability of a vacuum",utf8(956).."0","4*pi x 10^-7 N A^-2"},
+{"Permittivity of a vacuum",utf8(949).."0","8.854 x 10^-12 F m^-1"},
 {"Planck constant","h","6.626 x 10^-34 J s"},
 {"Proton mass energy (J)","mpc2","1.503 x 10^-10 J"},
 {"Proton mass energy (MeV)","mpc2","938.272 MeV"},
@@ -57,7 +57,7 @@ function RefConstants:paint(gc)
         if RefConstants.leftRight > 1 then
         	gc:drawString(utf8(9664),4,0,"top")
         end
-        if RefConstants.leftRight < 150 then
+        if RefConstants.leftRight < 160 then
         	gc:drawString(utf8(9654),pww()-gc:getStringWidth(utf8(9660))-2,0,"top")
         end
         if RefConstants.tmpScroll > 1 then
@@ -67,11 +67,11 @@ function RefConstants:paint(gc)
         	gc:drawString(utf8(9660),pww()-4*gc:getStringWidth(utf8(9654))-2,0,"top")
         end
         drawXCenteredString(gc,msg,4)
-        gc:setFont(font,"r",12)
+        gc:setFont("sansserif","r",12)
         
        	local tmp = 0
        	for k=RefConstants.tmpScroll,table.getn(RefConstants.data) do
-       			tmp = tmp + 1
+			tmp = tmp + 1
        		gc:setFont("sansserif","b",12)
             gc:drawString(RefConstants.data[k][1], 5-RefConstants.leftRight, 5+22*tmp, "top")
         	gc:setFont("sansserif","r",12)

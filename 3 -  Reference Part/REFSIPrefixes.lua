@@ -18,7 +18,7 @@ SIPrefixes.prefixes2 = {
 	{"d", "Deci", "-1"},
 	{"c", "Centi", "-2"},
 	{"m", "Milli", "-3"},
-	{string.uchar(956), "Micro", "-6"},
+	{utf8(956), "Micro", "-6"},
 	{"n", "Nano", "-9"},
 	{"p", "Pico", "-12"},
 	{"f", "Femto", "-15"},
@@ -28,10 +28,10 @@ SIPrefixes.prefixes2 = {
 }
 
 function SIPrefixes:paint(gc)
-	    msg = "SI Prefixes  "
+	    local msg = "SI Prefixes  "
         gc:setFont("sansserif","b",12)
         drawXCenteredString(gc,msg,0)
-        gc:setFont(font,"r",12)
+        gc:setFont("sansserif","r",12)
         for k,v in ipairs(SIPrefixes.prefixes1) do
                 gc:drawString("10", 5+.03*self.w, 3+19*k, "top")
                 gc:drawString(v[3], 23+.03*self.w, 19*k-3, "top")

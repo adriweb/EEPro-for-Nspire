@@ -1,6 +1,6 @@
 ResColor = Screen()
 
-colors = {
+ResColor.colors = {
 ["silver"] = {217,217,217},
 ["gold"] = {255,211,76},
 ["black"] = {0,0,0},
@@ -26,7 +26,7 @@ end
 -- Resistor = resistor({238,1,3},{5,6,11,3,2},1)
 Resistor = resistor({23,1,3},{5,6,3,2},1)
 
-tolerance = {
+ResColor.tolerance = {
 ["0.1"] = 10,
 ["0.25"] = 9,
 ["0.5"] = 8,
@@ -35,16 +35,16 @@ tolerance = {
 ["5"] = 2,
 ["10"] = 1
 }
-tolerancenr = {0.1,0.25,0.5,1,2,5,10}
+ResColor.tolerancenr = {0.1,0.25,0.5,1,2,5,10}
 
-colortable = {"silver","gold","black","brown","red","orange","yellow","green","blue","pink","grey","white"}
+ResColor.colortable = {"silver","gold","black","brown","red","orange","yellow","green","blue","pink","grey","white"}
 
 function ResColor:paint(gc)
 	Resistor:paint(gc)
 end
 
 function Resistor:paint(gc)
-	local w,h = getWW(),getWH()
+	local w,h = pww(),pwh()
 	
 	--------------
 	-- resistor --
@@ -59,7 +59,7 @@ function Resistor:paint(gc)
 	-- colors --
 	------------
 	for i=1,#self.colors do
-		gc:setColorRGB(unpack(colors[colortable[self.colors[i]]]))
+		gc:setColorRGB(unpack(ResColor.colors[ResColor.colortable[self.colors[i]]]))
 		gc:fillRect((w-w/2)/2+w/2/(#self.colors)*(i-0.85),(h/2-h/5)/2,w/2/(#self.colors+2),h/5)
 	end
 	
@@ -68,7 +68,7 @@ function Resistor:paint(gc)
 	-----------
 	gc:setColorRGB(0,0,0)
 	gc:setFont("sansserif","b","11")
-	local printstring = "Resistance: "..self.value[1]*self.value[2].." Ohm "..string.uchar(177).." "..tolerancenr[self.value[3]].."%"
+	local printstring = "Resistance: "..self.value[1]*self.value[2].." Ohm "..string.uchar(177).." "..ResColor.tolerancenr[self.value[3]].."%"
 	gc:drawString(printstring,(w-gc:getStringWidth(printstring))/2,h/2,"top")
 	
 	---------------
@@ -118,10 +118,10 @@ function Resistor:arrowKey(arrow)
 	---------------
 	elseif arrow=='up' and self.selection==#self.colors and self.value[3]<7 then
 		self.value[3] = self.value[3] + 1
-		self.colors[self.selection] = tolerance[tostring(tolerancenr[self.value[3]])]
+		self.colors[self.selection] = ResColor.tolerance[tostring(ResColor.tolerancenr[self.value[3]])]
 	elseif arrow=='down' and self.selection==#self.colors  and self.value[3]>1 then
 		self.value[3] = self.value[3] - 1
-		self.colors[self.selection] = tolerance[tostring(tolerancenr[self.value[3]])]
+		self.colors[self.selection] = ResColor.tolerance[tostring(ResColor.tolerancenr[self.value[3]])]
 	end
 	platform.window:invalidate()
 end
@@ -137,13 +137,4 @@ function Resistor:charIn(char)
 		self.value[1] = self.value[1]/10
 	end
 	platform.window:invalidate()
-end
-
-
-function getWW()
-	return platform.window:width()
-end
-
-function getWH()
-	return platform.window:height()
 end
