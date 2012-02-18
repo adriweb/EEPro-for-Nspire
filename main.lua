@@ -15,7 +15,7 @@ function showGreek()
 		push_screen(Greek)
 end
 
-function showPro()
+function showFormulaPro()
 		remove_screen()
 		push_screen(FormulaPro)
 end
@@ -28,6 +28,11 @@ end
 function showBoolExpr()
 		remove_screen()
 		push_screen(RefBoolExpr)
+end
+
+function showBoolAlg()
+		remove_screen()
+		push_screen(RefBoolAlg)
 end
 
 function showPhysConst()
@@ -48,16 +53,16 @@ menu = {
 	   {"Not done Yet", notDone}
 	},
 	{"FormulaPro",
-	   {"Formula Pro", showPro}
+	   {"Formula Pro", showFormulaPro}
 	},
 	{"Reference",
 	   {"Resistor Color Code", showResColor},
 	   {"Boolean Expressions", showBoolExpr},
+	   {"Boolean Algebra", showBoolAlg},
 	   {"Greek Alphabet", showGreek},
 	   {"Physical Constants", showPhysConst},
 	   {"SI Prefixes", showSIPref}
 	}
- 
 }
  
 toolpalette.register(menu)
