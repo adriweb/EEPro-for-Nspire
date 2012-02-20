@@ -11,7 +11,7 @@ RefBoolAlg.data = {
 {"x+(y+z)=(x+y)+z","x.(y.z)=(x.y).z","Associative"},
 {"x.(y+z)=(x.y)+(x.z)","x+(y.z)=(x+y).(x+z)","Distributive"},
 {"x+(x.y)=x","x.(x+y)=x","Absorption"},
-{"(x+y+z)'=x'.y'.z'","(x.y.z)'=x'+y'+z'","DeMorgan"},
+{"(x+y+z)'=x'.y'.z'","(x.y.z)'=x'+y'+z'","DeMorgan's Law"},
 {"(x.y)+(x'.z)+(y.z)=(x.y)+(x'.z)","(x+y).(x'+z).(y+z)=(x+y).(x'+z)","Consensus"}
 }
 
@@ -55,6 +55,6 @@ function RefBoolAlg:paint(gc)
 		gc:setFont("sansserif","b",12)
 		gc:drawString(RefBoolAlg.data[k][3], 3, 10+22*tmp, "top")
 		gc:setFont("sansserif","r",12)
-		gc:drawString(RefBoolAlg.data[k][1+test(RefBoolAlg.dual)], 115-22*test(k==11)*test(pww()<330)+30*test(pww()>330)+12, 10+22*tmp, "top")
+		gc:drawString(RefBoolAlg.data[k][1+test(RefBoolAlg.dual)], 125-32*test(k==11)*test(pww()<330)+30*test(pww()>330)+12, 10+22*tmp, "top")
 	end
 end
