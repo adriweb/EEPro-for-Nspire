@@ -81,7 +81,7 @@ function Screen:draw(gc)
 end
 
 function Screen:switchFocus(n)
-	if n~=0 or #self.widgets>0 then
+	if n~=0 and #self.widgets>0 then
 		if self.focus~=0 then
 			self:getWidget().hasFocus	=	false
 			self:getWidget():loseFocus()

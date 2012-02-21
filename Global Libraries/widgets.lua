@@ -95,7 +95,7 @@ function sList:init()
 	
 	self.items	=	{}
 	self.sel	=	1
-	self.font	=	{"sansserif", "r", 11}
+	self.font	=	{"sansserif", "r", 10}
 	self.itemh	=	18
 	self.hitems	=	4
 	
@@ -197,6 +197,8 @@ function sInput:init()
 	
 	self.value	=	""	
 	self.bgcolor	=	{255,255,255}
+	self.font	=	{"sansserif", "r", 10}
+	
 end
 
 function sInput:paint(gc)
@@ -204,6 +206,7 @@ function sInput:paint(gc)
 	local x	=	self.x
 	local y = 	self.y
 	
+	gc:setFont(unpack(self.font))
 	gc:setColorRGB(unpack(self.bgcolor))
 	gc:fillRect(x, y, self.w, self.h)
 
@@ -227,9 +230,9 @@ function sInput:paint(gc)
 	end
 	
 	if text==self.value then
-		gc:drawString(text, x+2, y-2, "top")
+		gc:drawString(text, x+2, y+1, "top")
 	else
-		gc:drawString(text, x-4+self.w-gc:getStringWidth(text), y-2, "top")
+		gc:drawString(text, x-4+self.w-gc:getStringWidth(text), y+1, "top")
 	end
 	if self.hasFocus then
 		gc:fillRect(self.x+(text==self.value and gc:getStringWidth(text)+2 or self.w-4), self.y, 1, self.h)
@@ -259,7 +262,7 @@ function sLabel:init(text, widget)
 	self.dh		=	20
 	self.lim	=	false
 	self.color	=	{0,0,0}
-	self.font	=	{"sansserif", "r", 11}
+	self.font	=	{"sansserif", "r", 10}
 	self.p		=	"top"
 	
 end
@@ -287,7 +290,7 @@ function sLabel:paint(gc)
 	
 	gc:setFont(unpack(self.font))
 	gc:setColorRGB(unpack(self.color))
-	gc:drawString(text, self.x, self.y-2, self.p)
+	gc:drawString(text, self.x, self.y, self.p)
 end
 
 function sLabel:getFocus()
@@ -309,17 +312,18 @@ function sButton:init(text, action)
 	self.dw	=	48
 	
 	self.bordercolor	=	{136,136,136}
+	self.font	=	{"sansserif", "r", 10}
 	
 end
 
 function sButton:paint(gc)
-	
+	gc:setFont(unpack(self.font))
 	self.w	=	gc:getStringWidth(self.text)+8
 	gc:setColorRGB(248,252,248)
 	gc:fillRect(self.x+2, self.y+2, self.w-4, self.h-4)
 	gc:setColorRGB(0,0,0)
 	
-	gc:drawString(self.text, self.x+4, self.y+2, "top")
+	gc:drawString(self.text, self.x+4, self.y+4, "top")
 		
 	gc:setColorRGB(unpack(self.bordercolor))
 	gc:fillRect(self.x + 2, self.y, self.w-4, 2)
