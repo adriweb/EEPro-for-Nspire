@@ -131,6 +131,13 @@ function horizontalBar(gc,y)
 	gc:fillRect(gc,0,y,pww(),1)
 end
 
+
+function nativeBar(gc, screen, y)
+	gc:setColorRGB(128,128,128)
+	gc:fillRect(screen.x+5, screen.y+y, screen.w-10, 2)
+end
+
+
 function drawSquare(gc,x,y,l)
 	gc:drawPolyLine(gc,{(x-l/2),(y-l/2), (x+l/2),(y-l/2), (x+l/2),(y+l/2), (x-l/2),(y+l/2), (x-l/2),(y-l/2)})
 end
