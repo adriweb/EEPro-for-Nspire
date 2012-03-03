@@ -21,6 +21,8 @@ function Ref.addRefs()
 	for n, ref in ipairs(References) do
 		if ref.screen then
 			table.insert(RefList.items, ref.title)
+		else
+			table.insert(RefList.items, ref.title .. " (not yet done)")
 		end
 	end
 end
