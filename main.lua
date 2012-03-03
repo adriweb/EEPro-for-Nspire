@@ -20,6 +20,10 @@ main.items	= {
 {title="Reference" , info="Line1\nLine2\nLine3", action=pushreference }
 }
 
+main.item_H	= 48
+main.item_W	= 270
+main.item_S	= 5
+
 function main:paint(gc)
 	gc:setFont("sansserif", "b", 12)
 	gc:drawString("EEPro for the Nspire", 5, 2, "top")
@@ -28,11 +32,13 @@ function main:paint(gc)
 	gc:setFont("sansserif", "r", 10)
 	
 	local number_items	= #self.items
-	local item_H	= 48
-	local item_W	= 270
-	local item_S	= 5
+	local item_H	= self.item_H
+	local item_W	= self.item_W
+	local item_S	= self.item_S
 	local startY	= (self.h - (item_H + item_S) * number_items)/2 + 3
 	local startX	= (self.w - item_W)/2
+	self.startY	= startY
+	self.startX	= startX
 	
 	for n, item in ipairs(self.items) do
 		local y	= startY + (item_H + item_S) * (n - 1)
@@ -75,6 +81,14 @@ function main:arrowKey(arrow)
 		self.sel	= self.sel-1
 	elseif arrow == "down" and self.sel<#self.items then
 		self.sel	= self.sel+1
+	end
+	self:invalidate()
+end
+
+function main:mouseUp(x, y)
+	local itemss	= self.item_H + self.item_S
+	if x>=self.startX and x<=self.startX+self.item_W and y>=self.startY and y<= self.startY + itemss * #self.items then
+		self.sel	= math.floor((y-self.startY)/itemss)+1
 	end
 	self:invalidate()
 end
