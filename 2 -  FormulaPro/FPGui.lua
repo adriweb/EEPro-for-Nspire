@@ -107,6 +107,10 @@ function SubCatSel:paint(gc)
 	gc:setFont("sansserif", "r", 8)
 	gc:drawString(tostring(self.cid), 7, 5, "top")	
 	
+	gc:drawRect(58, 110, self.w-58-5, self.h-110-5)
+	gc:setColorRGB(128,128,128)
+	gc:setFont("sansserif", "r", 10)
+	gc:drawString("Information..", 60, 110, "top")
 end
 
 function SubCatSel:pushed(sel)
