@@ -1,7 +1,7 @@
 --This document should contain the glue for all the plugins
 
 function pushanalysis() 
-
+	push_screen(Analysis)
 end
 
 function pushformulapro()

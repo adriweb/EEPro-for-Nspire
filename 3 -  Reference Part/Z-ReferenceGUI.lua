@@ -19,7 +19,9 @@ Ref:appendWidget(RefList, 2, 2)
 
 function Ref.addRefs()
 	for n, ref in ipairs(References) do
-		table.insert(RefList.items, ref.title)
+		if ref.screen then
+			table.insert(RefList.items, ref.title)
+		end
 	end
 end
 

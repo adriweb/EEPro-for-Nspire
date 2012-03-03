@@ -296,7 +296,7 @@ WScreen	= addExtension(Screen, WidgetManager)
 
 --Dialog screen
 
-Dialog	=	class(Screen)
+Dialog	=	class(WScreen)
 
 function Dialog:init(title,xx,yy,ww,hh)
 	self.yy	=	yy
@@ -311,6 +311,10 @@ function Dialog:init(title,xx,yy,ww,hh)
 end
 
 function Dialog:paint(gc)
+	self.xx	= (pww()-self.w)/2
+	self.yy	= (pwh()-self.h)/2
+	self.x, self.y	= self.xx, self.yy
+	
 	gc:setFont("sansserif","r",10)
 	gc:setColorRGB(224,224,224)
 	gc:fillRect(self.x, self.y, self.w, self.h)
@@ -338,7 +342,11 @@ function Dialog:paint(gc)
 			
 	gc:setColorRGB(255,255,255)
 	gc:drawString(self.title, self.x + 4, self.y+2, "top")
+	
+	self:postPaint(gc)
 end
+
+function Dialog:postPaint() end
 
 ------------------------------------------------------------------
 --                   Bindings to the on events                  --
