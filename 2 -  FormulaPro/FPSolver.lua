@@ -1,3 +1,8 @@
+function math.solve(formula, tosolve)
+	local eq="max(exp" .. string.uchar(9654) .. "list(solve(" .. formula .. ", " .. tosolve ..")," .. tosolve .."))"
+	return math.eval(eq)
+end
+
 function find_data(known)
 	local done={}
 	
@@ -26,8 +31,8 @@ function find_data(known)
 			if no==1 then
 				print("I can solve " .. formula[2])
 				
-				local eq="max(exp" .. string.uchar(9654) .. "list(solve(" .. formula[2] .. ", " .. tosolve ..")," .. tosolve .."))"
-				local sol	=	math.eval(eq)
+			--	local eq="max(exp" .. string.uchar(9654) .. "list(solve(" .. formula[2] .. ", " .. tosolve ..")," .. tosolve .."))"
+				local sol	=	math.solve(formula[2], tosolve)
 				known[tosolve]	=	sol
 				done[formula]=true
 				var.store(tosolve, sol)
