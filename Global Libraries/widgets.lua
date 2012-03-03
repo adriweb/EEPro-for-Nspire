@@ -446,9 +446,28 @@ function sList:arrowKey(arrow)
 	end
 end
 
+
+function sList:mouseUp(x, y)
+	if x>=self.x and x<self.x+self.w-16 and y>=self.y and y<self.y+self.h then
+		
+		self.sel	= math.floor((y-self.y)/self.ih) + 1 + self.top
+		print(self.sel)
+		if self.sel>(self.h/self.ih)+self.top then
+			self.top	= self.top + 1
+		end
+		if self.top>=self.sel then
+			self.top	= self.top - 1
+		end				
+	end 
+	self.scrollBar:mouseUp(x, y)
+end
+
+
 function sList:enterKey()
 	self:action(self.sel, self.items[self.sel])
 end
+
+
 
 function sList:action() end
 
