@@ -1,12 +1,23 @@
 --This document should contain the glue for all the plugins
 
+function pushanalysis() 
 
+end
+
+function pushformulapro()
+	only_screen(CategorySel)
+end
+
+function pushreference()
+	
+end
 
 main	=	Screen()
-main.items	=    {
-{title="Analysis"  , info="Line1\nLine2\nLine3"},
-{title="FormulaPro", info="Line1\nLine2\nLine3"},
-{title="Reference" , info="Line1\nLine2\nLine3"}
+main.sel	= 1
+main.items	= {
+{title="Analysis"  , info="Line1\nLine2\nLine3", action=pushanalysis  },
+{title="FormulaPro", info="Line1\nLine2\nLine3", action=pushformulapro},
+{title="Reference" , info="Line1\nLine2\nLine3", action=pushreference }
 }
 
 function main:paint(gc)
@@ -25,13 +36,18 @@ function main:paint(gc)
 	
 	for n, item in ipairs(self.items) do
 		local y	= startY + (item_H + item_S) * (n - 1)
-		gc:setColorRGB(220, 220, 220)
+		if self.sel~=n then
+			gc:setColorRGB(220, 220, 220)
+		else
+			gc:drawRect(startX-1, y-1, item_W+2, item_H+2)
+		end
 		gc:drawRect(startX, y, item_W, item_H)
 		
 		gc:setColorRGB(0, 0, 0)
 		gc:setFont("sansserif", "r", 10)
 		gc:drawString(self.items[n].title, startX+item_H+2, y, "top")
 		
+		gc:setColorRGB(128, 128, 128)
 		gc:setFont("sansserif", "r", 8)
 
 		local splinfo	= self.items[n].info:split("\n")
@@ -46,5 +62,17 @@ function main:paint(gc)
 	nativeBar(gc, self, self.h-26)
 end
 
+function main:arrowKey(arrow)
+	if arrow == "up" and self.sel>1 then
+		self.sel	= self.sel-1
+	elseif arrow == "down" and self.sel<#self.items then
+		self.sel	= self.sel+1
+	end
+	self:invalidate()
+end
+
+function main:enterKey()
+	self.items[self.sel].action()
+end
 
 push_screen(main)
