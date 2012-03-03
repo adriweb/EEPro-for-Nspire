@@ -1,38 +1,67 @@
+function uCol(col)
+	return col[1] or 0, col[2] or 0, col[3] or 0
+end
+
+function textLim(gc, text, max)
+	local ttext, out = "",""
+	local width	= gc:getStringWidth(text)
+	if width<max then
+		return text, width
+	else
+		for i=1, #text do
+			ttext	= text:usub(1, i)
+			if gc:getStringWidth(ttext .. "..")>max then
+				break
+			end
+			out = ttext
+		end
+		return out .. "..", gc:getStringWidth(out .. "..")
+	end
+end
+
+
 ------------------------------------------------------------------
 --                        Widget  Class                         --
 ------------------------------------------------------------------
 
-Widget	=	class()
+Widget	=	class(Screen)
 
 function Widget:init()
 	self.dw	=	10
 	self.dh	=	10
+	
+	self:ext()
 end
 
+function Widget:setSize(w, h)
+	self.ww	= w or self.ww
+	self.hh	= h or self.hh
+end
 
-function Widget:size()
-	self.rx	=	math.floor(Pr(self.xx, 0, self.parent.w)+.5)
-	self.ry	=	math.floor(Pr(self.yy, 0, self.parent.h)+.5)
+function Widget:setPos(x, y)
+	self.xx	= x or self.xx
+	self.yy	= y or self.yy
+end
+
+function Widget:size(n)
+	if n then return end
+	self.w	=	math.floor(Pr(self.ww, self.dw, self.parent.w, 0)+.5)
+	self.h	=	math.floor(Pr(self.hh, self.dh, self.parent.h, 0)+.5)
+	
+	self.rx	=	math.floor(Pr(self.xx, 0, self.parent.w, self.w)+.5)
+	self.ry	=	math.floor(Pr(self.yy, 0, self.parent.h, self.h)+.5)
 	self.x	=	self.parent.x + self.rx
 	self.y	=	self.parent.y + self.ry
-	
-	self.w	=	math.floor(Pr(self.ww, self.dw, self.parent.w)+.5)
-	self.h	=	math.floor(Pr(self.hh, self.dh, self.parent.h)+.5)
 end
 
-function Widget:prePaint()
-
-end
-
-function Widget:paint(gc) 
-	--gc:drawRect(self.x, self.y, self.w, self.h)
-end
-
-function Widget:focus()
+function Widget:giveFocus()
 	if self.parent.focus~=0 then
-		self.parent:getWidget().hasFocus	=	false
-		self.parent:getWidget():loseFocus()
+		local veto	= self.parent:stealFocus()
+		if veto == -1 then
+			return -1
+		end		
 	end
+	
 	self.hasFocus	=	true
 	self.parent.focus	=	self.pid
 	self:getFocus()
@@ -40,18 +69,11 @@ end
 
 function Widget:getFocus() end
 function Widget:loseFocus() end
-function Widget:arrowKey(key)end
-function Widget:mouseDown(x, y) end
-function Widget:mouseUp(x, y) end
-function Widget:mouseMove(x, y) end
 function Widget:enterKey() 
 	self.parent:switchFocus(1)
 end
-function Widget:charIn() end
-function Widget:escapeKey() end
-function Widget:backspaceKey() end
 
-
+WWidget	= addExtension(Widget, WidgetManager)
 
 
 ------------------------------------------------------------------
@@ -99,106 +121,6 @@ function box:paint(gc)
 	end
 end
 
-------------------------------------------------------------------
---                         List Widget                          --
-------------------------------------------------------------------
-
-sList	=	class(Widget)
-
-function sList:init()
-	self.dw	=	100
-	self.dh	=	10
-	
-	self.items	=	{}
-	self.sel	=	1
-	self.font	=	{"sansserif", "r", 10}
-	self.itemh	=	18
-	self.hitems	=	4
-	
-	self.dh	=	4 * self.itemh + 1
-	
-	self.color1	=	{160,160,160} 
-	self.color2	=	{200,200,200}
-	self.scolor	=	{40,40,40}
-	self.bgcolor	=	{240,240,245}
-	self.textc	=	{0,0,0}
-	self.texts	=	{220,220,220}
-	
-	self.shrink	=	false
-	self.offset	=	0
-end
-
-function sList:prePaint(gc)
-	self.hitems	=	math.floor((self.h-1)/self.itemh)
-	local height	=	self.hitems*self.itemh+1
-	self.he	=	self.h-height
-	if self.shrink then
-		self.h	=	height
-	end
-end
-
-function sList:paint(gc)
-	local x	=	self.x
-	local y = 	self.y
-	local n	=	#self.items
-	
-	gc:setColorRGB(unpack(self.bgcolor))
-	gc:setFont(unpack(self.font))
-	gc:fillRect(self.x, self.y, self.w, self.h)
-	gc:setColorRGB(0,0,0)
-	gc:drawRect(x, y, self.w, self.h)
-	
-	for i=1, math.min(n, self.hitems) do
-		local color	= ((i+self.offset)%2==0) and self.color1 or self.color2
-		
-		if i + self.offset	==	self.sel and self.hasFocus then color = self.scolor end
-		gc:setColorRGB(unpack(color))
-		gc:fillRect(x+1, y + 1 + i*self.itemh-self.itemh , self.w-1, self.itemh)
-		
-		local tcolor	=	self.textc
-		if i + self.offset	==	self.sel and self.hasFocus then tcolor = self.texts end		
-		gc:setColorRGB(unpack(tcolor))
-		gc:drawString(self.items[i+self.offset], x+1, y+1 + i*self.itemh-self.itemh*1.15, "top")
-	end
-	local i	=	math.min(n, self.hitems)+1
-	local color	= ((i+self.offset)%2==0) and self.color1 or self.color2
-	if n>self.hitems and not self.shrink then
-		gc:setColorRGB(unpack(color))
-		gc:fillRect(x+1, y + 1 + i*self.itemh-self.itemh , self.w-1, self.he)
-	end
-	
-	gc:setColorRGB(0,0,0)
-	local selp	=	math.max(n/self.hitems,1)
-	gc:fillRect(x+self.w+2, 2 + y + (self.offset*self.itemh)/selp, 3, (self.hitems*18)/selp)
-end
-
-function sList:arrowKey(arrow)
-	if #self.items==0 then return end
-	
-	if arrow	==	"up" and self.sel>1 then
-		self.sel	=	self.sel - 1
-		if self.offset==self.sel then
-			self.offset	=	self.offset - 1
-		end
-		
-	elseif arrow	==	"down" and self.sel<#self.items then
-		self.sel	=	self.sel + 1
-		if self.offset + self.hitems < self.sel then
-			self.offset	=	self.offset + 1
-		end
-	end
-	
-end
-
-function sList:mouseUp(xx, yy)
-	if xx>=self.x and yy>=self.y and xx<self.x+self.w and yy<self.y+self.h then
-		self.sel	=	self.offset + math.ceil((yy-self.y)/self.itemh)
-		if self.sel>#self.items then self.sel=#self.items end
-	end
-end
-
-
-
 
 ------------------------------------------------------------------
 --                         Input Widget                         --
@@ -222,8 +144,8 @@ function sInput:paint(gc)
 	local x	=	self.x
 	local y = 	self.y
 	
-	gc:setFont(unpack(self.font))
-	gc:setColorRGB(unpack(self.bgcolor))
+	gc:setFont(uCol(self.font))
+	gc:setColorRGB(uCol(self.bgcolor))
 	gc:fillRect(x, y, self.w, self.h)
 
 	gc:setColorRGB(0,0,0)
@@ -267,7 +189,12 @@ function sInput:backspaceKey()
 	self.value	=	self.value:usub(1,-2)
 end
 
---Label
+
+
+
+------------------------------------------------------------------
+--                         Label Widget                         --
+------------------------------------------------------------------
 
 sLabel	=	class(Widget)
 
@@ -284,39 +211,32 @@ function sLabel:init(text, widget)
 end
 
 function sLabel:paint(gc)
+	gc:setFont(uCol(self.font))
+	gc:setColorRGB(uCol(self.color))
+	
 	local text	=	""
 	local ttext
 	if self.lim then
-		if gc:getStringWidth(self.text)<self.w then
-			self.dw	= gc:getStringWidth(self.text)
-			text = self.text
-		else
-			for i=1, #self.text do
-				ttext	=	self.text:sub(1,i)
-				if gc:getStringWidth(ttext .. "..")>self.w then
-					break
-				end
-				text = ttext
-			end
-			text = text .. ".."
-		end
+		text, self.dw	= textLim(gc, self.text, self.w)
 	else
 		text = self.text
 	end
 	
-	gc:setFont(unpack(self.font))
-	gc:setColorRGB(unpack(self.color))
 	gc:drawString(text, self.x, self.y, self.p)
 end
 
-function sLabel:getFocus()
-	if self.widget then
-		self.widget:focus()
+function sLabel:getFocus(n)
+	if self.widget and not n then
+		self.widget:giveFocus()
+	elseif n then
+		self.parent:switchFocus(n)
 	end
 end
 
 
---Button widget
+------------------------------------------------------------------
+--                        Button Widget                         --
+------------------------------------------------------------------
 
 sButton	=	class(Widget)
 
@@ -333,7 +253,7 @@ function sButton:init(text, action)
 end
 
 function sButton:paint(gc)
-	gc:setFont(unpack(self.font))
+	gc:setFont(uCol(self.font))
 	self.w	=	gc:getStringWidth(self.text)+8
 	gc:setColorRGB(248,252,248)
 	gc:fillRect(self.x+2, self.y+2, self.w-4, self.h-4)
@@ -341,7 +261,7 @@ function sButton:paint(gc)
 	
 	gc:drawString(self.text, self.x+4, self.y+4, "top")
 		
-	gc:setColorRGB(unpack(self.bordercolor))
+	gc:setColorRGB(uCol(self.bordercolor))
 	gc:fillRect(self.x + 2, self.y, self.w-4, 2)
 	gc:fillRect(self.x + 2, self.y+self.h-2, self.w-4, 2)
 	
@@ -362,3 +282,240 @@ function sButton:enterKey()
 end
 
 sButton.mouseUp	=	sButton.enterKey
+
+
+------------------------------------------------------------------
+--                      Scrollbar Widget                        --
+------------------------------------------------------------------
+
+
+scrollBar	= class(Widget)
+
+scrollBar.upButton=image.new("\011\0\0\0\010\0\0\0\0\0\0\0\022\0\0\0\016\0\001\0001\1981\1981\1981\1981\1981\1981\1981\1981\1981\1981\1981\198\255\255\255\255\255\255\255\255\156\243\255\255\255\255\255\255\255\2551\1981\198\255\255\255\255\255\255\214\218\0\128\214\218\255\255\255\255\255\2551\1981\198\255\255\255\255\247\222B\136\0\128B\136\247\222\255\255\255\2551\1981\198\255\255\247\222B\136!\132\0\128!\132B\136\247\222\255\2551\1981\198\247\222B\136!\132B\136R\202B\136!\132B\136\247\2221\1981\198\132\144B\136B\136\247\222\255\255\247\222B\136B\136\132\1441\1981\198\156\243\132\144\247\222\255\255\255\255\255\255\247\222\132\144\189\2471\1981\198\255\255\222\251\255\255\255\255\255\255\255\255\255\255\222\251\255\2551\1981\1981\1981\1981\1981\1981\1981\1981\1981\1981\1981\198")
+scrollBar.downButton=image.new("\011\0\0\0\010\0\0\0\0\0\0\0\022\0\0\0\016\0\001\0001\1981\1981\1981\1981\1981\1981\1981\1981\1981\1981\1981\198\255\255\222\251\255\255\255\255\255\255\255\255\255\255\222\251\255\2551\1981\198\156\243\132\144\247\222\255\255\255\255\255\255\247\222\132\144\189\2471\1981\198\132\144B\136B\136\247\222\255\255\247\222B\136B\136\132\1441\1981\198\247\222B\136!\132B\136R\202B\136!\132B\136\247\2221\1981\198\255\255\247\222B\136!\132\0\128!\132B\136\247\222\255\2551\1981\198\255\255\255\255\247\222B\136\0\128B\136\247\222\255\255\255\2551\1981\198\255\255\255\255\255\255\214\218\0\128\214\218\255\255\255\255\255\2551\1981\198\255\255\255\255\255\255\255\255\156\243\255\255\255\255\255\255\255\2551\1981\1981\1981\1981\1981\1981\1981\1981\1981\1981\1981\198")
+
+function scrollBar:init(h, top, visible, total)
+	self.color1	= {96, 100, 96}
+	self.color2	= {184, 184, 184}
+	
+	self.hh	= h or 100
+	self.ww = 14
+	
+	self.visible = visible or 10
+	self.total   = total   or 15
+	self.top     = top     or 4
+end
+
+function scrollBar:paint(gc)
+	gc:setColorRGB(255,255,255)
+	gc:fillRect(self.x+1, self.y+1, self.w-1, self.h-1)
+	
+	gc:drawImage(self.upButton  , self.x+2, self.y+2)
+	gc:drawImage(self.downButton, self.x+2, self.y+self.h-11)
+	gc:setColorRGB(uCol(self.color1))
+	gc:drawRect(self.x + 3, self.y + 14, 8, self.h - 28)
+	
+	if self.visible<self.total then
+		local step	= (self.h-26)/self.total
+		gc:fillRect(self.x + 3, self.y + 14  + step*self.top, 9, step*self.visible)
+		gc:setColorRGB(uCol(self.color2))
+		gc:fillRect(self.x + 2 , self.y + 14 + step*self.top, 1, step*self.visible)
+		gc:fillRect(self.x + 12, self.y + 14 + step*self.top, 1, step*self.visible)
+	end
+end
+
+function scrollBar:update(top, visible, total)
+	self.top      = top     or self.top
+	self.visible  = visible or self.visible
+	self.total    = total   or self.total
+end
+
+function scrollBar:action(top) end
+
+function scrollBar:mouseUp(x, y)
+	local upX	= self.x+2
+	local upY	= self.y+2
+	local downX	= self.x+2
+	local downY	= self.y+self.h-11
+	local butH	= 10
+	local butW	= 11
+	
+	if x>=upX and x<upX+butW and y>=upY and y<upY+butH and self.top>0 then
+		self.top	= self.top-1
+		self:action(self.top)
+	elseif x>=downX and x<downX+butW and y>=downY and y<downY+butH and self.top<self.total-self.visible then
+		self.top	= self.top+1
+		self:action(self.top)
+	end
+end
+
+function scrollBar:getFocus(n)
+	if n==-1 or n==1 then
+		self.parent:switchFocus(n)
+	end
+end
+
+
+------------------------------------------------------------------
+--                         List Widget                          --
+------------------------------------------------------------------
+
+sList	= class(WWidget)
+
+function sList:init()
+	Widget.init(self)
+	self.dw	= 150
+	self.dh	= 153
+
+	self.ih	= 18
+
+	self.top	= 0
+	self.sel	= 1
+	
+	self.font	= {"sansserif", "r", 10}
+	self.colors	= {50,150,190}
+	self.items	= {}
+end
+
+function sList:appended()
+	self.scrollBar	= scrollBar("100", self.top, #self.items,#self.items)
+	self:appendWidget(self.scrollBar, -1, 0)
+	
+	function self.scrollBar:action(top)
+		self.parent.top	= top
+	end
+end
+
+
+function sList:paint(gc)
+	local x	= self.x
+	local y	= self.y
+	local w	= self.w
+	local h	= self.h
+	
+	
+	local ih	= self.ih   
+	local top	= self.top		
+	local sel	= self.sel		
+		      
+	local items	= self.items			
+	local visible_items	= math.floor(h/ih)	
+	gc:setColorRGB(255, 255, 255)
+	gc:fillRect(x, y, w, h)
+	gc:setColorRGB(0, 0, 0)
+	gc:drawRect(x, y, w, h)
+	gc:clipRect("set", x, y, w, h)
+	gc:setFont(unpack(self.font))
+
+	
+	
+	local label, item
+	for i=1, math.min(#items-top, visible_items+1) do
+		item	= items[i+top]
+		label	= textLim(gc, item, w-(5 + 12 + 2 + 1))
+		
+		if i+top == sel then
+			gc:setColorRGB(unpack(self.colors))
+			gc:fillRect(x+1, y + i*ih-ih + 1, w-(12 + 2 + 2), ih)
+			
+			gc:setColorRGB(255, 255, 255)
+		end
+		
+		gc:drawString(label, x+5, y + i*ih-ih , "top")
+		gc:setColorRGB(0, 0, 0)
+	end
+	
+	self.scrollBar:update(top, visible_items, #items)
+	
+	gc:clipRect("reset")
+end
+
+function sList:arrowKey(arrow)	
+	if arrow=="up" and self.sel>1 then
+		self.sel	= self.sel - 1
+		if self.top>=self.sel then
+			self.top	= self.top - 1
+		end
+	end
+
+	if arrow=="down" and self.sel<#self.items then
+		self.sel	= self.sel + 1
+		if self.sel>(self.h/self.ih)+self.top then
+			self.top	= self.top + 1
+		end
+	end
+end
+
+function sList:enterKey()
+	self:action(self.sel, self.items[self.sel])
+end
+
+function sList:action() end
+
+function sList:reset()
+	self.sel	= 1
+	self.top	= 0
+end
+
+------------------------------------------------------------------
+--                        Screen Widget                         --
+------------------------------------------------------------------
+
+sScreen	= class(WWidget)
+
+function sScreen:init(w, h)
+	Widget.init(self)
+	self.ww	= w
+	self.hh	= h
+	self.noloop	= true
+end
+
+function sScreen:appended()
+	self.oy	= self.y
+	self.ox	= self.x
+end
+
+function sScreen:paint(gc)
+	gc:clipRect("set", self.x, self.y, self.w, self.h)
+	self:extra(gc)
+	self.x	= self.ox
+	self.y	= self.oy
+end
+
+function sScreen:postPaint(gc)
+	gc:clipRect("reset")
+end
+
+function sScreen:extra(gc)
+
+end
+
+function sScreen:setY(y)
+	self.oy	= y or self.oy
+end
+
+function sScreen:setX(x)
+	self.ox	= x or self.ox
+end
+
+function sScreen:getFocus(n)
+	if n==-1 or n==1 then
+		self:stealFocus()
+		self:switchFocus(n, true)
+	end
+end
+
+function sScreen:loop(n)
+	self.parent:switchFocus(n)
+end
+
+function sScreen:loseFocus(n)
+	if (n == 1 and self.focus<#self.widgets) or (n == -1 and self.focus>1) then
+		--print("Hey, I don't want to lose focus!")
+		self:switchFocus(n)
+
+		return -1
+	else
+		self:stealFocus()
+	end
+end

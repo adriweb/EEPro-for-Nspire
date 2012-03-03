@@ -17,7 +17,7 @@ end
 
 function showFormulaPro()
 		remove_screen()
-		push_screen(FormulaPro)
+		only_screen(CategorySel)
 end
 
 function showSIPref()

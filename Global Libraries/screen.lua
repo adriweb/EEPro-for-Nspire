@@ -1,20 +1,48 @@
+function print(...)
+	local out	= ""
+	for _,v in ipairs({...}) do 
+		out	=	out .. (_==1 and "" or "    ") .. tostring(v)
+	end
+	var.store("print", out)
+end
+
+
+function Pr(n, d, s, ex)
+	local nc	= tonumber(n)
+	if nc and nc<math.abs(nc) then
+		return s-ex-(type(n)== "number" and math.abs(n) or (.01*s*math.abs(nc)))
+	else
+		return (type(n)=="number" and n or (type(n)=="string" and .01*s*nc or d))
+	end
+end
+
+-- Apply an extension on a class, and return our new frankenstein 
+function addExtension(oldclass, extension)
+	local newclass	= class(oldclass)
+	for key, data in pairs(extension) do
+		newclass[key]	= data
+	end
+	return newclass
+end
+
 ------------------------------------------------------------------
 --                        Screen  Class                         --
 ------------------------------------------------------------------
-
-function Pr(n, d, s)
-	return (type(n)=="number" and n or (type(n)=="string" and .01*s*n or d))
-end
-
 
 Screen	=	class()
 
 Screens	=	{}
 
-function push_screen(screen)
+function push_screen(screen, ...)
 	table.insert(Screens, screen)
 	platform.window:invalidate()
-	current_screen():pushed()
+	current_screen():pushed(...)
+end
+
+function only_screen(screen, ...)
+	Screens	=	{screen}
+	platform.window:invalidate()
+	screen:pushed(...)	
 end
 
 function remove_screen(screen)
@@ -32,15 +60,20 @@ function Screen:init(xx,yy,ww,hh)
 	self.hh	=	hh
 	self.ww	=	ww
 	
-	self:size()
 	
-	self.widgets	=	{}
-	self.focus	=	0
+	self:ext()
+	self:size(0)
+end
+
+function Screen:ext()
 end
 
 function Screen:size()
 	local screenH	=	platform.window:height()
 	local screenW	=	platform.window:width()
+
+	if screenH	== 0 then screenH=212 end
+	if screenW	== 0 then screenW=318 end
 
 	self.x	=	math.floor(Pr(self.xx, 0, screenW)+.5)
 	self.y	=	math.floor(Pr(self.yy, 0, screenH)+.5)
@@ -48,19 +81,54 @@ function Screen:size()
 	self.h	=	math.floor(Pr(self.hh, screenH, screenH)+.5)
 end
 
-function Screen:drawWidgets(gc) 
-	for _, widget in pairs(self.widgets) do
-		widget:size()
-		widget:prePaint()
-		widget:paint(gc)
-		
-		gc:setColorRGB(0,0,0)
-	end
+
+function Screen:pushed()
+	
 end
 
-function Screen:pushed() end
 
-function Screen:appendWidget(widget, xx, yy) 
+function Screen:draw(gc)
+	self:size()
+	self:paint(gc)
+end
+
+function Screen:paint(gc) end
+
+function Screen:invalidate()
+	platform.window:invalidate(self.x ,self.y , self.w, self.h)
+end
+
+function Screen:arrowKey()	end
+function Screen:enterKey()	end
+function Screen:backspaceKey()	end
+function Screen:escapeKey()	end
+function Screen:tabKey()	end
+function Screen:backtabKey()	end
+function Screen:charIn(char)	end
+
+
+function Screen:mouseDown()	end
+function Screen:mouseUp()	end
+function Screen:mouseMove()	end
+
+function Screen:appended() end
+
+function Screen:destroy()
+	self	= nil
+end
+
+------------------------------------------------------------------
+--                   WidgetManager Extension                    --
+------------------------------------------------------------------
+
+WidgetManager	= {}
+
+function WidgetManager:ext()
+	self.widgets	=	{}
+	self.focus	=	0
+end
+
+function WidgetManager:appendWidget(widget, xx, yy) 
 	widget.xx	=	xx
 	widget.yy	=	yy
 	widget.parent	=	self
@@ -68,92 +136,122 @@ function Screen:appendWidget(widget, xx, yy)
 	
 	table.insert(self.widgets, widget)
 	widget.pid	=	#self.widgets
+	
+	widget:appended(self)
 end
 
-function Screen:getWidget()
+function WidgetManager:getWidget()
 	return self.widgets[self.focus]
 end
 
-function Screen:draw(gc)
-	self:size()
-	self:paint(gc)
-	self:drawWidgets(gc)
-end
-
-function Screen:switchFocus(n)
-	if n~=0 and #self.widgets>0 then
-		if self.focus~=0 then
-			self:getWidget().hasFocus	=	false
-			self:getWidget():loseFocus()
-		end
+function WidgetManager:drawWidgets(gc) 
+	for _, widget in pairs(self.widgets) do
+		widget:size()
+		widget:draw(gc)
 		
-		self.focus	=	self.focus + n
-		if self.focus>#self.widgets then
-			self.focus	=	1
-		elseif self.focus<1 then
-			self.focus	=	#self.widgets
-		end	
-		self:getWidget().hasFocus	=	true	
-		self:getWidget():getFocus()
+		gc:setColorRGB(0,0,0)
 	end
 end
 
-function Screen:paint(gc)
-	-- will be overriden
+function WidgetManager:postPaint(gc) 
 end
 
-function Screen:invalidate()
-	platform.window:invalidate(self.x ,self.y , self.w, self.h)
+function WidgetManager:draw(gc)
+	self:size()
+	self:paint(gc)
+	self:drawWidgets(gc)
+	self:postPaint(gc)
 end
 
-function Screen:timer()		end
 
-function Screen:arrowKey(arrow)	
+function WidgetManager:loop(n) end
+
+function WidgetManager:stealFocus(n)
+	local oldfocus=self.focus
+	if oldfocus~=0 then
+		local veto	= self:getWidget():loseFocus(n)
+		if veto == -1 then
+			return -1, oldfocus
+		end
+		self:getWidget().hasFocus	=	false
+		self.focus	= 0
+	end
+	return 0, oldfocus
+end
+
+function WidgetManager:switchFocus(n, b)
+	if n~=0 and #self.widgets>0 then
+		local veto, focus	= self:stealFocus(n)
+		if veto == -1 then
+			return -1
+		end
+		
+		local looped
+		self.focus	=	focus + n
+		if self.focus>#self.widgets then
+			self.focus	=	1
+			looped	= true
+		elseif self.focus<1 then
+			self.focus	=	#self.widgets
+			looped	= true
+		end	
+		if looped and self.noloop and not b then
+			self.focus	= focus
+			self:loop(n)
+		else
+			self:getWidget().hasFocus	=	true	
+			self:getWidget():getFocus(n)
+		end
+	end
+end
+
+
+function WidgetManager:arrowKey(arrow)	
 	if self.focus~=0 then
 		self:getWidget():arrowKey(arrow)
 	end
 	self:invalidate()
 end
 
-function Screen:enterKey()	
+function WidgetManager:enterKey()	
 	if self.focus~=0 then
 		self:getWidget():enterKey()
 	end
 	self:invalidate()
 end
 
-function Screen:backspaceKey()
+function WidgetManager:backspaceKey()
 	if self.focus~=0 then
 		self:getWidget():backspaceKey()
 	end
 	self:invalidate()
 end
 
-function Screen:escapeKey()	
+function WidgetManager:escapeKey()	
 	if self.focus~=0 then
 		self:getWidget():escapeKey()
 	end
 	self:invalidate()
 end
 
-function Screen:tabKey()	
+function WidgetManager:tabKey()	
 	self:switchFocus(1)
 	self:invalidate()
 end
 
-function Screen:backtabKey()	
+function WidgetManager:backtabKey()	
 	self:switchFocus(-1)
 	self:invalidate()
 end
 
-function Screen:charIn(char)
+function WidgetManager:charIn(char)
 	if self.focus~=0 then
 		self:getWidget():charIn(char)
 	end
 	self:invalidate()
 end
 
-function Screen:getWidgetIn(x, y)
+function WidgetManager:getWidgetIn(x, y)
 	for n, widget in pairs(self.widgets) do
 		if x>=widget.x and y>=widget.y and x<widget.x+widget.w and y<widget.y+widget.h then
 			return n, widget
@@ -161,10 +259,10 @@ function Screen:getWidgetIn(x, y)
 	end 
 end
 
-function Screen:mouseDown(x, y) 
+function WidgetManager:mouseDown(x, y) 
 	local n, widget	=	self:getWidgetIn(x, y)
 	if n then
-		if self.focus~=0 then self:getWidget().hasFocus = false self:getWidget():loseFocus()  end
+		if self.focus~=0 and self.focus~=n then self:getWidget().hasFocus = false self:getWidget():loseFocus()  end
 		self.focus	=	n
 		
 		widget.hasFocus	=	true
@@ -176,17 +274,24 @@ function Screen:mouseDown(x, y)
 		self.focus	=	0
 	end
 end
-function Screen:mouseUp(x, y)
+function WidgetManager:mouseUp(x, y)
 	if self.focus~=0 then
 		self:getWidget():mouseUp(x, y)
 	end
 	self:invalidate()
 end
-function Screen:mouseMove(x, y)
+function WidgetManager:mouseMove(x, y)
 	if self.focus~=0 then
 		self:getWidget():mouseMove(x, y)
 	end
 end
+
+--------------------------
+-- Our new frankenstein --
+--------------------------
+
+WScreen	= addExtension(Screen, WidgetManager)
+
 
 
 --Dialog screen
@@ -263,3 +368,4 @@ function on.backspaceKey()	current_screen():backspaceKey()  end
 function on.mouseDown(x,y)	current_screen():mouseDown(x,y)	 end
 function on.mouseUp(x,y)	current_screen():mouseUp(x,y)	 end
 function on.mouseMove(x,y)	current_screen():mouseMove(x,y)  end
+
