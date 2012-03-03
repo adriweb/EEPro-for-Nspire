@@ -34,6 +34,10 @@ Greek.alphabet3 = {
 }
  
 function Greek:paint(gc)
+	gc:setColorRGB(255,255,255)
+	gc:fillRect(self.x, self.y, self.w, self.h)
+	gc:setColorRGB(0,0,0)
+	
         local msg = "Greek Alphabet"
         gc:setFont("sansserif","b",12)
         drawXCenteredString(gc,msg,5)
@@ -52,4 +56,8 @@ end
 function Greek:enterKey()
     Greek.font = Greek.font == "serif" and "sansserif" or "serif"
     Greek:invalidate()
+end
+
+function Greek:escapeKey()
+	remove_screen()
 end

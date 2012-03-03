@@ -9,7 +9,7 @@ function pushformulapro()
 end
 
 function pushreference()
-	
+	only_screen(Ref)
 end
 
 main	=	Screen()

@@ -33,6 +33,10 @@ function RefBoolExpr:arrowKey(arrw)
 end
 
 function RefBoolExpr:paint(gc)
+	gc:setColorRGB(255,255,255)
+	gc:fillRect(self.x, self.y, self.w, self.h)
+	gc:setColorRGB(0,0,0)
+	
 	    msg = "Boolean Expressions : "
         gc:setFont("sansserif","b",12)
         if RefBoolExpr.tmpScroll > 1 then
@@ -53,4 +57,8 @@ function RefBoolExpr:paint(gc)
             gc:drawString(RefBoolExpr.data[k][2], 40+30*test(pww()>330)+15, 5+22*tmp, "top")
 		    gc:drawString(RefBoolExpr.data[k][3], 134+50*test(pww()>330)+15, 5+22*tmp, "top")
 		end
+end
+
+function RefBoolExpr:escapeKey()
+	remove_screen()
 end

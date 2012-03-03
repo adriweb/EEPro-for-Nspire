@@ -35,7 +35,15 @@ function RefBoolAlg:enterKey()
 	RefBoolAlg:invalidate()
 end
 
+function RefBoolAlg:escapeKey()
+	remove_screen()
+end
+
 function RefBoolAlg:paint(gc)
+	gc:setColorRGB(255,255,255)
+	gc:fillRect(self.x, self.y, self.w, self.h)
+	gc:setColorRGB(0,0,0)
+	
 	msg = "Boolean Algebra : "
 	gc:setFont("sansserif","b",12)
 	if RefBoolAlg.tmpScroll > 1 and pww()<330 then

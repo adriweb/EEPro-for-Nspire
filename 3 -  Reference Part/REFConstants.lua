@@ -52,6 +52,10 @@ function RefConstants:arrowKey(arrw)
 end
 
 function RefConstants:paint(gc)
+	gc:setColorRGB(255,255,255)
+	gc:fillRect(self.x, self.y, self.w, self.h)
+	gc:setColorRGB(0,0,0)
+	
 	    msg = "Physical Constants : "
         gc:setFont("sansserif","b",12)
         if RefConstants.leftRight > 1 then
@@ -77,4 +81,8 @@ function RefConstants:paint(gc)
         	gc:setFont("sansserif","r",12)
             gc:drawString("  (" .. RefConstants.data[k][2] .. ") : " .. RefConstants.data[k][3] .. ". ", gc:getStringWidth(RefConstants.data[k][1])+15-RefConstants.leftRight, 5+22*tmp, "top")
 		end
+end
+
+function RefConstants:escapeKey()
+	remove_screen()
 end

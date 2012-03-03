@@ -40,6 +40,10 @@ ResColor.tolerancenr = {0.1,0.25,0.5,1,2,5,10}
 ResColor.colortable = {"silver","gold","black","brown","red","orange","yellow","green","blue","pink","grey","white"}
 
 function ResColor:paint(gc)
+	gc:setColorRGB(255,255,255)
+	gc:fillRect(self.x, self.y, self.w, self.h)
+	gc:setColorRGB(0,0,0)
+	
 	Resistor:paint(gc)
 end
 
@@ -137,4 +141,8 @@ function Resistor:charIn(char)
 		self.value[1] = self.value[1]/10
 	end
 	platform.window:invalidate()
+end
+
+function ResColor:escapeKey()
+	remove_screen()
 end

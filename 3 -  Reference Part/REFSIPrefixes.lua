@@ -28,6 +28,10 @@ SIPrefixes.prefixes2 = {
 }
 
 function SIPrefixes:paint(gc)
+	gc:setColorRGB(255,255,255)
+	gc:fillRect(self.x, self.y, self.w, self.h)
+	gc:setColorRGB(0,0,0)
+	
 	    local msg = "SI Prefixes  "
         gc:setFont("sansserif","b",12)
         drawXCenteredString(gc,msg,0)
@@ -44,4 +48,8 @@ function SIPrefixes:paint(gc)
                 gc:drawString("  : " .. v[2], 45+.52*self.w, 3+19*k, "top")
                 gc:drawString("  (" .. v[1] .. ")", 100+.52*self.w, 3+19*k, "top")
         end
+end
+
+function SIPrefixes:escapeKey()
+	remove_screen()
 end
