@@ -77,8 +77,8 @@ function Screen:size()
 
 	self.x	=	math.floor(Pr(self.xx, 0, screenW)+.5)
 	self.y	=	math.floor(Pr(self.yy, 0, screenH)+.5)
-	self.w	=	math.floor(Pr(self.ww, screenW, screenW)+.5)
-	self.h	=	math.floor(Pr(self.hh, screenH, screenH)+.5)
+	self.w	=	math.floor(Pr(self.ww, screenW, screenW, 0)+.5)
+	self.h	=	math.floor(Pr(self.hh, screenH, screenH, 0)+.5)
 end
 
 
@@ -138,6 +138,7 @@ function WidgetManager:appendWidget(widget, xx, yy)
 	widget.pid	=	#self.widgets
 	
 	widget:appended(self)
+	return self
 end
 
 function WidgetManager:getWidget()

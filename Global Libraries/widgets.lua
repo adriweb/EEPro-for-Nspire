@@ -201,8 +201,9 @@ sLabel	=	class(Widget)
 function sLabel:init(text, widget)
 	self.widget	=	widget
 	self.text	=	text
-	self.dw		=	30
-	self.dh		=	20
+	self.ww		=	30
+	
+	self.hh		=	20
 	self.lim	=	false
 	self.color	=	{0,0,0}
 	self.font	=	{"sansserif", "r", 10}
@@ -246,7 +247,7 @@ function sButton:init(text, action)
 	
 	self.dh	=	27
 	self.dw	=	48
-	
+		
 	self.bordercolor	=	{136,136,136}
 	self.font	=	{"sansserif", "r", 10}
 	
@@ -254,7 +255,9 @@ end
 
 function sButton:paint(gc)
 	gc:setFont(uCol(self.font))
-	self.w	=	gc:getStringWidth(self.text)+8
+	self.ww	=	gc:getStringWidth(self.text)+8
+	self:size()
+
 	gc:setColorRGB(248,252,248)
 	gc:fillRect(self.x+2, self.y+2, self.w-4, self.h-4)
 	gc:setColorRGB(0,0,0)
@@ -450,14 +453,20 @@ end
 function sList:mouseUp(x, y)
 	if x>=self.x and x<self.x+self.w-16 and y>=self.y and y<self.y+self.h then
 		
-		self.sel	= math.floor((y-self.y)/self.ih) + 1 + self.top
-		print(self.sel)
+		local sel	= math.floor((y-self.y)/self.ih) + 1 + self.top
+		if sel==self.sel then
+			self:enterKey()
+			return
+		end
+		self.sel=sel
+		
 		if self.sel>(self.h/self.ih)+self.top then
 			self.top	= self.top + 1
 		end
 		if self.top>=self.sel then
 			self.top	= self.top - 1
-		end				
+		end
+						
 	end 
 	self.scrollBar:mouseUp(x, y)
 end
