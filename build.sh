@@ -35,4 +35,5 @@ rm lib.big.lua
 rm FormulaPro.big.lua
 rm Analysis.big.lua
 rm Reference.big.lua
+rm Database.big.lua
 rm EEPro.big.lua
