@@ -4,7 +4,10 @@
 
 echo "Building EEProNspire..."
 
+cd 0\ -\ \ Database
+./build.sh
 
+cd ..
 cd 1\ -\ \ Analysis\ Part
 ./build.sh
 
@@ -22,7 +25,7 @@ cd Global\ Libraries
 
 cd ..
 
-cat lib.big.lua FormulaPro.big.lua Analysis.big.lua Reference.big.lua main.lua > EEPro.big.lua
+cat Database.big.lua lib.big.lua FormulaPro.big.lua Analysis.big.lua Reference.big.lua main.lua > EEPro.big.lua
 luna EEPro.big.lua EEPro.tns
 
 echo "Done building"
