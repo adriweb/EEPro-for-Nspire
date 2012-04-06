@@ -1,3 +1,7 @@
+function utf8(n)
+	return string.uchar(n)
+end
+
 Constants	= {
 {"Acceleration due to gravity","g","9.81 m*s^-2"},
 {"Atomic mass unit","mu or u","1.66 x 10^-27 kg"},

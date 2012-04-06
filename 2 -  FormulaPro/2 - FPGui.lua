@@ -133,6 +133,12 @@ function SubCatSel:escapeKey()
 	only_screen(CategorySel)
 end
 
+
+
+-------------------
+-- Manual solver --
+-------------------
+
 manualSolver	= WScreen()
 manualSolver.pl	= sScreen(-20, -50)
 manualSolver:appendWidget(manualSolver.pl, 2, 4)
@@ -143,7 +149,7 @@ manualSolver:appendWidget(manualSolver.sb, -2, 3)
 manualSolver.back	=	sButton("Back")
 manualSolver:appendWidget(manualSolver.back, 5, -5)
 function manualSolver.back:action()
-	print("back pressed")
+	manualSolver:escapeKey()
 end
 
 
@@ -170,28 +176,63 @@ function manualSolver:pushed(cid, sid)
 	self.sid	= sid
 	self.sub	= Categories[cid].sub[sid]
 	
+	self.known	= {}
+	self.inputs	= {}
+	
 	local inp, lbl
 	local i	= 0
 	for unit,_ in pairs(self.sub.units) do
 		i=i+1
-		inp	= sInput()
-		inp.value	= "0"
-		inp.number	= true
 		
-		lbl	= sLabel(unit, inp)
+		if not Constants[unit] then	
+			inp	= sInput()
+			inp.value	= ""
+			inp.number	= true
+			
+			function inp:enterKey() 
+				manualSolver:solve()
+			end
+			
+			self.inputs[unit]	= inp
+			
+			lbl	= sLabel(unit, inp)
 
-		self.pl:appendWidget(inp, 30, i*30-28)		
-		self.pl:appendWidget(lbl, 2, i*30-28)
-		self.pl:appendWidget(sLabel(":", inp), 20, i*30-28)
+			self.pl:appendWidget(inp, 30, i*30-28)		
+			self.pl:appendWidget(lbl, 2, i*30-28)
+			self.pl:appendWidget(sLabel(":", inp), 20, i*30-28)
+		else
+			self.known[unit]	= Constants[unit].value
+		end
 
 	end
+	
 	manualSolver.sb:update(0, math.floor(self.pl.h/30+.5), i)
 	self.pl:giveFocus()
 
-	self.pl.focus	=1
+	self.pl.focus	= 1
 	self.pl:getWidget().hasFocus	= true
 	self.pl:getWidget():getFocus()
 	
+end
+
+function manualSolver:solve()
+	local inputed	= {}
+
+	for unit, input in pairs(self.inputs) do
+		input:enable()
+		if input.value	~= "" then
+			inputed[unit]	= tonumber(input.value)
+		end
+	end
+	
+	self.known	= find_data(inputed, self.cid, self.sid)
+	
+	for unit, value in pairs(self.known) do
+		if not inputed[unit] and self.inputs[unit] then
+			self.inputs[unit].value	= tostring(value)
+			self.inputs[unit]:disable()
+		end
+	end
 end
 
 function manualSolver:escapeKey()

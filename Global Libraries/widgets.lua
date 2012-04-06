@@ -72,6 +72,14 @@ function Widget:loseFocus() end
 function Widget:enterKey() 
 	self.parent:switchFocus(1)
 end
+function Widget:arrowKey(arrow)
+	if arrow=="up" then
+		self.parent:switchFocus(-1)
+	elseif arrow=="down" then
+		self.parent:switchFocus(1)
+	end
+end
+
 
 WWidget	= addExtension(Widget, WidgetManager)
 
@@ -135,8 +143,9 @@ function sInput:init()
 	
 	self.value	=	""	
 	self.bgcolor	=	{255,255,255}
+	self.disabledcolor	= {128,128,128}
 	self.font	=	{"sansserif", "r", 10}
-	
+	self.disabled	= false
 end
 
 function sInput:paint(gc)
@@ -167,11 +176,16 @@ function sInput:paint(gc)
 		end
 	end
 	
+	if self.disabled then
+		gc:setColorRGB(uCol(self.disabledcolor))
+	end
+	
 	if text==self.value then
 		gc:drawString(text, x+2, y+1, "top")
 	else
 		gc:drawString(text, x-4+self.w-gc:getStringWidth(text), y+1, "top")
 	end
+	
 	if self.hasFocus then
 		gc:fillRect(self.x+(text==self.value and gc:getStringWidth(text)+2 or self.w-4), self.y, 1, self.h)
 	end
@@ -179,14 +193,24 @@ function sInput:paint(gc)
 end
 
 function sInput:charIn(char)
-	if self.number and not tonumber(self.value .. char) then
+	if (not self.disabled) and self.number and (not tonumber(self.value .. char)) then
 		return
 	end
 	self.value	=	self.value .. char
 end
 
 function sInput:backspaceKey()
-	self.value	=	self.value:usub(1,-2)
+	if not self.disabled then
+		self.value	=	self.value:usub(1,-2)
+	end
+end
+
+function sInput:enable()
+	self.disabled	= false
+end
+
+function sInput:disable()
+	self.dissabled	= true
 end
 
 
