@@ -25,7 +25,7 @@ The only requirement to run the .tns files is to have an Nspire OS >= 3.0. You c
 ## What do we have to do, for now ?
 First, the formula/equation manager/solver part.  (Look at this specific part on the linked document)
 
-![An early preview look at a part of FormulaPro](http://i.imgur.com/mQULJ.jpg)
+![An early preview look at a part of FormulaPro](http://i.imgur.com/mQULJ.jpg)![Some native-like GUI](http://i.imgur.com/b0jC0.jpg)![Some native-like GUI](http://i.imgur.com/HYCiZ.jpg)![Some native-like GUI](http://i.imgur.com/0QC5K.jpg)
 
 Please refer to the document linked in the previous paragraph.
 
