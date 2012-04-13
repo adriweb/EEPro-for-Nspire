@@ -193,7 +193,7 @@ function sInput:paint(gc)
 end
 
 function sInput:charIn(char)
-	if (not self.disabled) and self.number and (not tonumber(self.value .. char)) then
+	if self.disabled or (self.number and not tonumber(self.value .. char)) then
 		return
 	end
 	self.value	=	self.value .. char
@@ -210,7 +210,7 @@ function sInput:enable()
 end
 
 function sInput:disable()
-	self.dissabled	= true
+	self.disabled	= true
 end
 
 

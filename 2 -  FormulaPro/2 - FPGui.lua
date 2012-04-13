@@ -225,7 +225,7 @@ function manualSolver:solve()
 		end
 	end
 	
-	self.known	= find_data(inputed, self.cid, self.sid)
+	self.known	= find_data(copyTable(inputed), self.cid, self.sid)
 	
 	for unit, value in pairs(self.known) do
 		if not inputed[unit] and self.inputs[unit] then

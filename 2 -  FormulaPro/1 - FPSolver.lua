@@ -22,7 +22,7 @@ function find_data(known, cid, sid)
 		dirty_exit	=	false
 		
 		for i, formula in ipairs(Formulas) do
-			--if ((not cid) or (cid and formula.cid == cid)) and ((not sid) or (formula.cid == cid and formula.sid == sid)) then
+			if ((not cid) or (cid and formula.category == cid)) and ((not sid) or (formula.category == cid and formula.sub == sid)) then
 				no=0		
 					
 				for var in pairs(formula.units) do
@@ -50,7 +50,7 @@ function find_data(known, cid, sid)
 					print("I can not solve " .. formula.formula .. " because I don't know the value of multiple variables")
 				end
 			end
-		--end
+		end
 	end
 	
 	return known
