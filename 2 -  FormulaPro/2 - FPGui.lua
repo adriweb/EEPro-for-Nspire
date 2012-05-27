@@ -1,80 +1,47 @@
-CategorySel	= Screen()
-CategorySel.sel	=	2
+CategorySel	= WScreen()
 CategorySel.iconS	= 48
-CategorySel.offS	= 4
-CategorySel.n	= 6
+
+CategorySel.sublist	= sList()
+CategorySel:appendWidget(CategorySel.sublist, 5, 5)
+CategorySel.sublist:setSize(-10, -40)
+CategorySel.sublist.cid	= 0
+
+function CategorySel.sublist:action(sid)
+	only_screen(SubCatSel, sid)
+end
 
 function CategorySel:paint(gc)
-	local bx, by
-	local n	= self.n
-	local iconS	= self.iconS
-	local offS	= self.offS
-	local mv	= math.floor((self.w - n * (iconS+offS))/2 +.5) + 2
-	self.mv	= mv
+	gc:setColorRGB(255,255,255)
+	gc:fillRect(self.x, self.y, self.w, self.h)
 	
-	for cid, category in ipairs(Categories) do
-		bx	= (cid%n)
-		bx	= (bx>0 and (bx-1) or (n-1)) * (iconS+offS)
-		by	= math.floor((cid-1)/n) * (iconS+offS) + 5
-		
-		bx	= bx + mv
-		
-		if icon[cid] then
-			gc:drawImage(icon[cid], bx, by)
-		end
-		if cid==self.sel then
-			gc:setColorRGB(0,0,0)
-		else
-			gc:setColorRGB(220, 220, 220)
-		end
-		gc:drawRect(bx, by, iconS, iconS)
-		gc:setFont("sansserif", "r", 8)
-		gc:drawString(tostring(cid), bx+2, by, "top")
+
+	if icon[self.cid] then
+		gc:drawImage(icon[self.cid], 5, 5)
 	end
-	
-	gc:setColorRGB(220, 220, 220)
-	gc:drawRect(mv, 3 * (iconS+offS) + 5, n * (iconS+offS) - 4, 40)
-	gc:setColorRGB(0,0,0)
-	local splinfo	= Categories[self.sel].info:split("\n")
-	
+	gc:setColorRGB(220,220,220)
+	gc:setFont("sansserif", "r", 8)	
+	gc:drawRect(5, self.h-40+10, self.w-10, 25)
+	gc:setColorRGB(128,128,128)
+	gc:setFont("sansserif", "r", 8)
+		
+	local splinfo	= Categories[self.sublist.sel].info:split("\n")
 	for i, str in ipairs(splinfo) do
-		gc:drawString(str, mv+2, 3 * (iconS+offS) + 11 + i*10, "top")
-	end
-	
-	gc:setFont("sansserif", "r", 10)
-	gc:drawString(Categories[self.sel].name, mv+2, 3 * (iconS+offS) + 5, "top")
-end
-
-function CategorySel:arrowKey(arrow)
-	if arrow == "up" and self.sel-self.n>0 then
-		self.sel	= self.sel-self.n
-	elseif arrow == "down"  and self.sel+self.n<=#Categories then
-		self.sel	= self.sel+self.n
-	elseif arrow == "left" and self.sel>1 then
-		self.sel	= self.sel-1
-	elseif arrow == "right" and self.sel<#Categories then
-		self.sel	= self.sel+1
-	end
-	self:invalidate()
-end
-
-function CategorySel:mouseDown(x, y)
-	if x>self.mv and x<self.mv+(self.iconS+self.offS)*self.n and y>5 and y<5+3*(self.iconS+self.offS) then
-		x=x-self.mv
-		y=y-5
-		
-		local itemX	= math.floor(x/(self.iconS+self.offS))+1
-		local itemY	= math.floor(y/(self.iconS+self.offS))+1
-		local sel	= (itemY-1)*self.n + itemX
-		if sel<=#Categories then
-			self.sel	= sel
-		end
-		self:invalidate()
+		gc:drawString(str, 7, self.h-50+12 + i*10, "top")
 	end
 end
 
-function CategorySel:enterKey()
-	only_screen(SubCatSel, self.sel)
+function CategorySel:pushed()
+	local items	= {}
+	for cid, cat in ipairs(Categories) do
+		table.insert(items, cat.name)
+	end
+
+	self.sublist.items	= items
+	self.sublist:giveFocus()
+end
+
+function CategorySel:escapeKey()
+	only_screen(CategorySel)
 end
 
 function CategorySel:escapeKey()
@@ -86,31 +53,12 @@ SubCatSel	= WScreen()
 SubCatSel.sel	= 1
 
 SubCatSel.sublist	= sList()
-SubCatSel:appendWidget(SubCatSel.sublist, -5, 5)
-SubCatSel.sublist:setSize(-10-48-5, 100)
+SubCatSel:appendWidget(SubCatSel.sublist, 5, 5)
+SubCatSel.sublist:setSize(-10, -10)
 SubCatSel.sublist.cid	= 0
 
 function SubCatSel.sublist:action (sub)
 	only_screen(manualSolver, self.parent.cid, sub)
-end
-
-function SubCatSel:paint(gc)
-	gc:setColorRGB(255,255,255)
-	gc:fillRect(self.x, self.y, self.w, self.h)
-	
-
-	if icon[self.cid] then
-		gc:drawImage(icon[self.cid], 5, 5)
-	end
-	gc:setColorRGB(220,220,220)
-	gc:drawRect(5, 5, CategorySel.iconS, CategorySel.iconS)
-	gc:setFont("sansserif", "r", 8)
-	gc:drawString(tostring(self.cid), 7, 5, "top")	
-	
-	gc:drawRect(58, 110, self.w-58-5, self.h-110-5)
-	gc:setColorRGB(128,128,128)
-	gc:setFont("sansserif", "r", 10)
-	gc:drawString("Information..", 60, 110, "top")
 end
 
 function SubCatSel:pushed(sel)

@@ -550,24 +550,41 @@ function sScreen:setX(x)
 	self.ox	= x or self.ox
 end
 
+function sScreen:showWidget()
+	local w	= self:getWidget()
+	if not w then print("bye") return end
+	local y	= self.y-self.oy
+	print("hi", w.y, w.h, y,self.y,self.oy,self.h)
+	if w.y < y then
+		print("Moving up")
+		self:setY(y-w.y)
+	elseif w.y+w.h > y+self.h then
+		print("moving down")
+		self:setY(-(w.y+w.h-y-self.h-1))
+	end
+end
+
 function sScreen:getFocus(n)
 	if n==-1 or n==1 then
 		self:stealFocus()
 		self:switchFocus(n, true)
+		
+		self:showWidget()
 	end
 end
 
 function sScreen:loop(n)
 	self.parent:switchFocus(n)
+	self:showWidget()
 end
 
 function sScreen:loseFocus(n)
 	if (n == 1 and self.focus<#self.widgets) or (n == -1 and self.focus>1) then
-		--print("Hey, I don't want to lose focus!")
 		self:switchFocus(n)
-
+		self:showWidget()
 		return -1
 	else
 		self:stealFocus()
 	end
+	
 end
