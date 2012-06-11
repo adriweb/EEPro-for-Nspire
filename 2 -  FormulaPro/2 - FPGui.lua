@@ -109,12 +109,15 @@ function manualSolver:paint(gc)
 	gc:fillRect(self.x, self.y, self.w, self.h)
 	gc:setColorRGB(128,128,128)
 	gc:fillRect(self.x+5, self.y+self.h-42, self.w-10, 2)
+	self.sb:update(math.floor(-(self.pl.oy-4)/30+.5))
 end
 
 function manualSolver:postPaint(gc)
 	--gc:setColorRGB(128,128,128)
 	--gc:drawRect(self.x, self.y, self.w, self.h-46)
 end
+
+
 
 function manualSolver:pushed(cid, sid)
 	self.pl.widgets	= {}

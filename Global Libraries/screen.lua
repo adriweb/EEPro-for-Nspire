@@ -212,6 +212,8 @@ function WidgetManager:stealFocus(n)
 	return 0, oldfocus
 end
 
+function WidgetManager:focusChange() end
+
 function WidgetManager:switchFocus(n, b)
 	if n~=0 and #self.widgets>0 then
 		local veto, focus	= self:stealFocus(n)
@@ -236,6 +238,7 @@ function WidgetManager:switchFocus(n, b)
 			self:getWidget():getFocus(n)
 		end
 	end
+	self:focusChange()
 end
 
 
@@ -286,7 +289,9 @@ end
 
 function WidgetManager:getWidgetIn(x, y)
 	for n, widget in pairs(self.widgets) do
-		if x>=widget.x and y>=widget.y and x<widget.x+widget.w and y<widget.y+widget.h then
+		local wox	= widget.ox or 0
+		local woy	= widget.oy or 0
+		if x>=widget.x-wox and y>=widget.y-wox and x<widget.x+widget.w-wox and y<widget.y+widget.h-woy then
 			return n, widget
 		end
 	end 
@@ -302,8 +307,9 @@ function WidgetManager:mouseDown(x, y)
 		widget:getFocus()
 
 		widget:mouseDown(x, y)
+		self:focusChange()
 	else
-		if self.focus~=0 then self:getWidget().hasFocus = false self:getWidget():loseFocus()  end
+		if self.focus~=0 then self:getWidget().hasFocus = false self:getWidget():loseFocus() end
 		self.focus	=	0
 	end
 end

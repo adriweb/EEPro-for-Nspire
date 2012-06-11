@@ -533,33 +533,30 @@ function sScreen:init(w, h)
 	Widget.init(self)
 	self.ww	= w
 	self.hh	= h
+	self.oy	= 0
+	self.ox	= 0
 	self.noloop	= true
 end
 
 function sScreen:appended()
-	self.oy	= self.y
-	self.ox	= self.x
+	self.oy	= 0
+	self.ox	= 0
 end
 
 function sScreen:paint(gc)
 	gc_clipRect(gc, "set", self.x, self.y, self.w, self.h)
-	self:extra(gc)
-	self.x	= self.ox
-	self.y	= self.oy
+	self.x	= self.x + self.ox
+	self.y	= self.y + self.oy
 end
 
 function sScreen:postPaint(gc)
 	gc_clipRect(gc, "reset")
 end
 
-function sScreen:extra(gc)
-
-end
-
 function sScreen:setY(y)
 	self.oy	= y or self.oy
 end
-
+						
 function sScreen:setX(x)
 	self.ox	= x or self.ox
 end
@@ -567,14 +564,15 @@ end
 function sScreen:showWidget()
 	local w	= self:getWidget()
 	if not w then print("bye") return end
-	local y	= self.y-self.oy
-	print("hi", w.y, w.h, y,self.y,self.oy,self.h)
-	if w.y < y then
+	local y	= self.y - self.oy
+	local wy = w.y - self.oy
+	
+	if w.y-2 < y then
 		print("Moving up")
-		self:setY(y-w.y)
+		self:setY(-(wy-y)+4)
 	elseif w.y+w.h > y+self.h then
 		print("moving down")
-		self:setY(-(w.y+w.h-y-self.h-1))
+		self:setY(-(wy-(y+self.h)+w.h+2))
 	end
 	
 	if self.focus == 1 then
@@ -586,8 +584,6 @@ function sScreen:getFocus(n)
 	if n==-1 or n==1 then
 		self:stealFocus()
 		self:switchFocus(n, true)
-		
-		self:showWidget()
 	end
 end
 
@@ -596,10 +592,13 @@ function sScreen:loop(n)
 	self:showWidget()
 end
 
+function sScreen:focusChange()
+	self:showWidget()
+end
+
 function sScreen:loseFocus(n)
 	if (n == 1 and self.focus<#self.widgets) or (n == -1 and self.focus>1) then
 		self:switchFocus(n)
-		self:showWidget()
 		return -1
 	else
 		self:stealFocus()
