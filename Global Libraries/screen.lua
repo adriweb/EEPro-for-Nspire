@@ -1,6 +1,6 @@
 stdout	= print
 
-function print(...)
+function pprint(...)
 	stdout(...)
 	local out	= ""
 	for _,v in ipairs({...}) do 
@@ -26,6 +26,35 @@ function addExtension(oldclass, extension)
 		newclass[key]	= data
 	end
 	return newclass
+end
+
+clipRectData	= {}
+
+function gc_clipRect(gc, what, x, y, w, h)
+	if what == "set" and clipRectData.current then
+		clipRectData.old	= clipRectData.current
+		
+	elseif what == "subset" and clipRectData.current then
+		clipRectData.old	= clipRectData.current
+		x	= clipRectData.old.x<x and x or clipRectData.old.x
+		y	= clipRectData.old.y<y and y or clipRectData.old.y
+		h	= clipRectData.old.y+clipRectData.old.h > y+h and h or clipRectData.old.y+clipRectData.old.h-y
+		w	= clipRectData.old.x+clipRectData.old.w > x+w and w or clipRectData.old.x+clipRectData.old.w-x
+		what = "set"
+		
+	elseif what == "restore" and clipRectData.old then
+		--gc:clipRect("reset")
+		what = "set"
+		x	= clipRectData.old.x
+		y	= clipRectData.old.y
+		h	= clipRectData.old.h
+		w	= clipRectData.old.w
+	elseif what == "restore" then
+		what = "reset"
+	end
+	
+	gc:clipRect(what, x, y, w, h)
+	if x and y and w and h then clipRectData.current = {x=x,y=y,w=w,h=h} end
 end
 
 ------------------------------------------------------------------

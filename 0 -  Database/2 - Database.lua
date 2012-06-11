@@ -1,23 +1,25 @@
 Categories	=	{}
 Formulas	=	{}
+Units	= {}
+
 
 function addCat(id,name,info)
 	return table.insert(Categories, id, {id=id, name=name, info=info, sub={}})
 end
 
 function addSubCat(cid, id, name, info)
-	return table.insert(Categories[cid].sub, id, {category=cid, id=id, name=name, info=info, formulas={}, units={}})
+	return table.insert(Categories[cid].sub, id, {category=cid, id=id, name=name, info=info, formulas={}, variables={}})
 end
 
-function aF(cid, sid, formula, units) --add Formula
-	local fr	=	{category=cid, sub=sid, formula=formula, units=units}
+function aF(cid, sid, formula, variables) --add Formula
+	local fr	=	{category=cid, sub=sid, formula=formula, variables=variables}
 	-- In times like this we are happy that inserting tables just inserts a reference
 	table.insert(Formulas, fr)
 	table.insert(Categories[cid].sub[sid].formulas, fr)
 	
 	-- This function might need to be merged with U(...)
-	for unit,_ in pairs(units) do
-		Categories[cid].sub[sid].units[unit]	= true
+	for variable,_ in pairs(variables) do
+		Categories[cid].sub[sid].variables[variable]	= true
 	end
 end
 
@@ -39,6 +41,23 @@ c_e  = string.uchar(949)
 c_Pi = string.uchar(960)
 c_u  = string.uchar(181)
 c_t  = string.uchar(964)
+c_Ohm = string.uchar(937)
+
+
+
+Units["i"] = {
+	{symbol="A", name="Ampere", da=1, db=0}
+}
+
+Units["u"] = {
+	{symbol="V", name="Volt", da=1, db=0}
+}
+
+Units["r"] = {
+	{symbol=c_Ohm, name="Ohm", da=1, db=0}
+}
+
+
 
 addCat(1, "Resistive Circuits", "Performs routine calculations of resistive circuits")
 

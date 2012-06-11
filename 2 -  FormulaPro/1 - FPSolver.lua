@@ -25,7 +25,7 @@ function find_data(known, cid, sid)
 			if ((not cid) or (cid and formula.category == cid)) and ((not sid) or (formula.category == cid and formula.sub == sid)) then
 				no=0		
 					
-				for var in pairs(formula.units) do
+				for var in pairs(formula.variables) do
 					if not known[var] then
 						no=no+1
 						tosolve	=	var

@@ -2,8 +2,8 @@ CategorySel	= WScreen()
 CategorySel.iconS	= 48
 
 CategorySel.sublist	= sList()
-CategorySel:appendWidget(CategorySel.sublist, 5, 5)
-CategorySel.sublist:setSize(-10, -40)
+CategorySel:appendWidget(CategorySel.sublist, 5, 5+24)
+CategorySel.sublist:setSize(-10, -70)
 CategorySel.sublist.cid	= 0
 
 function CategorySel.sublist:action(sid)
@@ -14,19 +14,19 @@ function CategorySel:paint(gc)
 	gc:setColorRGB(255,255,255)
 	gc:fillRect(self.x, self.y, self.w, self.h)
 	
-
-	if icon[self.cid] then
-		gc:drawImage(icon[self.cid], 5, 5)
-	end
+	gc:setColorRGB(0,0,0)
+	gc:setFont("sansserif", "r", 16)
+	gc:drawString("Select your category:", 5, 0, "top")
+	
 	gc:setColorRGB(220,220,220)
 	gc:setFont("sansserif", "r", 8)	
-	gc:drawRect(5, self.h-40+10, self.w-10, 25)
+	gc:drawRect(5, self.h-46+10, self.w-10, 25+6)
 	gc:setColorRGB(128,128,128)
 	gc:setFont("sansserif", "r", 8)
 		
 	local splinfo	= Categories[self.sublist.sel].info:split("\n")
 	for i, str in ipairs(splinfo) do
-		gc:drawString(str, 7, self.h-50+12 + i*10, "top")
+		gc:drawString(str, 7, self.h-56+12 + i*10, "top")
 	end
 end
 
@@ -40,25 +40,24 @@ function CategorySel:pushed()
 	self.sublist:giveFocus()
 end
 
-function CategorySel:escapeKey()
-	only_screen(CategorySel)
-end
-
-function CategorySel:escapeKey()
-	only_screen(main)
-end
 
 
 SubCatSel	= WScreen()
 SubCatSel.sel	= 1
 
 SubCatSel.sublist	= sList()
-SubCatSel:appendWidget(SubCatSel.sublist, 5, 5)
-SubCatSel.sublist:setSize(-10, -10)
+SubCatSel:appendWidget(SubCatSel.sublist, 5, 5+24)
+SubCatSel.sublist:setSize(-10, -34)
 SubCatSel.sublist.cid	= 0
 
 function SubCatSel.sublist:action (sub)
 	only_screen(manualSolver, self.parent.cid, sub)
+end
+
+function SubCatSel:paint(gc)
+	gc:setColorRGB(0,0,0)
+	gc:setFont("sansserif", "r", 16)
+	gc:drawString(Categories[self.cid].name, 5, 0, "top")	
 end
 
 function SubCatSel:pushed(sel)
@@ -129,10 +128,10 @@ function manualSolver:pushed(cid, sid)
 	
 	local inp, lbl
 	local i	= 0
-	for unit,_ in pairs(self.sub.units) do
+	for variable,_ in pairs(self.sub.variables) do
 		i=i+1
 		
-		if not Constants[unit] then	
+		if not Constants[variable] then	
 			inp	= sInput()
 			inp.value	= ""
 			inp.number	= true
@@ -141,15 +140,21 @@ function manualSolver:pushed(cid, sid)
 				manualSolver:solve()
 			end
 			
-			self.inputs[unit]	= inp
+			self.inputs[variable]	= inp
 			
-			lbl	= sLabel(unit, inp)
+			lbl	= sLabel(variable, inp)
 
-			self.pl:appendWidget(inp, 30, i*30-28)		
+			self.pl:appendWidget(inp, 60, i*30-28)		
 			self.pl:appendWidget(lbl, 2, i*30-28)
-			self.pl:appendWidget(sLabel(":", inp), 20, i*30-28)
+			self.pl:appendWidget(sLabel(":", inp), 50, i*30-28)
+			if Units[variable] then
+				unitlbl	= sLabel(Units[variable][1].symbol)
+				self.pl:appendWidget(unitlbl, 165, i*30-28)
+			end
+			
+			inp.getFocus = manualSolver.update
 		else
-			self.known[unit]	= Constants[unit].value
+			self.known[variable]	= Constants[variable].value
 		end
 
 	end
@@ -163,22 +168,33 @@ function manualSolver:pushed(cid, sid)
 	
 end
 
+function manualSolver.update()
+	manualSolver:solve()
+end
+
 function manualSolver:solve()
 	local inputed	= {}
-
-	for unit, input in pairs(self.inputs) do
+	local disabled	= {}
+	
+	for variable, input in pairs(self.inputs) do
+		
+		if input.disabled then 
+			inputed[variable] = nil
+			input.value = ""
+		end
+		
 		input:enable()
 		if input.value	~= "" then
-			inputed[unit]	= tonumber(input.value)
+			inputed[variable]	= tonumber(input.value)
 		end
 	end
 	
 	self.known	= find_data(copyTable(inputed), self.cid, self.sid)
 	
-	for unit, value in pairs(self.known) do
-		if not inputed[unit] and self.inputs[unit] then
-			self.inputs[unit].value	= tostring(value)
-			self.inputs[unit]:disable()
+	for variable, value in pairs(self.known) do
+		if (not inputed[variable] and self.inputs[variable]) then
+			self.inputs[variable].value	= tostring(value)
+			self.inputs[variable]:disable()
 		end
 	end
 end

@@ -159,13 +159,17 @@ function sInput:paint(gc)
 
 	gc:setColorRGB(0,0,0)
 	gc:drawRect(x, y, self.w, self.h)
+	
 	if self.hasFocus then
 		gc:drawRect(x-1, y-1, self.w+2, self.h+2)
 	end
 		
-	local text	=	""
+	local text	=	self.value
 	local	p	=	0
 	
+	gc_clipRect(gc, "subset", x, y, self.w, self.h)
+	
+	--[[
 	while true do
 		if p==#self.value then break end
 		p	=	p + 1
@@ -175,21 +179,25 @@ function sInput:paint(gc)
 			break 
 		end
 	end
+	--]]
 	
 	if self.disabled then
 		gc:setColorRGB(uCol(self.disabledcolor))
 	end
 	
-	if text==self.value then
+	local strwidth = gc:getStringWidth(text)
+	
+	if strwidth<self.w-4 or not self.hasFocus then
 		gc:drawString(text, x+2, y+1, "top")
 	else
-		gc:drawString(text, x-4+self.w-gc:getStringWidth(text), y+1, "top")
+		gc:drawString(text, x-4+self.w-strwidth, y+1, "top")
 	end
 	
 	if self.hasFocus then
-		gc:fillRect(self.x+(text==self.value and gc:getStringWidth(text)+2 or self.w-4), self.y, 1, self.h)
+		gc:fillRect(self.x+(text==self.value and strwidth+2 or self.w-4), self.y, 1, self.h)
 	end
 	
+	gc_clipRect(gc, "restore")
 end
 
 function sInput:charIn(char)
@@ -431,7 +439,7 @@ function sList:paint(gc)
 	gc:fillRect(x, y, w, h)
 	gc:setColorRGB(0, 0, 0)
 	gc:drawRect(x, y, w, h)
-	gc:clipRect("set", x, y, w, h)
+	gc_clipRect(gc, "set", x, y, w, h)
 	gc:setFont(unpack(self.font))
 
 	
@@ -454,7 +462,7 @@ function sList:paint(gc)
 	
 	self.scrollBar:update(top, visible_items, #items)
 	
-	gc:clipRect("reset")
+	gc_clipRect(gc, "reset")
 end
 
 function sList:arrowKey(arrow)	
@@ -482,7 +490,11 @@ function sList:mouseUp(x, y)
 			self:enterKey()
 			return
 		end
-		self.sel=sel
+		if self.items[sel] then
+			self.sel=sel
+		else
+			return
+		end
 		
 		if self.sel>(self.h/self.ih)+self.top then
 			self.top	= self.top + 1
@@ -497,7 +509,9 @@ end
 
 
 function sList:enterKey()
-	self:action(self.sel, self.items[self.sel])
+	if self.items[self.sel] then
+		self:action(self.sel, self.items[self.sel])
+	end
 end
 
 
@@ -528,14 +542,14 @@ function sScreen:appended()
 end
 
 function sScreen:paint(gc)
-	gc:clipRect("set", self.x, self.y, self.w, self.h)
+	gc_clipRect(gc, "set", self.x, self.y, self.w, self.h)
 	self:extra(gc)
 	self.x	= self.ox
 	self.y	= self.oy
 end
 
 function sScreen:postPaint(gc)
-	gc:clipRect("reset")
+	gc_clipRect(gc, "reset")
 end
 
 function sScreen:extra(gc)
@@ -561,6 +575,10 @@ function sScreen:showWidget()
 	elseif w.y+w.h > y+self.h then
 		print("moving down")
 		self:setY(-(w.y+w.h-y-self.h-1))
+	end
+	
+	if self.focus == 1 then
+		self:setY(0)
 	end
 end
 
