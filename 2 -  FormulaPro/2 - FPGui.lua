@@ -125,7 +125,7 @@ function manualSolver:pushed(cid, sid)
 	self.cid	= cid
 	self.sid	= sid
 	self.sub	= Categories[cid].sub[sid]
-	
+	self.pl.oy = 0
 	self.known	= {}
 	self.inputs	= {}
 	
@@ -141,6 +141,7 @@ function manualSolver:pushed(cid, sid)
 			
 			function inp:enterKey() 
 				manualSolver:solve()
+				self.parent:switchFocus(1)
 			end
 			
 			self.inputs[variable]	= inp
