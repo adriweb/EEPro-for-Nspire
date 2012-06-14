@@ -132,9 +132,10 @@ function manualSolver:pushed(cid, sid)
 	local inp, lbl
 	local i	= 0
 	for variable,_ in pairs(self.sub.variables) do
-		i=i+1
 		
-		if not Constants[variable] then	
+		
+		if not Constants[variable] or Categories[cid].varlink[variable] then
+			i=i+1
 			inp	= sInput()
 			inp.value	= ""
 			inp.number	= true
@@ -145,20 +146,25 @@ function manualSolver:pushed(cid, sid)
 			end
 			
 			self.inputs[variable]	= inp
+			inp.ww	= 200
 			
 			lbl	= sLabel(variable, inp)
 
 			self.pl:appendWidget(inp, 60, i*30-28)		
 			self.pl:appendWidget(lbl, 2, i*30-28)
 			self.pl:appendWidget(sLabel(":", inp), 50, i*30-28)
-			if Units[variable] then
-				unitlbl	= sLabel(Units[variable][1].symbol)
-				self.pl:appendWidget(unitlbl, 165, i*30-28)
+			
+			local variabledata	= Categories[cid].varlink[variable]
+			inp.placeholder	= variabledata.info
+			if variabledata.unit ~= "unitless" then
+				unitlbl	= sLabel(variabledata.unit:gsub("([^%d]+)(%d)", numberToSub))
+				self.pl:appendWidget(unitlbl, 265, i*30-28)
 			end
 			
 			inp.getFocus = manualSolver.update
 		else
-			self.known[variable]	= Constants[variable].value
+			self.known[variable]	= math.eval(Constants[variable].value)
+			var.store(variable, self.known[variable])
 		end
 
 	end

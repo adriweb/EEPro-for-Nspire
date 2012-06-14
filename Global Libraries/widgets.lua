@@ -167,6 +167,7 @@ function sInput:paint(gc)
 	local text	=	self.value
 	local	p	=	0
 	
+	
 	gc_clipRect(gc, "subset", x, y, self.w, self.h)
 	
 	--[[
@@ -181,8 +182,11 @@ function sInput:paint(gc)
 	end
 	--]]
 	
-	if self.disabled then
+	if self.disabled or self.value == "" then
 		gc:setColorRGB(uCol(self.disabledcolor))
+	end
+	if self.value == ""  and not self.hasFocus then
+		text	= self.placeholder or ""
 	end
 	
 	local strwidth = gc:getStringWidth(text)
