@@ -185,7 +185,7 @@ function sInput:paint(gc)
 	if self.disabled or self.value == "" then
 		gc:setColorRGB(uCol(self.disabledcolor))
 	end
-	if self.value == ""  and not self.hasFocus then
+	if self.value == ""  then
 		text	= self.placeholder or ""
 	end
 	
@@ -197,7 +197,7 @@ function sInput:paint(gc)
 		gc:drawString(text, x-4+self.w-strwidth, y+1, "top")
 	end
 	
-	if self.hasFocus then
+	if self.hasFocus and self.value ~= "" then
 		gc:fillRect(self.x+(text==self.value and strwidth+2 or self.w-4), self.y, 1, self.h)
 	end
 	

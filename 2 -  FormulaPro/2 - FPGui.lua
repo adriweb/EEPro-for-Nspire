@@ -128,6 +128,7 @@ function manualSolver:pushed(cid, sid)
 	self.pl.oy = 0
 	self.known	= {}
 	self.inputs	= {}
+	self.constants = {}
 	
 	local inp, lbl
 	local i	= 0
@@ -163,8 +164,8 @@ function manualSolver:pushed(cid, sid)
 			
 			inp.getFocus = manualSolver.update
 		else
-			self.known[variable]	= math.eval(Constants[variable].value)
-			var.store(variable, self.known[variable])
+			self.constants[variable]	= math.eval(Constants[variable].value)
+			--var.store(variable, self.known[variable])
 		end
 
 	end
@@ -199,7 +200,11 @@ function manualSolver:solve()
 		end
 	end
 	
-	self.known	= find_data(copyTable(inputed), self.cid, self.sid)
+	local invs = copyTable(inputed)
+	for k,v in pairs(self.constants) do
+		invs[k]=v
+	end
+	self.known	= find_data(invs, self.cid, self.sid)
 	
 	for variable, value in pairs(self.known) do
 		if (not inputed[variable] and self.inputs[variable]) then
