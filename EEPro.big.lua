@@ -1111,9 +1111,9 @@ Units["V"]["mV"]	= {Mt.m, 0}
 Units["V"][Mt.us.."V"]	= {Mt.u, 0}
 
 Units["m2"]	= {}
-Units["m2"]["cm2"]	= {Mt.c^2}
-Units["m2"]["mm2"]	= {Mt.m^2}
-Units["m2"]["km2"]	= {Mt.k^2}
+Units["m2"]["cm2"]	= {Mt.c^2, 0}
+Units["m2"]["mm2"]	= {Mt.m^2, 0}
+Units["m2"]["km2"]	= {Mt.k^2, 0}
 
 Units["A/Wb"]	= {}
 
@@ -2518,12 +2518,16 @@ function find_data(known, cid, sid)
 				if no==1 then
 					print("I can solve " .. formula.formula)
 					
-					local sol	=	math.solve(formula.formula, tosolve)
-					known[tosolve]	=	sol
-					done[formula]=true
-					var.store(tosolve, sol)
-					
-					print(tosolve .. " = " .. sol)
+					local sol,r	=	math.solve(formula.formula, tosolve)
+					if not sol then 
+						known[tosolve]	=	sol
+						done[formula]=true
+						var.store(tosolve, sol)
+						
+						print(tosolve .. " = " .. sol)
+					else
+						print("Oops! Something went wrong:", r)
+					end	
 					
 					dirty_exit	=	true
 					break

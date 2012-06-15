@@ -36,12 +36,17 @@ function find_data(known, cid, sid)
 				if no==1 then
 					print("I can solve " .. formula.formula)
 					
-					local sol	=	math.solve(formula.formula, tosolve)
-					known[tosolve]	=	sol
-					done[formula]=true
-					var.store(tosolve, sol)
-					
-					print(tosolve .. " = " .. sol)
+					local sol,r	=	math.solve(formula.formula, tosolve)
+					if sol then 
+						known[tosolve]	=	sol
+						done[formula]=true
+						var.store(tosolve, sol)
+						
+						print(tosolve .. " = " .. sol)
+					else
+						print("Oops! Something went wrong:", r)
+						-- it crashes here ...
+					end	
 					
 					dirty_exit	=	true
 					break
