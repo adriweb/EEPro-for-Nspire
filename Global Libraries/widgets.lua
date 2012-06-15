@@ -472,6 +472,7 @@ end
 function sList:arrowKey(arrow)	
 	if arrow=="up" and self.sel>1 then
 		self.sel	= self.sel - 1
+		self:change(self.sel, self.items[self.sel])
 		if self.top>=self.sel then
 			self.top	= self.top - 1
 		end
@@ -479,6 +480,7 @@ function sList:arrowKey(arrow)
 
 	if arrow=="down" and self.sel<#self.items then
 		self.sel	= self.sel + 1
+		self:change(self.sel, self.items[self.sel])
 		if self.sel>(self.h/self.ih)+self.top then
 			self.top	= self.top + 1
 		end
@@ -496,6 +498,7 @@ function sList:mouseUp(x, y)
 		end
 		if self.items[sel] then
 			self.sel=sel
+			self:change(self.sel, self.items[self.sel])
 		else
 			return
 		end
@@ -519,7 +522,7 @@ function sList:enterKey()
 end
 
 
-
+function sList:change() end
 function sList:action() end
 
 function sList:reset()
@@ -609,3 +612,132 @@ function sScreen:loseFocus(n)
 	end
 	
 end
+
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+sDropdown	=	class(Widget)
+
+
+function sDropdown:init(items)
+	self.dh	= 21
+	self.dw	= 75
+	self.screen	= WScreen()
+	self.sList	= sList()
+	self.sList.items	= items or {}
+	self.screen:appendWidget(self.sList,0,0)
+	self.sList.action	= self.listAction
+	self.sList.loseFocus	= self.screenEscape
+	self.sList.change	= self.listChange
+	self.screen.escapeKey	= self.screenEscape
+	self.lak	= self.sList.arrowKey	
+	self.sList.arrowKey	= self.listArrowKey
+	self.value	= items[1] or ""
+	self.valuen	= #items>0 and 1 or 0
+	self.rvalue	= items[1] or ""
+	self.rvaluen=self.valuen
+	
+	self.sList.parentWidget = self
+	self.screen.parentWidget = self
+	--self.screen.focus=1
+end
+
+function sDropdown:screenpaint(gc)
+	gc:setColorRGB(255,255,255)
+	gc:fillRect(self.x, self.y, self.h, self.w)
+	gc:setColorRGB(0,0,0)
+	gc:drawRect(self.x, self.y, self.h, self.w)
+end
+
+function sDropdown:mouseDown()
+	self:open()
+end
+
+
+sDropdown.img = image.new("\14\0\0\0\7\0\0\0\0\0\0\0\28\0\0\0\16\0\1\000{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239al{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239alalal{\239{\239\255\255\255\255\255\255\255\255\255\255\255\255{\239{\239alalalalal{\239{\239\255\255\255\255\255\255\255\255{\239{\239alalalalalalal{\239{\239\255\255\255\255{\239{\239alalalalalalalalal{\239{\239{\239{\239alalalalalalalalalalal{\239{\239alalalalalal")
+function sDropdown:arrowKey(arrow)
+	if arrow == "right" then
+		self:open()
+	end
+	
+	if arrow=="up" then
+		self.parent:switchFocus(-1)
+	elseif arrow=="down" then
+		self.parent:switchFocus(1)
+	end
+end
+
+function sDropdown:listArrowKey(arrow)
+	if arrow == "left" then
+		self:loseFocus()
+	else
+		self.parentWidget.lak(self, arrow)
+	end
+end
+
+function sDropdown:listChange(a, b)
+	self.parentWidget.value  = b
+	self.parentWidget.valuen = a
+end
+
+function sDropdown:open()
+	self.screen.yy	= self.y+self.h
+	self.screen.xx	= self.x-1
+	self.screen.ww	= self.w + 13
+	local h = 2+(18*#self.sList.items)
+	self.screen.hh	= self.y+self.h+h>self.parent.h+self.parent.y-10 and self.parent.h-self.parent.y-self.y-self.h-10 or h
+	if self.screen.hh < 40 then
+		self.screen.hh = h < 100 and h or 100
+		self.screen.yy = self.y-self.screen.hh
+	end
+	
+	self.sList.ww = self.w + 13
+	self.sList.hh = self.screen.hh-2
+	self.sList:giveFocus()
+	push_screen(self.screen)
+end
+
+function sDropdown:listAction(a,b)
+	self.parentWidget.value  = b
+	self.parentWidget.valuen = a
+	self.parentWidget.rvalue  = b
+	self.parentWidget.rvaluen = a
+	remove_screen()
+end
+
+function sDropdown:screenEscape()
+	self.parentWidget.sList.sel = self.parentWidget.rvaluen
+	self.parentWidget.value	= self.parentWidget.rvalue
+	if current_screen() == self.parentWidget.screen then
+		remove_screen()
+	end
+end
+
+function sDropdown:paint(gc)
+	gc:setColorRGB(255, 255, 255)
+	gc:fillRect(self.x, self.y, self.w-1, self.h-1)
+	
+	gc:setColorRGB(0,0,0)
+	gc:drawRect(self.x, self.y, self.w-1, self.h-1)
+	
+	if self.hasFocus then
+		gc:drawRect(self.x-1, self.y-1, self.w+1, self.h+1)
+	end
+	
+	gc:setColorRGB(192, 192, 192)
+	gc:fillRect(self.x+self.w-21, self.y+1, 20, 19)
+	gc:setColorRGB(224, 224, 224)
+	gc:fillRect(self.x+self.w-22, self.y+1, 1, 19)
+	
+	gc:drawImage(self.img, self.x+self.w-18, self.y+9)
+	
+	gc:setColorRGB(0,0,0)
+	local text = self.value
+	if self.unitmode then
+		text=text:gsub("([^%d]+)(%d)", numberToSub)
+	end
+	
+	gc:drawString(textLim(gc, text, self.w-5-22), self.x+5, self.y, "top")
+end
+
