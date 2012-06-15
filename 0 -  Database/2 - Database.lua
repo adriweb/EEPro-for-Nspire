@@ -41,7 +41,7 @@ c_O  = utf8(963)
 c_P  = utf8(961)
 c_e  = utf8(949)
 c_Pi = utf8(960)
-c_u  = utf8(181)
+c_u  = utf8(956)
 c_t  = utf8(964)
 c_Ohm = utf8(937)
 
@@ -133,9 +133,9 @@ aF(2, 3, "Vz=("..c_P.."s/(2*"..c_e.."0*"..c_e.."r))*(sqrt(ra*ra+z*z)-abs(z))",  
 
 addSubCat(2, 4, "Parallel Plates", "")
 aF(2, 4, "E=V/d",                 U("E","V","d")           )
-aF(2, 4, "C=("..c_e.."0*"..c_e.."r*A)/d",         U("C",c_e.."0",c_e.."r","A","D") )
+aF(2, 4, "C=("..c_e.."0*"..c_e.."r*A)/d",         U("C",c_e.."0",c_e.."r","A","d") )
 aF(2, 4, "Q=C*V",                 U("Q","C","V")           )
-aF(2, 4, "F=-0.5*(V*V*C)/d",      U("F","V","C","D")       )
+aF(2, 4, "F=-0.5*(V*V*C)/d",      U("F","V","C","d")       )
 aF(2, 4, "W=0.5*V*V*C",           U("W","V","C")           )
 
 addSubCat(2, 5, "Parallel Wires", "")

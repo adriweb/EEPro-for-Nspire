@@ -38,6 +38,7 @@ Constants["pe"     ]	= {info="Proton-electron mass ratio"         , value="1836.
 Constants["Rbc"    ]	= {info="Rydberg constant"                   , value="1.0974 * 10^7"         , unit="m^-1"               }
 Constants["C"      ]	= {info="Speed of light in vacuum"           , value="2.9979 * 10^8"         , unit="m/s"                }
 Constants["pi"     ]	= {info="PI"                                 , value="pi"                    , unit=nil                  }
+Constants[utf8(956).."0"]	= {info="Magnetic permeability constant"     , value="4*pi*10^-7"           , unit=nil                  }
 Constants[utf8(960)]	= Constants["pi"]
 Categories	=	{}
 Formulas	=	{}
@@ -82,7 +83,7 @@ c_O  = utf8(963)
 c_P  = utf8(961)
 c_e  = utf8(949)
 c_Pi = utf8(960)
-c_u  = utf8(181)
+c_u  = utf8(956)
 c_t  = utf8(964)
 c_Ohm = utf8(937)
 
@@ -174,9 +175,9 @@ aF(2, 3, "Vz=("..c_P.."s/(2*"..c_e.."0*"..c_e.."r))*(sqrt(ra*ra+z*z)-abs(z))",  
 
 addSubCat(2, 4, "Parallel Plates", "")
 aF(2, 4, "E=V/d",                 U("E","V","d")           )
-aF(2, 4, "C=("..c_e.."0*"..c_e.."r*A)/d",         U("C",c_e.."0",c_e.."r","A","D") )
+aF(2, 4, "C=("..c_e.."0*"..c_e.."r*A)/d",         U("C",c_e.."0",c_e.."r","A","d") )
 aF(2, 4, "Q=C*V",                 U("Q","C","V")           )
-aF(2, 4, "F=-0.5*(V*V*C)/d",      U("F","V","C","D")       )
+aF(2, 4, "F=-0.5*(V*V*C)/d",      U("F","V","C","d")       )
 aF(2, 4, "W=0.5*V*V*C",           U("W","V","C")           )
 
 addSubCat(2, 5, "Parallel Wires", "")
@@ -1801,10 +1802,14 @@ function Widget:enterKey()
 	self.parent:switchFocus(1)
 end
 function Widget:arrowKey(arrow)
-	if arrow=="up" then
-		self.parent:switchFocus(-1)
-	elseif arrow=="down" then
-		self.parent:switchFocus(1)
+	if arrow=="up" then 
+		self.parent:switchFocus(self.focusUp or -1)
+	elseif arrow=="down"  then
+		self.parent:switchFocus(self.focusDown or 1)
+	elseif arrow=="left" then 
+		self.parent:switchFocus(self.focusLeft or -1)
+	elseif arrow=="right"  then
+		self.parent:switchFocus(self.focusRight or 1)	
 	end
 end
 
@@ -1991,6 +1996,10 @@ function sLabel:paint(gc)
 end
 
 function sLabel:getFocus(n)
+	if n then
+		n	= n < 0 and -1 or (n > 0 and 1 or 0)
+	end
+	
 	if self.widget and not n then
 		self.widget:giveFocus()
 	elseif n then
@@ -2332,7 +2341,7 @@ function sScreen:focusChange()
 end
 
 function sScreen:loseFocus(n)
-	if (n == 1 and self.focus<#self.widgets) or (n == -1 and self.focus>1) then
+	if n and ((n >= 1 and self.focus+n<=#self.widgets) or (n <= -1 and self.focus+n>=1)) then
 		self:switchFocus(n)
 		return -1
 	else
@@ -2384,15 +2393,16 @@ end
 
 
 sDropdown.img = image.new("\14\0\0\0\7\0\0\0\0\0\0\0\28\0\0\0\16\0\1\000{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239al{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239alalal{\239{\239\255\255\255\255\255\255\255\255\255\255\255\255{\239{\239alalalalal{\239{\239\255\255\255\255\255\255\255\255{\239{\239alalalalalalal{\239{\239\255\255\255\255{\239{\239alalalalalalalalal{\239{\239{\239{\239alalalalalalalalalalal{\239{\239alalalalalal")
-function sDropdown:arrowKey(arrow)
-	if arrow == "right" then
-		self:open()
-	end
-	
+
+function sDropdown:arrowKey(arrow)	
 	if arrow=="up" then
-		self.parent:switchFocus(-1)
+		self.parent:switchFocus(self.focusUp or -1)
 	elseif arrow=="down" then
-		self.parent:switchFocus(1)
+		self.parent:switchFocus(self.focusDown or 1)
+	elseif arrow=="left" then 
+		self.parent:switchFocus(self.focusLeft or -1)
+	elseif arrow == "right" then
+		self:open()
 	end
 end
 
@@ -2431,8 +2441,11 @@ function sDropdown:listAction(a,b)
 	self.parentWidget.valuen = a
 	self.parentWidget.rvalue  = b
 	self.parentWidget.rvaluen = a
+	self.parentWidget:change(a, b)
 	remove_screen()
 end
+
+function sDropdown:change() end
 
 function sDropdown:screenEscape()
 	self.parentWidget.sList.sel = self.parentWidget.rvaluen
@@ -2579,7 +2592,10 @@ SubCatSel.sublist:setSize(-10, -34)
 SubCatSel.sublist.cid	= 0
 
 function SubCatSel.sublist:action (sub)
-	only_screen(manualSolver, self.parent.cid, sub)
+	local cid	= self.parent.cid
+	if #Categories[cid].sub[sub].formulas>0 then
+		only_screen(manualSolver, cid, sub)
+	end
 end
 
 function SubCatSel:paint(gc)
@@ -2592,7 +2608,7 @@ function SubCatSel:pushed(sel)
 	self.cid	= sel
 	local items	= {}
 	for sid, subcat in ipairs(Categories[sel].sub) do
-		table.insert(items, subcat.name)
+		table.insert(items, subcat.name .. (#subcat.formulas == 0 and " (Empty)" or ""))
 	end
 
 	if self.sublist.cid ~= sel then
@@ -2660,6 +2676,7 @@ function manualSolver:pushed(cid, sid)
 	
 	local inp, lbl
 	local i	= 0
+	local nodropdown, lastdropdown
 	for variable,_ in pairs(self.sub.variables) do
 		
 		
@@ -2676,15 +2693,22 @@ function manualSolver:pushed(cid, sid)
 			
 			self.inputs[variable]	= inp
 			inp.ww	= 155
-			
+			inp.focusDown	= 4
+			inp.focusUp	= -2
 			lbl	= sLabel(variable, inp)
 
 			self.pl:appendWidget(inp, 60, i*30-28)		
 			self.pl:appendWidget(lbl, 2, i*30-28)
 			self.pl:appendWidget(sLabel(":", inp), 50, i*30-28)
 			
+			print(variable)
 			local variabledata	= Categories[cid].varlink[variable]
 			inp.placeholder	= variabledata.info
+			
+			if nodropdown then
+				inp.focusUp	= -1
+			end
+			
 			if variabledata.unit ~= "unitless" then
 				--unitlbl	= sLabel(variabledata.unit:gsub("([^%d]+)(%d)", numberToSub))
 				local itms	= {variabledata.unit}
@@ -2693,9 +2717,22 @@ function manualSolver:pushed(cid, sid)
 				end
 				inp.dropdown	= sDropdown(itms)
 				inp.dropdown.unitmode	= true
-				
+				inp.dropdown.change	= self.update
+				inp.dropdown.focusUp	= nodropdown and -5 or -4
+				inp.dropdown.focusDown	= 2
 				self.pl:appendWidget(inp.dropdown, 220, i*30-28)
+				nodropdown	= false
+				lastdropdown	= inp.dropdown
+			else 
+				nodropdown	= true
+				inp.focusDown	= 1
+				if lastdropdown then 
+					lastdropdown.focusDown = 1
+					lastdropdown = false
+				end			
 			end
+			
+			
 			
 			inp.getFocus = manualSolver.update
 		else
@@ -2704,6 +2741,7 @@ function manualSolver:pushed(cid, sid)
 		end
 
 	end
+	inp.focusDown	= 1
 	
 	manualSolver.sb:update(0, math.floor(self.pl.h/30+.5), i)
 	self.pl:giveFocus()

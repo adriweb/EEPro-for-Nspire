@@ -73,10 +73,14 @@ function Widget:enterKey()
 	self.parent:switchFocus(1)
 end
 function Widget:arrowKey(arrow)
-	if arrow=="up" then
-		self.parent:switchFocus(-1)
-	elseif arrow=="down" then
-		self.parent:switchFocus(1)
+	if arrow=="up" then 
+		self.parent:switchFocus(self.focusUp or -1)
+	elseif arrow=="down"  then
+		self.parent:switchFocus(self.focusDown or 1)
+	elseif arrow=="left" then 
+		self.parent:switchFocus(self.focusLeft or -1)
+	elseif arrow=="right"  then
+		self.parent:switchFocus(self.focusRight or 1)	
 	end
 end
 
@@ -263,6 +267,10 @@ function sLabel:paint(gc)
 end
 
 function sLabel:getFocus(n)
+	if n then
+		n	= n < 0 and -1 or (n > 0 and 1 or 0)
+	end
+	
 	if self.widget and not n then
 		self.widget:giveFocus()
 	elseif n then
@@ -604,7 +612,7 @@ function sScreen:focusChange()
 end
 
 function sScreen:loseFocus(n)
-	if (n == 1 and self.focus<#self.widgets) or (n == -1 and self.focus>1) then
+	if n and ((n >= 1 and self.focus+n<=#self.widgets) or (n <= -1 and self.focus+n>=1)) then
 		self:switchFocus(n)
 		return -1
 	else
@@ -656,15 +664,16 @@ end
 
 
 sDropdown.img = image.new("\14\0\0\0\7\0\0\0\0\0\0\0\28\0\0\0\16\0\1\000{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239al{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239{\239alalal{\239{\239\255\255\255\255\255\255\255\255\255\255\255\255{\239{\239alalalalal{\239{\239\255\255\255\255\255\255\255\255{\239{\239alalalalalalal{\239{\239\255\255\255\255{\239{\239alalalalalalalalal{\239{\239{\239{\239alalalalalalalalalalal{\239{\239alalalalalal")
-function sDropdown:arrowKey(arrow)
-	if arrow == "right" then
-		self:open()
-	end
-	
+
+function sDropdown:arrowKey(arrow)	
 	if arrow=="up" then
-		self.parent:switchFocus(-1)
+		self.parent:switchFocus(self.focusUp or -1)
 	elseif arrow=="down" then
-		self.parent:switchFocus(1)
+		self.parent:switchFocus(self.focusDown or 1)
+	elseif arrow=="left" then 
+		self.parent:switchFocus(self.focusLeft or -1)
+	elseif arrow == "right" then
+		self:open()
 	end
 end
 
@@ -703,8 +712,11 @@ function sDropdown:listAction(a,b)
 	self.parentWidget.valuen = a
 	self.parentWidget.rvalue  = b
 	self.parentWidget.rvaluen = a
+	self.parentWidget:change(a, b)
 	remove_screen()
 end
+
+function sDropdown:change() end
 
 function sDropdown:screenEscape()
 	self.parentWidget.sList.sel = self.parentWidget.rvaluen

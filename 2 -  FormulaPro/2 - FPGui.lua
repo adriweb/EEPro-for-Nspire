@@ -51,7 +51,10 @@ SubCatSel.sublist:setSize(-10, -34)
 SubCatSel.sublist.cid	= 0
 
 function SubCatSel.sublist:action (sub)
-	only_screen(manualSolver, self.parent.cid, sub)
+	local cid	= self.parent.cid
+	if #Categories[cid].sub[sub].formulas>0 then
+		only_screen(manualSolver, cid, sub)
+	end
 end
 
 function SubCatSel:paint(gc)
@@ -64,7 +67,7 @@ function SubCatSel:pushed(sel)
 	self.cid	= sel
 	local items	= {}
 	for sid, subcat in ipairs(Categories[sel].sub) do
-		table.insert(items, subcat.name)
+		table.insert(items, subcat.name .. (#subcat.formulas == 0 and " (Empty)" or ""))
 	end
 
 	if self.sublist.cid ~= sel then
@@ -132,6 +135,7 @@ function manualSolver:pushed(cid, sid)
 	
 	local inp, lbl
 	local i	= 0
+	local nodropdown, lastdropdown
 	for variable,_ in pairs(self.sub.variables) do
 		
 		
@@ -148,15 +152,22 @@ function manualSolver:pushed(cid, sid)
 			
 			self.inputs[variable]	= inp
 			inp.ww	= 155
-			
+			inp.focusDown	= 4
+			inp.focusUp	= -2
 			lbl	= sLabel(variable, inp)
 
 			self.pl:appendWidget(inp, 60, i*30-28)		
 			self.pl:appendWidget(lbl, 2, i*30-28)
 			self.pl:appendWidget(sLabel(":", inp), 50, i*30-28)
 			
+			print(variable)
 			local variabledata	= Categories[cid].varlink[variable]
 			inp.placeholder	= variabledata.info
+			
+			if nodropdown then
+				inp.focusUp	= -1
+			end
+			
 			if variabledata.unit ~= "unitless" then
 				--unitlbl	= sLabel(variabledata.unit:gsub("([^%d]+)(%d)", numberToSub))
 				local itms	= {variabledata.unit}
@@ -165,9 +176,22 @@ function manualSolver:pushed(cid, sid)
 				end
 				inp.dropdown	= sDropdown(itms)
 				inp.dropdown.unitmode	= true
-				
+				inp.dropdown.change	= self.update
+				inp.dropdown.focusUp	= nodropdown and -5 or -4
+				inp.dropdown.focusDown	= 2
 				self.pl:appendWidget(inp.dropdown, 220, i*30-28)
+				nodropdown	= false
+				lastdropdown	= inp.dropdown
+			else 
+				nodropdown	= true
+				inp.focusDown	= 1
+				if lastdropdown then 
+					lastdropdown.focusDown = 1
+					lastdropdown = false
+				end			
 			end
+			
+			
 			
 			inp.getFocus = manualSolver.update
 		else
@@ -176,6 +200,7 @@ function manualSolver:pushed(cid, sid)
 		end
 
 	end
+	inp.focusDown	= 1
 	
 	manualSolver.sb:update(0, math.floor(self.pl.h/30+.5), i)
 	self.pl:giveFocus()
