@@ -339,9 +339,9 @@ addCatVar(6, "W", "Energy dissipated", "J")
 
 addSubCat(6, 1, "RL Natural Response", "")
 aF(6, 1, c_t.."=L/R",                           U(c_t,"L","R")                )
-aF(6, 1, "vL=I0*R*exp(-t/"..c_t..")",               U("vL","I0","r","t",c_t)      )
+aF(6, 1, "vL=I0*R*exp(-t/"..c_t..")",               U("vL","I0","R","t",c_t)      )
 aF(6, 1, "iL=I0*exp(-t/"..c_t..")",                 U("iL","I0","t",c_t)          )
-aF(6, 1, "W=1/2*L*I0*I0*(1-exp(-2*t/"..c_t.."))",   U("W","l","I0","t",c_t)       )
+aF(6, 1, "W=1/2*L*I0*I0*(1-exp(-2*t/"..c_t.."))",   U("W","L","I0","t",c_t)       )
 
 addSubCat(6, 2, "RC Natural Response", "")
 aF(6, 2, c_t.."=R*C",                           U(c_t,"R","C")                )
@@ -360,11 +360,9 @@ aF(6, 4, "vC=Vs+(V0-Vs)*exp(-t/"..c_t..")",         U("vC","Vs","V0","t",c_t)   
 aF(6, 4, "iC=(Vs-V0)/R*exp(-t/"..c_t..")",          U("iC","Vs","V0","R","t",c_t) )
 
 addSubCat(6, 5, "RL Series to Parallel", "")
-aF(6, 5, "",                 U("","","")           )
 -- 11 formulas here :o --
 
 addSubCat(6, 6, "RC Series to Parallel", "")
-aF(6, 6, "",                 U("","","")           )
 -- 11 formulas here :o --
 
 
