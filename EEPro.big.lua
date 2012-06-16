@@ -2516,7 +2516,7 @@ function find_data(known, cid, sid)
 				end
 				
 				if no==1 then
-					print("I can solve " .. formula.formula)
+					print("I can solve " .. tosolve .. " for " .. formula.formula)
 					
 					local sol,r	=	math.solve(formula.formula, tosolve)
 					if sol then 
@@ -2528,8 +2528,9 @@ function find_data(known, cid, sid)
 					else
 						print("Oops! Something went wrong:", r)
 						-- it crashes here ...
+						return known
+						
 					end	
-					
 					dirty_exit	=	true
 					break
 					
