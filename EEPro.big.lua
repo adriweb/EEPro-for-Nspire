@@ -2519,7 +2519,7 @@ function find_data(known, cid, sid)
 					print("I can solve " .. formula.formula)
 					
 					local sol,r	=	math.solve(formula.formula, tosolve)
-					if not sol then 
+					if sol then 
 						known[tosolve]	=	sol
 						done[formula]=true
 						var.store(tosolve, sol)
@@ -2527,6 +2527,7 @@ function find_data(known, cid, sid)
 						print(tosolve .. " = " .. sol)
 					else
 						print("Oops! Something went wrong:", r)
+						-- it crashes here ...
 					end	
 					
 					dirty_exit	=	true
