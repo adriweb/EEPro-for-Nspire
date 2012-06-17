@@ -17,12 +17,13 @@ function find_data(known, cid, sid)
 	local no
 	local dirty_exit	=	true
 	local tosolve
+	local couldnotsolve	= 0
 	
 	while dirty_exit do
 		dirty_exit	=	false
 		
 		for i, formula in ipairs(Formulas) do
-			if ((not cid) or (cid and formula.category == cid)) and ((not sid) or (formula.category == cid and formula.sub == sid)) then
+			if ((not cid) or (cid and formula.category == cid)) and ((not sid) or (formula.category == cid and formula.sub == sid)) and couldnotsolve ~= formula then
 				no=0		
 					
 				for var in pairs(formula.variables) do
@@ -41,12 +42,12 @@ function find_data(known, cid, sid)
 						known[tosolve]	=	sol
 						done[formula]=true
 						var.store(tosolve, sol)
-						
+						couldnotsolve	= 0
 						print(tosolve .. " = " .. sol)
 					else
 						print("Oops! Something went wrong:", r)
 						-- Need to issue a warning dialog
-						return known
+						couldnotsolve	= formula
 						
 					end	
 					dirty_exit	=	true

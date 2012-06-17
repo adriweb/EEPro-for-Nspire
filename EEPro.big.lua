@@ -163,8 +163,8 @@ addCatVar(2, utf8(961).."l", "Line charge", "C/m")
 addCatVar(2, utf8(961).."s", "Charge density", "C/m2")
 
 addSubCat(2, 1, "Point Charge", "")
-aF(2, 1, "Er=Q/(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*r*r)",  U("Er","Q",c_Pi,c_e.."0",c_e.."r") )
-aF(2, 1, "V=Q/(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*r)",     U("V","Q",c_Pi,c_e.."0",c_e.."r")  )
+aF(2, 1, "Er=Q/(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*r*r)",  U("Er","Q",c_Pi,c_e.."0",c_e.."r", "r") )
+aF(2, 1, "V=Q/(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*r)",     U("V","Q",c_Pi,c_e.."0",c_e.."r", "r")  )
 
 addSubCat(2, 2, "Long Charged Line", "")
 aF(2, 2, "Er="..c_P.."l/(2*"..c_Pi.."*"..c_e.."0*"..c_e.."r)",     U("Er",c_P.."l",c_Pi,c_e.."0",c_e.."r")  )
@@ -2499,12 +2499,13 @@ function find_data(known, cid, sid)
 	local no
 	local dirty_exit	=	true
 	local tosolve
+	local couldnotsolve	= 0
 	
 	while dirty_exit do
 		dirty_exit	=	false
 		
 		for i, formula in ipairs(Formulas) do
-			if ((not cid) or (cid and formula.category == cid)) and ((not sid) or (formula.category == cid and formula.sub == sid)) then
+			if ((not cid) or (cid and formula.category == cid)) and ((not sid) or (formula.category == cid and formula.sub == sid)) and couldnotsolve ~= formula then
 				no=0		
 					
 				for var in pairs(formula.variables) do
@@ -2523,12 +2524,12 @@ function find_data(known, cid, sid)
 						known[tosolve]	=	sol
 						done[formula]=true
 						var.store(tosolve, sol)
-						
+						couldnotsolve	= 0
 						print(tosolve .. " = " .. sol)
 					else
 						print("Oops! Something went wrong:", r)
-						-- it crashes here ...
-						return known
+						-- Need to issue a warning dialog
+						couldnotsolve	= formula
 						
 					end	
 					dirty_exit	=	true
