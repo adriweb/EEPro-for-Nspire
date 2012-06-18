@@ -3486,15 +3486,22 @@ only_screen(CategorySel)
 
 aboutWindow	= Dialog("About FormulaPro :", 50, 20, 280, 180)
 
-local aboutText	= sLabel([[FormulaPro v1.0  -  Standalone version
+local aboutstr	= [[FormulaPro v1.0  -  Standalone version
 -----------------------------
 Authors : Jim Bauwens, Adrien Bertrand
 (Adriweb). Credits also to Levak.
-LGPL License. More info and contact : 
-http://tiplanet.org  and  www.inspired-lua.org]])
+LGPL License.
+More info and contact : 
+http://tiplanet.org  and  www.inspired-lua.org]]
 
 local aboutButton	= sButton("OK")
-aboutWindow:appendWidget(aboutText,10,27)
+
+for i, line in ipairs(aboutstr:split("\n")) do
+	local aboutlabel	= sLabel(line)
+	aboutWindow:appendWidget(aboutlabel, 10, 27 + i*14-12)
+end
+
+
 aboutWindow:appendWidget(aboutButton,-10,-5)
 
 function aboutWindow:postPaint(gc)
