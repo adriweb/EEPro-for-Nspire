@@ -1386,8 +1386,9 @@ function only_screen(screen, ...)
 	screen:pushed(...)	
 end
 
-function remove_screen(screen)
+function remove_screen(...)
 	platform.window:invalidate()
+	current_screen():removed(...)
 	return table.remove(Screens)
 end
 
@@ -1428,6 +1429,11 @@ function Screen:pushed()
 end
 
 
+function Screen:removed()
+	
+end
+
+
 function Screen:draw(gc)
 	self:size()
 	self:paint(gc)
@@ -1451,6 +1457,7 @@ function Screen:charIn(char)	end
 function Screen:mouseDown()	end
 function Screen:mouseUp()	end
 function Screen:mouseMove()	end
+function Screen:contextMenu()	end
 
 function Screen:appended() end
 
@@ -1721,6 +1728,7 @@ function on.tabKey()		current_screen():tabKey()		 end
 function on.backtabKey()	current_screen():backtabKey()	 end
 function on.charIn(ch)		current_screen():charIn(ch)		 end
 function on.backspaceKey()	current_screen():backspaceKey()  end
+function on.contextMenu()	current_screen():contextMenu()   end
 function on.mouseDown(x,y)	current_screen():mouseDown(x,y)	 end
 function on.mouseUp(x,y)	current_screen():mouseUp(x,y)	 end
 function on.mouseMove(x,y)	current_screen():mouseMove(x,y)  end
@@ -2087,7 +2095,9 @@ function scrollBar:paint(gc)
 	gc:drawImage(self.upButton  , self.x+2, self.y+2)
 	gc:drawImage(self.downButton, self.x+2, self.y+self.h-11)
 	gc:setColorRGB(uCol(self.color1))
-	gc:drawRect(self.x + 3, self.y + 14, 8, self.h - 28)
+	if self.h > 28 then
+		gc:drawRect(self.x + 3, self.y + 14, 8, self.h - 28)
+	end
 	
 	if self.visible<self.total then
 		local step	= (self.h-26)/self.total
@@ -2422,7 +2432,11 @@ function sDropdown:open()
 	self.screen.xx	= self.x-1
 	self.screen.ww	= self.w + 13
 	local h = 2+(18*#self.sList.items)
-	self.screen.hh	= self.y+self.h+h>self.parent.h+self.parent.y-10 and self.parent.h-self.parent.y-self.y-self.h-10 or h
+	
+	local py	= self.parent.oy and self.parent.y-self.parent.oy or self.parent.y
+	local ph	= self.parent.h
+	
+	self.screen.hh	= self.y+self.h+h>ph+py-10 and ph-py-self.y-self.h-10 or h
 	if self.screen.hh < 40 then
 		self.screen.hh = h < 100 and h or 100
 		self.screen.yy = self.y-self.screen.hh
@@ -2644,10 +2658,17 @@ manualSolver:appendWidget(manualSolver.sb, -2, 3)
 
 manualSolver.back	=	sButton("Back")
 manualSolver:appendWidget(manualSolver.back, 5, -5)
+
+manualSolver.usedFormulas	=	sButton("Formulas")
+manualSolver:appendWidget(manualSolver.usedFormulas, 50, -5)
+
 function manualSolver.back:action()
 	manualSolver:escapeKey()
 end
 
+function manualSolver.usedFormulas:action()
+	push_screen(usedFormulas)
+end
 
 function manualSolver.sb:action(top)
 	self.parent.pl:setY(4-top*30)
@@ -2806,6 +2827,72 @@ end
 function manualSolver:escapeKey()
 	only_screen(SubCatSel, self.cid)
 end
+
+function manualSolver:contextMenu()
+	push_screen(usedFormulas)
+end
+
+usedFormulas	= Dialog("Used formulas",50, 50, 300, 180)
+
+usedFormulas.but	= sButton("Close")
+
+usedFormulas:appendWidget(usedFormulas.but,-10,-5)
+
+function usedFormulas:postPaint(gc)
+	self.ed:move(self.x + 5, self.y+30)
+	self.ed:resize(self.w-9, self.h-74)
+	nativeBar(gc, self, self.h-40)
+end
+
+function usedFormulas:pushed()
+	self.ed	= D2Editor.newRichText ( )
+	self.ed:setReadOnly(true)
+	local cont	= ""
+	
+	local fmls	= #manualSolver.sub.formulas
+	for k,v in ipairs(manualSolver.sub.formulas) do
+		cont = cont .. k .. ": \\0el {" .. v.formula .. "} "  .. (k<fmls and "\n" or "")
+	end
+	
+	if self.ed.setExpression then
+		self.ed:setExpression(cont, 1)
+		self.ed:registerFilter{escapeKey=usedFormulas.closeEditor, enterKey=usedFormulas.closeEditor, tabKey=usedFormulas.leaveEditor}
+		self.ed:setFocus(true)
+	else
+		self.ed:setText(cont, 1)
+	end
+	
+
+end
+
+function usedFormulas.leaveEditor()
+	platform.window:setFocus(true)
+	usedFormulas.but:giveFocus()
+	return true
+end
+
+function usedFormulas.closeEditor()
+	platform.window:setFocus(true)
+	if current_screen() == usedFormulas then
+		remove_screen()
+	end
+	return true
+end
+
+function usedFormulas:removed()
+	if usedFormulas.ed.setVisible then
+		usedFormulas.ed:setVisible(false)
+	else
+		usedFormulas.ed:setText("")
+		usedFormulas.ed:resize(1,1)
+		usedFormulas.ed:move(-10, -10)
+	end
+	usedFormulas.ed	= nil
+end
+
+function usedFormulas.but.action(self)
+	remove_screen()
+end	
 
 --[[
 

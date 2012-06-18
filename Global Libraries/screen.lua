@@ -77,8 +77,9 @@ function only_screen(screen, ...)
 	screen:pushed(...)	
 end
 
-function remove_screen(screen)
+function remove_screen(...)
 	platform.window:invalidate()
+	current_screen():removed(...)
 	return table.remove(Screens)
 end
 
@@ -119,6 +120,11 @@ function Screen:pushed()
 end
 
 
+function Screen:removed()
+	
+end
+
+
 function Screen:draw(gc)
 	self:size()
 	self:paint(gc)
@@ -142,6 +148,7 @@ function Screen:charIn(char)	end
 function Screen:mouseDown()	end
 function Screen:mouseUp()	end
 function Screen:mouseMove()	end
+function Screen:contextMenu()	end
 
 function Screen:appended() end
 
@@ -412,6 +419,7 @@ function on.tabKey()		current_screen():tabKey()		 end
 function on.backtabKey()	current_screen():backtabKey()	 end
 function on.charIn(ch)		current_screen():charIn(ch)		 end
 function on.backspaceKey()	current_screen():backspaceKey()  end
+function on.contextMenu()	current_screen():contextMenu()   end
 function on.mouseDown(x,y)	current_screen():mouseDown(x,y)	 end
 function on.mouseUp(x,y)	current_screen():mouseUp(x,y)	 end
 function on.mouseMove(x,y)	current_screen():mouseMove(x,y)  end

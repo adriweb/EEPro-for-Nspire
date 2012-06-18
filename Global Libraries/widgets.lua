@@ -360,7 +360,9 @@ function scrollBar:paint(gc)
 	gc:drawImage(self.upButton  , self.x+2, self.y+2)
 	gc:drawImage(self.downButton, self.x+2, self.y+self.h-11)
 	gc:setColorRGB(uCol(self.color1))
-	gc:drawRect(self.x + 3, self.y + 14, 8, self.h - 28)
+	if self.h > 28 then
+		gc:drawRect(self.x + 3, self.y + 14, 8, self.h - 28)
+	end
 	
 	if self.visible<self.total then
 		local step	= (self.h-26)/self.total
@@ -695,7 +697,11 @@ function sDropdown:open()
 	self.screen.xx	= self.x-1
 	self.screen.ww	= self.w + 13
 	local h = 2+(18*#self.sList.items)
-	self.screen.hh	= self.y+self.h+h>self.parent.h+self.parent.y-10 and self.parent.h-self.parent.y-self.y-self.h-10 or h
+	
+	local py	= self.parent.oy and self.parent.y-self.parent.oy or self.parent.y
+	local ph	= self.parent.h
+	
+	self.screen.hh	= self.y+self.h+h>ph+py-10 and ph-py-self.y-self.h-10 or h
 	if self.screen.hh < 40 then
 		self.screen.hh = h < 100 and h or 100
 		self.screen.yy = self.y-self.screen.hh
