@@ -66,12 +66,14 @@ Screen	=	class()
 Screens	=	{}
 
 function push_screen(screen, ...)
+	current_screen():screenLoseFocus()
 	table.insert(Screens, screen)
 	platform.window:invalidate()
 	current_screen():pushed(...)
 end
 
 function only_screen(screen, ...)
+	current_screen():screenLoseFocus()
 	Screens	=	{screen}
 	platform.window:invalidate()
 	screen:pushed(...)	
@@ -80,11 +82,13 @@ end
 function remove_screen(...)
 	platform.window:invalidate()
 	current_screen():removed(...)
-	return table.remove(Screens)
+	res=table.remove(Screens)
+	current_screen():screenGetFocus()
+	return res
 end
 
 function current_screen()
-	return Screens[#Screens]
+	return Screens[#Screens] or DummyScreen
 end
 
 function Screen:init(xx,yy,ww,hh)
@@ -115,15 +119,10 @@ function Screen:size()
 end
 
 
-function Screen:pushed()
-	
-end
-
-
-function Screen:removed()
-	
-end
-
+function Screen:pushed() end
+function Screen:removed() end
+function Screen:screenLoseFocus() end
+function Screen:screenGetFocus() end
 
 function Screen:draw(gc)
 	self:size()
@@ -393,6 +392,19 @@ function Dialog:paint(gc)
 end
 
 function Dialog:postPaint() end
+
+
+
+
+
+
+
+---
+-- The dummy screen
+---
+
+DummyScreen	= Screen()
+
 
 ------------------------------------------------------------------
 --                   Bindings to the on events                  --

@@ -158,7 +158,7 @@ function manualSolver:pushed(cid, sid)
 			end
 			
 			self.inputs[variable]	= inp
-			inp.ww	= 155
+			inp.ww	= -145
 			inp.focusDown	= 4
 			inp.focusUp	= -2
 			lbl	= sLabel(variable, inp)
@@ -186,7 +186,7 @@ function manualSolver:pushed(cid, sid)
 				inp.dropdown.change	= self.update
 				inp.dropdown.focusUp	= nodropdown and -5 or -4
 				inp.dropdown.focusDown	= 2
-				self.pl:appendWidget(inp.dropdown, 220, i*30-28)
+				self.pl:appendWidget(inp.dropdown, -2, i*30-28)
 				nodropdown	= false
 				lastdropdown	= inp.dropdown
 			else 
@@ -272,15 +272,18 @@ function manualSolver:contextMenu()
 	push_screen(usedFormulas)
 end
 
-usedFormulas	= Dialog("Used formulas",50, 50, 300, 180)
+usedFormulas	= Dialog("Used formulas",10, 10, -20, -20)
 
 usedFormulas.but	= sButton("Close")
 
 usedFormulas:appendWidget(usedFormulas.but,-10,-5)
 
 function usedFormulas:postPaint(gc)
-	self.ed:move(self.x + 5, self.y+30)
-	self.ed:resize(self.w-9, self.h-74)
+	if self.ed then
+		self.ed:move(self.x + 5, self.y+30)
+		self.ed:resize(self.w-9, self.h-74)
+	end
+	
 	nativeBar(gc, self, self.h-40)
 end
 
@@ -302,7 +305,7 @@ function usedFormulas:pushed()
 		self.ed:setText(cont, 1)
 	end
 	
-
+	self.but:giveFocus()
 end
 
 function usedFormulas.leaveEditor()
@@ -318,6 +321,15 @@ function usedFormulas.closeEditor()
 	end
 	return true
 end
+
+function usedFormulas:screenLoseFocus()
+	self:removed()
+end
+
+function usedFormulas:screenGetFocus()
+	self:pushed()
+end
+
 
 function usedFormulas:removed()
 	if usedFormulas.ed.setVisible then
