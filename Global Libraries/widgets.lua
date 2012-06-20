@@ -209,9 +209,10 @@ function sInput:paint(gc)
 end
 
 function sInput:charIn(char)
-	if self.disabled or (self.number and not tonumber(self.value .. char)) then
+	if self.disabled or (self.number and not tonumber(self.value .. char)) then --or char~="," then
 		return
 	end
+	--char = (char == ",") and "." or char
 	self.value	=	self.value .. char
 end
 

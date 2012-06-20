@@ -41,7 +41,9 @@ c_O  = utf8(963)
 c_P  = utf8(961)
 c_e  = utf8(949)
 c_Pi = utf8(960)
+c_pi = utf8(960)
 c_u  = utf8(956) -- mu
+c_mu  = utf8(956) -- mu
 c_t  = utf8(964)
 c_Ohm = utf8(937)
 c_theta = utf8(952)
@@ -122,22 +124,22 @@ addCatVar(2, utf8(961).."l", "Line charge", "C/m")
 addCatVar(2, utf8(961).."s", "Charge density", "C/m2")
 
 addSubCat(2, 1, "Point Charge", "")
-aF(2, 1, "Er=Q/(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*r*r)",  U("Er","Q",c_Pi,c_e.."0",c_e.."r", "r") )
+aF(2, 1, "Er=Q/(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*r^2)",  U("Er","Q",c_Pi,c_e.."0",c_e.."r", "r") )
 aF(2, 1, "V=Q/(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*r)",     U("V","Q",c_Pi,c_e.."0",c_e.."r", "r")  )
 
 addSubCat(2, 2, "Long Charged Line", "")
 aF(2, 2, "Er="..c_P.."l/(2*"..c_Pi.."*"..c_e.."0*"..c_e.."r)",     U("Er",c_P.."l",c_Pi,c_e.."0",c_e.."r")  )
 
 addSubCat(2, 3, "Charged Disk", "")
-aF(2, 3, "Ez=("..c_P.."s/(2*"..c_e.."0*"..c_e.."r))*(1-abs(z)/sqrt(ra*ra+z*z))",     U("Ez",c_P.."s",c_e.."0",c_e.."r","z","ra")  )
-aF(2, 3, "Vz=("..c_P.."s/(2*"..c_e.."0*"..c_e.."r))*(sqrt(ra*ra+z*z)-abs(z))",       U("Vz",c_P.."s",c_e.."0",c_e.."r","z","ra")  )
+aF(2, 3, "Ez=("..c_P.."s/(2*"..c_e.."0*"..c_e.."r))*(1-abs(z)/sqrt(ra^2+z^2))",     U("Ez",c_P.."s",c_e.."0",c_e.."r","z","ra")  )
+aF(2, 3, "Vz=("..c_P.."s/(2*"..c_e.."0*"..c_e.."r))*(sqrt(ra^2+z^2)-abs(z))",       U("Vz",c_P.."s",c_e.."0",c_e.."r","z","ra")  )
 
 addSubCat(2, 4, "Parallel Plates", "")
 aF(2, 4, "E=V/d",                 U("E","V","d")           )
 aF(2, 4, "C=("..c_e.."0*"..c_e.."r*A)/d",         U("C",c_e.."0",c_e.."r","A","d") )
 aF(2, 4, "Q=C*V",                 U("Q","C","V")           )
-aF(2, 4, "F=-0.5*(V*V*C)/d",      U("F","V","C","d")       )
-aF(2, 4, "W=0.5*V*V*C",           U("W","V","C")           )
+aF(2, 4, "F=-1/2*(V^2*C)/d",      U("F","V","C","d")       )
+aF(2, 4, "W=1/2*V^2*C",           U("W","V","C")           )
 
 addSubCat(2, 5, "Parallel Wires", "")
 aF(2, 5, "scl="..c_Pi.."*"..c_e.."0*"..c_e.."r/arccosh(d/(2*ra))", U("cl",c_Pi,c_e.."0",c_e.."r","d","ra")     )
@@ -149,12 +151,12 @@ aF(2, 6, "cl=(2*"..c_Pi.."*"..c_e.."0*"..c_e.."r)/ln(rb/ra)",      U("cl",c_Pi,c
 
 addSubCat(2, 7, "Sphere", "")
 aF(2, 7, "V=(Q/(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r))*(1/ra-1/rb)", U("V","Q",c_Pi,c_e.."0",c_e.."r","ra","rb") )
-aF(2, 7, "Er=Q/(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*r*r)",          U("Er","Q","r",c_Pi,c_e.."0",c_e.."r")      )
-aF(2, 7, "cl=(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*ra*rb)/(rb-ra)",  U("cl",c_Pi,c_e.."0",c_e.."r","rb","ra")    )
+aF(2, 7, "Er=Q/(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*r^2)",          U("Er","Q","r",c_Pi,c_e.."0",c_e.."r")      )
+aF(2, 7, "C=(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*ra*rb)/(rb-ra)",  U("C",c_Pi,c_e.."0",c_e.."r","rb","ra")    )
 
 addCat(3, "Inductors and Magnetism", "Calculate electrical and magnetic properties of physical elements")
 
-addCatVar(3, c_theta, "Angle", "radian")
+addCatVar(3, c_theta, "Angle", "rad")
 addCatVar(3, utf8(956).."r", "Relative permeability", "unitless")
 addCatVar(3, "a", "Loop radius or side of a rectangular loop", "m")
 addCatVar(3, "B", "Magnetic field", "T")
@@ -189,25 +191,26 @@ aF(3, 1, "B=("..c_u.."0*I)/(2*"..c_Pi.."*r)", U("B",c_u.."0","I","r",c_Pi) )
 
 addSubCat(3, 2, "Long Strip", "")
 aF(3, 2, "Bx=((-"..c_u.."0*Is)/(2*"..c_Pi.."))*(atan((x+d/2)/y)-atan((x-d/2)/y))", U("Bx",c_u.."0","Is",c_Pi,"x","d","y") )
-aF(3, 2, "By=(("..c_u.."0*Is)/(4*"..c_Pi.."))*ln((y*y-(x+d/2))/(y*y-(x-d/2)))",    U("By",c_u.."0","Is",c_Pi,"x","d","y") )
+aF(3, 2, "By=(("..c_u.."0*Is)/(4*"..c_Pi.."))*ln((y^2-(x+d/2)^2)/(y^2-(x-d/2)^2))",    U("By",c_u.."0","Is",c_Pi,"x","d","y") )
 
 addSubCat(3, 3, "Parallel Wires", "")
-aF(3, 3, "Fw=("..c_u.."0*I1*I2)/2*"..c_Pi.."*D",               U("Fw",c_u.."0","I1","I2",c_Pi,"D"))
+aF(3, 3, "Fw=("..c_u.."0*I1*I2)/(2*"..c_Pi.."*D)",               U("Fw",c_u.."0","I1","I2",c_Pi,"D"))
 aF(3, 3, "Bx=("..c_u.."0/(2*"..c_Pi.."))*(I1/x-I2/(D-x))",     U("Bx",c_u.."0","I1","I2",c_Pi,"D","x" ))
-aF(3, 3, "L=("..c_u.."0/(4*"..c_Pi.."))+("..c_u.."0/("..c_Pi.."))*arccosh(D/2*a)", U("L",c_u.."0","a",c_Pi,"D" ))
+aF(3, 3, "L=("..c_u.."0/(4*"..c_Pi.."))+("..c_u.."0/("..c_Pi.."))*arccosh(D/(2*a))", U("L",c_u.."0","a",c_Pi,"D" ))
 
 addSubCat(3, 4, "Loop", "")
-aF(3, 4, "B=("..c_u.."0*I*a*a)/(2*(sqrt(a*a+z*z))^3)", U("B", c_u.."0", "I", "a", "z") )
+aF(3, 4, "B=("..c_u.."0*I*a^2)/(2*(sqrt(a^2+z^2))^3)", U("B", c_u.."0", "I", "a", "z") )
 aF(3, 4, "Ls=("..c_u.."0*a)*(ln(8*a/rr0)-2)", U(c_u.."0", "a", "rr0") )
 aF(3, 4, "L12=("..c_u.."0*a)*cos("..c_theta..")/(2*"..c_pi..")*ln((bl+d)/d)", U("L12", c_u.."0", "a", c_theta, c_pi, "bl", "d") )
-aF(3, 4, "T12=("..c_u.."0*a)*sin("..c_theta..")/(2*"..c_pi..")*I1*I2*ln((bl+d)/d)", U("L12", c_u.."0", "a", c_theta, c_pi, "I1", "I2", "bl", "d") )
+aF(3, 4, "T12=("..c_u.."0*a)*sin("..c_theta..")/(2*"..c_pi..")*I1*I2*ln((bl+d)/d)", U("T12", c_u.."0", "a", c_theta, c_pi, "I1", "I2", "bl", "d") )
 
 addSubCat(3, 5, "Coaxial Cable", "")
 aF(3, 5, "L="..c_u.."0/(8*"..c_pi..")+"..c_u.."0/(2*"..c_pi..")*ln(rb/ra)", U("L", c_u.."0", c_pi, "rb", "ra"))
 
 addSubCat(3, 6, "Skin Effect", "")
-aF(3, 5, utf8(948).."=1/(sqrt(("..c_pi.."*f*"..c_u.."0*"..c_u.."r)/"..utf8(961).."))", U(utf8(948), c_u.."0", c_u.."r", c_pi, "f", utf8(961)))
-aF(3, 5, "Reff=sqrt(("..c_pi.."*f*"..c_u.."0*"..c_u.."r*"..utf8(961).."))", U("Reff", c_u.."0", c_u.."r", c_pi, "f", utf8(961)))
+aF(3, 6, utf8(948).."=1/(sqrt(("..c_pi.."*f*"..c_u.."0*"..c_u.."r)/"..utf8(961).."))", U(utf8(948), c_u.."0", c_u.."r", c_pi, "f", utf8(961)))
+aF(3, 6, "Reff=sqrt(("..c_pi.."*f*"..c_u.."0*"..c_u.."r*"..utf8(961).."))", U("Reff", c_u.."0", c_u.."r", c_pi, "f", utf8(961)))
+
 
 addCat(4, "Electron Motion", "Investigate the trajectories of electrons under the influence \nof electric and magnetic fields")
 
@@ -219,6 +222,7 @@ addCatVar(4, "f0", "Critical frequency", "Hz")
 addCatVar(4, "I", "Thermionic current", "A")
 addCatVar(4, "L", "Deflecting plate length", "m")
 addCatVar(4, "Ls", "Beam length to destination", "m")
+addCatVar(4, "q", "Charge", "C") -- Missing from EEPro 89 !!! This is causing problem in the solving since it is not supposed to be entered... To be researched.
 addCatVar(4, "r", "Radius of circular path", "m")
 addCatVar(4, "S", "Surface area", "m2")
 addCatVar(4, "T", "Temperature", "K")
@@ -231,8 +235,18 @@ addCatVar(4, "z", "Distance along beam axis", "m")
 addCatVar(4, utf8(966), "Work function", "V")
 
 addSubCat(4, 1, "Beam Deflection", "")
+aF(4, 1, "v=sqrt(2*q/me*Va)", U("v", "q", "me", "Va"))
+aF(4, 1, "r=me*v/(q*B)", U("r", "me", "v", "q", "B"))
+aF(4, 1, "yd=(L*Ls)/(2*d*Va)*Vd", U("yd", "L", "Ls", "d", "Va", "Vd"))
+aF(4, 1, "y=q*Vd/(2*me*d*v^2)*z^2", U("y", "q", "Vd", "me", "d", "v", "z"))
+
 addSubCat(4, 2, "Thermionic Emission", "")
+aF(4, 2, "I=A0*S*T^2*exp(-(q*"..utf8(966)..")/(k*T))", U("A0", "S", "T", "q", "k", utf8(966)) )
+
 addSubCat(4, 3, "Photoemission", "")
+aF(4, 3, "h*f=q*"..utf8(966).."+1/2*me*v^2", U("h", "f", "q", utf8(966), "me", "v") )
+aF(4, 3, "f0=q*"..utf8(966).."/h", U("f0", "q", utf8(966), "h") )
+
 
 addCat(5, "Meters and Bridge Circuits", "This category covers a variety of topics on meters, commonly used\nbridge and attenuator circuits")
 
