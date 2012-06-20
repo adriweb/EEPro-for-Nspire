@@ -83,9 +83,10 @@ c_O  = utf8(963)
 c_P  = utf8(961)
 c_e  = utf8(949)
 c_Pi = utf8(960)
-c_u  = utf8(956)
+c_u  = utf8(956) -- mu
 c_t  = utf8(964)
 c_Ohm = utf8(937)
+c_theta = utf8(952)
 
 addCat(1, "Resistive Circuits", "Performs routine calculations of resistive circuits")
 
@@ -195,7 +196,7 @@ aF(2, 7, "cl=(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*ra*rb)/(rb-ra)",  U("cl",c_Pi,c
 
 addCat(3, "Inductors and Magnetism", "Calculate electrical and magnetic properties of physical elements")
 
-addCatVar(3, utf8(952), "Angle", "radian")
+addCatVar(3, c_theta, "Angle", "radian")
 addCatVar(3, utf8(956).."r", "Relative permeability", "unitless")
 addCatVar(3, "a", "Loop radius or side of a rectangular loop", "m")
 addCatVar(3, "B", "Magnetic field", "T")
@@ -216,31 +217,39 @@ addCatVar(3, "Ls", "Loop self-inductance", "H")
 addCatVar(3, "r", "Radial distance", "m")
 addCatVar(3, "ra", "Radius of inner conductor", "m")
 addCatVar(3, "rb", "Radius of outer conductor", "m")
-addCatVar(3, "Reff", "Effective resistance", utf8(937))
+addCatVar(3, "Reff", "Effective resistance", utf8(937)) -- in Ohms
 addCatVar(3, "rr0", "Wire radius", "m")
 addCatVar(3, "T12", "Torque", "N*m")
 addCatVar(3, "x", "x axis distance", "m")
 addCatVar(3, "y", "y axis distance", "m")
 addCatVar(3, "z", "Distance to loop z axis", "m")
-addCatVar(3, utf8(948), "Skin depth", "m")
-addCatVar(3, utf8(961), "Resistivity", utf8(937).."*m")
+addCatVar(3, utf8(948), "Skin depth", "m") -- delta
+addCatVar(3, utf8(961), "Resistivity", utf8(937).."*m") -- rho
 
 addSubCat(3, 1, "Long Line", "")
 aF(3, 1, "B=("..c_u.."0*I)/(2*"..c_Pi.."*r)", U("B",c_u.."0","I","r",c_Pi) )
 
 addSubCat(3, 2, "Long Strip", "")
-
 aF(3, 2, "Bx=((-"..c_u.."0*Is)/(2*"..c_Pi.."))*(atan((x+d/2)/y)-atan((x-d/2)/y))", U("Bx",c_u.."0","Is",c_Pi,"x","d","y") )
 aF(3, 2, "By=(("..c_u.."0*Is)/(4*"..c_Pi.."))*ln((y*y-(x+d/2))/(y*y-(x-d/2)))",    U("By",c_u.."0","Is",c_Pi,"x","d","y") )
 
 addSubCat(3, 3, "Parallel Wires", "")
-aF(3, 3, "Fw=("..c_u.."0*I1*I2)/2*"..c_Pi.."*D",               U("Fw",c_u.."0","I1","I2",c_Pi,"D")       )
-aF(3, 3, "Bx=("..c_u.."0/(2*"..c_Pi.."))*(I1/x-I2/(D-x))",     U("Bx",c_u.."0","I1","I2",c_Pi,"D","x" )  )
-aF(3, 3, "L=("..c_u.."0/(4*"..c_Pi.."))+("..c_u.."0/("..c_Pi.."))*acos(D/2*a)", U("L",c_u.."0","a",c_Pi,"D" )             )
+aF(3, 3, "Fw=("..c_u.."0*I1*I2)/2*"..c_Pi.."*D",               U("Fw",c_u.."0","I1","I2",c_Pi,"D"))
+aF(3, 3, "Bx=("..c_u.."0/(2*"..c_Pi.."))*(I1/x-I2/(D-x))",     U("Bx",c_u.."0","I1","I2",c_Pi,"D","x" ))
+aF(3, 3, "L=("..c_u.."0/(4*"..c_Pi.."))+("..c_u.."0/("..c_Pi.."))*arccosh(D/2*a)", U("L",c_u.."0","a",c_Pi,"D" ))
 
 addSubCat(3, 4, "Loop", "")
+aF(3, 4, "B=("..c_u.."0*I*a*a)/(2*(sqrt(a*a+z*z))^3)", U("B", c_u.."0", "I", "a", "z") )
+aF(3, 4, "Ls=("..c_u.."0*a)*(ln(8*a/rr0)-2)", U(c_u.."0", "a", "rr0") )
+aF(3, 4, "L12=("..c_u.."0*a)*cos("..c_theta..")/(2*"..c_pi..")*ln((bl+d)/d)", U("L12", c_u.."0", "a", c_theta, c_pi, "bl", "d") )
+aF(3, 4, "T12=("..c_u.."0*a)*sin("..c_theta..")/(2*"..c_pi..")*I1*I2*ln((bl+d)/d)", U("L12", c_u.."0", "a", c_theta, c_pi, "I1", "I2", "bl", "d") )
+
 addSubCat(3, 5, "Coaxial Cable", "")
+aF(3, 5, "L="..c_u.."0/(8*"..c_pi..")+"..c_u.."0/(2*"..c_pi..")*ln(rb/ra)", U("L", c_u.."0", c_pi, "rb", "ra"))
+
 addSubCat(3, 6, "Skin Effect", "")
+aF(3, 5, utf8(948).."=1/(sqrt(("..c_pi.."*f*"..c_u.."0*"..c_u.."r)/"..utf8(961).."))", U(utf8(948), c_u.."0", c_u.."r", c_pi, "f", utf8(961)))
+aF(3, 5, "Reff=sqrt(("..c_pi.."*f*"..c_u.."0*"..c_u.."r*"..utf8(961).."))", U("Reff", c_u.."0", c_u.."r", c_pi, "f", utf8(961)))
 
 addCat(4, "Electron Motion", "Investigate the trajectories of electrons under the influence \nof electric and magnetic fields")
 
