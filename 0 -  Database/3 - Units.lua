@@ -152,7 +152,7 @@ Units["K"]["°R"]	= {9/5, 0}
 Units["J"]	= {}
 Units["J"]["GJ"]	= {Mt.G, 0} 
 Units["J"]["MJ"]	= {Mt.M, 0}
-Units["J"]["kJ"]	= {Mt,k, 0}	
+Units["J"]["kJ"]	= {Mt.k, 0}	
 Units["J"]["kWh"]	= {1/3600000, 0}
 
 Units["1/V"]	= {}
