@@ -2643,8 +2643,14 @@ SubCatSel.sel	= 1
 
 SubCatSel.sublist	= sList()
 SubCatSel:appendWidget(SubCatSel.sublist, 5, 5+24)
-SubCatSel.sublist:setSize(-10, -34)
+SubCatSel.back	=	sButton("Back")
+SubCatSel:appendWidget(SubCatSel.back, 5, -5)
+SubCatSel.sublist:setSize(-10, -66)
 SubCatSel.sublist.cid	= 0
+
+function SubCatSel.back:action() 
+	only_screen(CategorySel)	
+end
 
 function SubCatSel.sublist:action (sub)
 	local cid	= self.parent.cid
