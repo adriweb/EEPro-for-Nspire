@@ -83,7 +83,7 @@ Units["C/m"]["C/mm"      ]	= {1/Mt.m, 0}
 
 Units["m2/s"]	= {}
 
-Units[utf8(937)]	= {}
+Units[utf8(937)]	= {} --Ohm
 Units[utf8(937)]["m"..utf8(937)]	= {Mt.m, 0}
 Units[utf8(937)]["k"..utf8(937)]	= {Mt.k, 0}
 Units[utf8(937)]["M"..utf8(937)]	= {Mt.M, 0}

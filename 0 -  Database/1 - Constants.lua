@@ -37,7 +37,7 @@ Constants["mp"     ]	= {info="Proton rest mass"                   , value="1.672
 Constants["pe"     ]	= {info="Proton-electron mass ratio"         , value="1836.15"               , unit=nil                  }
 Constants["Rbc"    ]	= {info="Rydberg constant"                   , value="1.0974 * 10^7"         , unit="m^-1"               }
 Constants["C"      ]	= {info="Speed of light in vacuum"           , value="2.9979 * 10^8"         , unit="m/s"                }
-Constants["q"      ]	= {info="e elementary charge"                , value="1.60218 * 10^-19"      , unit="C"                }
+Constants["q"      ]	= {info="e elementary charge"                , value="1.60218 * 10^-19"      , unit="C"                  }
 Constants["pi"     ]	= {info="PI"                                 , value="pi"                    , unit=nil                  }
 Constants[utf8(956).."0"]	= {info="Magnetic permeability constant" , value="4*pi*10^-7"            , unit=nil                  }
 Constants[utf8(960)]	= Constants["pi"]

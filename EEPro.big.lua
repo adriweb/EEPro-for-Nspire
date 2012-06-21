@@ -37,7 +37,7 @@ Constants["mp"     ]	= {info="Proton rest mass"                   , value="1.672
 Constants["pe"     ]	= {info="Proton-electron mass ratio"         , value="1836.15"               , unit=nil                  }
 Constants["Rbc"    ]	= {info="Rydberg constant"                   , value="1.0974 * 10^7"         , unit="m^-1"               }
 Constants["C"      ]	= {info="Speed of light in vacuum"           , value="2.9979 * 10^8"         , unit="m/s"                }
-Constants["q"      ]	= {info="e elementary charge"                , value="1.60218 * 10^-19"      , unit="C"                }
+Constants["q"      ]	= {info="e elementary charge"                , value="1.60218 * 10^-19"      , unit="C"                  }
 Constants["pi"     ]	= {info="PI"                                 , value="pi"                    , unit=nil                  }
 Constants[utf8(956).."0"]	= {info="Magnetic permeability constant" , value="4*pi*10^-7"            , unit=nil                  }
 Constants[utf8(960)]	= Constants["pi"]
@@ -328,6 +328,8 @@ addCatVar(5, "Vsen", "Voltage sensitivity", "V")
 addCatVar(5, utf8(969), "Radian frequency", "rad/s")
 
 addSubCat(5, 1, "A, V, W Meters", "")
+aF(5, 1, "Rsh=(Rm*Isen)/(Imax-Isen)", U("Rsh", "Rm", "Isen", "Imax") )
+
 addSubCat(5, 2, "Wheatstone Bridge", "")
 addSubCat(5, 3, "Wien Bridge", "")
 addSubCat(5, 4, "Maxwell Bridge", "")
@@ -357,20 +359,20 @@ addCatVar(6, "vC", "Capacitor voltage", "V")
 addCatVar(6, "vL", "Inductor voltage", "V")
 addCatVar(6, "V0", "Initial capacitor voltage", "V")
 addCatVar(6, "Vs", "Voltage stimulus", "V")
-addCatVar(6, utf8(969), "Radian frequency", "rad/s")
+addCatVar(6, utf8(969), "Radian frequency", "rad/s") -- lowercase omega
 addCatVar(6, "W", "Energy dissipated", "J")
 
 addSubCat(6, 1, "RL Natural Response", "")
 aF(6, 1, c_t.."=L/R",                           U(c_t,"L","R")                )
 aF(6, 1, "vL=I0*R*exp(-t/"..c_t..")",               U("vL","I0","R","t",c_t)      )
 aF(6, 1, "iL=I0*exp(-t/"..c_t..")",                 U("iL","I0","t",c_t)          )
-aF(6, 1, "W=1/2*L*I0*I0*(1-exp(-2*t/"..c_t.."))",   U("W","L","I0","t",c_t)       )
+aF(6, 1, "W=1/2*L*I0^2*(1-exp(-2*t/"..c_t.."))",   U("W","L","I0","t",c_t)       )
 
 addSubCat(6, 2, "RC Natural Response", "")
 aF(6, 2, c_t.."=R*C",                           U(c_t,"R","C")                )
 aF(6, 2, "vC=V0*exp(-t/"..c_t..")",                 U("vC","V0","t",c_t)          )
 aF(6, 2, "iC=V0/R*exp(-t/"..c_t..")",               U("iC","V0","R","t",c_t)      )
-aF(6, 2, "W=1/2*C*V0*V0*(1-exp(-2*t/"..c_t.."))",   U("W","C","V0","t",c_t)       )
+aF(6, 2, "W=1/2*C*V0^2*(1-exp(-2*t/"..c_t.."))",   U("W","C","V0","t",c_t)       )
 
 addSubCat(6, 3, "RL Step response", "")
 aF(6, 3, c_t.."=L/R",                           U(c_t,"L","R")                )
@@ -383,11 +385,30 @@ aF(6, 4, "vC=Vs+(V0-Vs)*exp(-t/"..c_t..")",         U("vC","Vs","V0","t",c_t)   
 aF(6, 4, "iC=(Vs-V0)/R*exp(-t/"..c_t..")",          U("iC","Vs","V0","R","t",c_t) )
 
 addSubCat(6, 5, "RL Series to Parallel", "")
--- 11 formulas here :o --
+aF(6, 5, utf8(969).."=2*"..c_pi.."*f", U(utf8(969), c_pi, "f") )
+aF(6, 5, "Qs=("..utf8(969).."*Ls)/Rs" , U("Qs", utf8(969), "Ls", "Rs") )
+aF(6, 5, "Rp=(Rs^2+"..utf8(969).."^2*Ls^2)/Rs", U("Rp", utf8(969),"Rs", "Ls" ) )
+aF(6, 5, "Lp=(Rs^2+"..utf8(969).."^2*Ls^2)/("..utf8(969).."^2*Ls)", U("Lp", "Rs", utf8(969), "Ls" ) )
+aF(6, 5, "Qp=Rp/("..utf8(969).."*Lp)", U("Qp", "Rp", utf8(969)) )
+aF(6, 5, "Rs=("..utf8(969).."^2*Lp^2*Rp)/(Rp^2+"..utf8(969).."^2*Lp^2)", U("Lp", "Rs", utf8(969), "Rp" ) )
+aF(6, 5, "Ls=(Rp^2*Lp)/(Rp^2+"..utf8(969).."^2*Lp^2)", U("Ls", "Rp", utf8(969), "Lp" ) )
+aF(6, 5, "Rp=Rs*(1+Qs^2)", U("Rp", "Rs", "Qs") )
+aF(6, 5, "Lp=Ls*(1+1/(Qs^2))", U("Lp", "Ls", "Qs") )
+aF(6, 5, "Rs=Rp/(1+Qp^2)", U("Rs", "Rp", "Qp") )
+aF(6, 5, "Ls=(Qp^2*Lp)/(1+Qp^2)", U("Ls", "Qp", "Lp") )
 
 addSubCat(6, 6, "RC Series to Parallel", "")
--- 11 formulas here :o --
-
+aF(6, 6, utf8(969).."=2*"..c_pi.."*f", U(utf8(969), c_pi, "f") )
+aF(6, 6, "Qs=1/("..utf8(969).."*Rs*Cs)" , U("Qs", utf8(969), "Rs", "Cs") )
+aF(6, 6, "Rp=Rs*(1+1/("..utf8(969).."^2*Rs^2*Cs^2))", U("Rp", utf8(969),"Rs", "Cs" ) )
+aF(6, 6, "Cp=Cs/(1+"..utf8(969).."^2*Cs^2*Rs^2)", U("Cp", "Cs", utf8(969), "Rs" ) )
+aF(6, 6, "Qp="..utf8(969).."*Rp*Cp", U("Qp", "Rp", utf8(969), "Cp") )
+aF(6, 6, "Rs=Rp/(1+"..utf8(969).."^2*Rp^2*Cp^2)", U("Rs", "Rp", utf8(969), "Cp" ) )
+aF(6, 6, "Cs=(1+"..utf8(969).."^2*Rp^2*Cp^2)/("..utf8(969).."^2*Rp^2*Cp)", U("Cs", "Cp", utf8(969), "Rp" ) )
+aF(6, 6, "Rp=Rs*(1+Qs^2)", U("Rp", "Rs", "Qs") )
+aF(6, 6, "Cp=Cs/(1+1/(Qs^2))", U("Cp", "Cs", "Qs") )
+aF(6, 6, "Rs=Rp/(1+Qp^2)", U("Rs", "Rp", "Qp") )
+aF(6, 6, "Cs=(Cp*(1+Qp^2))/(Qp^2)", U("Cs", "Cp", "Qp") )
 
 addCat(7, "RLC Circuits", "Compute the impedance, admittance, natural response and\ntransient behavior of RLC circuits")
 
@@ -406,7 +427,7 @@ addCatVar(7, "f", "Frequency", "Hz")
 addCatVar(7, "G", "Conductance", "S")
 addCatVar(7, "I0", "Initial inductor current", "A")
 addCatVar(7, "L", "Inductance", "H")
-addCatVar(7, utf8(952), "Phase angle", "rad")
+addCatVar(7, utf8(952), "Phase angle", "rad") --theta
 addCatVar(7, "R", "Resistance", utf8(937))
 addCatVar(7, "s1", "Characteristic frequency", "rad/s")
 addCatVar(7, "s2", "Characteristic frequency", "rad/s")
@@ -417,7 +438,7 @@ addCatVar(7, "s2i", "Characteristic frequency (real)", "rad/s")
 addCatVar(7, "t", "Time", "s")
 addCatVar(7, "v", "Capacitor voltage", "V")
 addCatVar(7, "V0", "Initial capacitor voltage", "V")
-addCatVar(7, utf8(969), "Radian Frequency", "rad/s")
+addCatVar(7, utf8(969), "Radian Frequency", "rad/s") -- lowercase omega
 addCatVar(7, utf8(969).."d", "Damped radian frequency", "rad/s")
 addCatVar(7, utf8(969).."0", "Classical radian frequency", "rad/s")
 addCatVar(7, "X", "Reactance", utf8(937))
@@ -427,6 +448,13 @@ addCatVar(7, "Ym", "Admittance "..utf8(8211).." magnitude", "S")
 addCatVar(7, "Zm", "Impedance "..utf8(8211).." magnitude", "S")
 
 addSubCat(7, 1, "Series Impedance", "")
+aF(7, 1, "(abs(Zm))^2=R^2+X^2", U("Zm", "R", "X"))
+aF(7, 1, utf8(952).."=arctan(X/R)", U(utf8(952), "X", "R"))
+aF(7, 1, "X=XL+XXC", U("X", "XL", "XXC") )
+aF(7, 1, "XL="..utf8(969).."*L", U("XL", utf8(969), "L") )
+aF(7, 1, "XXC=-1/("..utf8(969).."*C)", U("XXC", utf8(969), "C") )
+aF(7, 1, utf8(969).."=2*"..c_pi.."*f", U(utf8(969), c_pi, "f") )
+
 addSubCat(7, 2, "Parallel Admittance", "")
 addSubCat(7, 3, "RLC Natural Response", "")
 addSubCat(7, 4, "Under-damped case", "")
@@ -1011,7 +1039,7 @@ Units["C/m"]["C/mm"      ]	= {1/Mt.m, 0}
 
 Units["m2/s"]	= {}
 
-Units[utf8(937)]	= {}
+Units[utf8(937)]	= {} --Ohm
 Units[utf8(937)]["m"..utf8(937)]	= {Mt.m, 0}
 Units[utf8(937)]["k"..utf8(937)]	= {Mt.k, 0}
 Units[utf8(937)]["M"..utf8(937)]	= {Mt.M, 0}
