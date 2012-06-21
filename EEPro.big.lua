@@ -2515,7 +2515,7 @@ function sDropdown:open()
 	local ph	= self.parent.h
 	
 	self.screen.hh	= self.y+self.h+h>ph+py-10 and ph-py-self.y-self.h-10 or h
-	if self.y+self.h+h>ph+py-10 then
+	if self.y+self.h+h>ph+py-10  and self.screen.hh<40 then
 		self.screen.hh = h < self.y and h or self.y-5
 		self.screen.yy = self.y-self.screen.hh
 	end
