@@ -2693,16 +2693,16 @@ end
 
 manualSolver	= WScreen()
 manualSolver.pl	= sScreen(-20, -50)
-manualSolver:appendWidget(manualSolver.pl, 2, 4)
+manualSolver:appendWidget(manualSolver.pl, 2, -4)
 
 manualSolver.sb	= scrollBar(-50)
-manualSolver:appendWidget(manualSolver.sb, -2, 3)
+manualSolver:appendWidget(manualSolver.sb, -2, -3)
 
 manualSolver.back	=	sButton("Back")
-manualSolver:appendWidget(manualSolver.back, 5, -5)
+manualSolver:appendWidget(manualSolver.back, 5, 5)
 
 manualSolver.usedFormulas	=	sButton("Formulas")
-manualSolver:appendWidget(manualSolver.usedFormulas, 50, -5)
+manualSolver:appendWidget(manualSolver.usedFormulas, -5, 5)
 
 function manualSolver.back:action()
 	manualSolver:escapeKey()
@@ -2720,8 +2720,14 @@ function manualSolver:paint(gc)
 	gc:setColorRGB(224,224,224)
 	gc:fillRect(self.x, self.y, self.w, self.h)
 	gc:setColorRGB(128,128,128)
-	gc:fillRect(self.x+5, self.y+self.h-42, self.w-10, 2)
+	gc:fillRect(self.x+5, self.y+38, self.w-10, 2)
 	self.sb:update(math.floor(-(self.pl.oy-4)/30+.5))
+	
+	gc:setColorRGB(0,0,0)
+	gc:setFont("sansserif", "r", 9)
+	local name	= self.sub.name
+	local len	= gc:getStringWidth(name)
+	gc:drawString(name, self.x+(self.w-len)/2, 10, "top")
 end
 
 function manualSolver:postPaint(gc)
