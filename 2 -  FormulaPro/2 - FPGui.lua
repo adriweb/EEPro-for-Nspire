@@ -146,7 +146,7 @@ function manualSolver:pushed(cid, sid)
 	for variable,_ in pairs(self.sub.variables) do
 		
 		
-		if not Constants[variable] or Categories[cid].varlink[variable] then
+		if not Constants[variable] then
 			i=i+1
 			inp	= sInput()
 			inp.value	= ""

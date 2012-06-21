@@ -34,7 +34,7 @@ Mt.m	= 1000
 Mt.u	= 1000000
 Mt.n	= 1000000000
 
-Mt.us	= utf8(181)
+Mt.us	= utf8(956)
 
 
 Units["W/K"]	= {}
@@ -145,7 +145,7 @@ Units["H"][Mt.us.."H"]	= {Mt.u, 0}
 Units["H"]["nH"]	= {Mt.n, 0}
 
 Units["K"]	= {}
-Units["K"]["°C"]	= {1, 273.15}
+Units["K"]["°C"]	= {1, -273.15}
 Units["K"]["°F"]	= {9/5, -459.67}
 Units["K"]["°R"]	= {9/5, 0}
 
