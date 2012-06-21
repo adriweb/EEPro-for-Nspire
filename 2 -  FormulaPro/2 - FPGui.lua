@@ -146,7 +146,7 @@ function manualSolver:pushed(cid, sid)
 	for variable,_ in pairs(self.sub.variables) do
 		
 		
-		if not Constants[variable] then
+		if not Constants[variable] or Categories[cid].varlink[variable] then
 			i=i+1
 			inp	= sInput()
 			inp.value	= ""
@@ -175,7 +175,7 @@ function manualSolver:pushed(cid, sid)
 				inp.focusUp	= -1
 			end
 			
-			if variabledata.unit ~= "unitless" then
+			if variabledata and variabledata.unit ~= "unitless" then
 				--unitlbl	= sLabel(variabledata.unit:gsub("([^%d]+)(%d)", numberToSub))
 				local itms	= {variabledata.unit}
 				for k,_ in pairs(Units[variabledata.unit]) do 
