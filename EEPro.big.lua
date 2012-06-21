@@ -412,7 +412,7 @@ aF(6, 6, "Cs=(Cp*(1+Qp^2))/(Qp^2)", U("Cs", "Cp", "Qp") )
 
 addCat(7, "RLC Circuits", "Compute the impedance, admittance, natural response and\ntransient behavior of RLC circuits")
 
-addCatVar(7, utf8(945), "Neper"..utf8(8217).."s frequency", "rad/s")
+addCatVar(7, utf8(945), "Neper"..utf8(8217).."s frequency", "rad/s") --alpha, apostrophe
 addCatVar(7, "A1", "Constant", "V")
 addCatVar(7, "A2", "Constant", "V")
 addCatVar(7, "B", "Susceptance", "S")
@@ -434,7 +434,7 @@ addCatVar(7, "s2", "Characteristic frequency", "rad/s")
 addCatVar(7, "s1i", "Characteristic frequency (imaginary)", "rad/s")
 addCatVar(7, "s1r", "Characteristic frequency (real)", "rad/s")
 addCatVar(7, "s2i", "Characteristic frequency (imaginary)", "rad/s")
-addCatVar(7, "s2i", "Characteristic frequency (real)", "rad/s")
+addCatVar(7, "s2r", "Characteristic frequency (real)", "rad/s")
 addCatVar(7, "t", "Time", "s")
 addCatVar(7, "v", "Capacitor voltage", "V")
 addCatVar(7, "V0", "Initial capacitor voltage", "V")
@@ -456,7 +456,22 @@ aF(7, 1, "XXC=-1/("..utf8(969).."*C)", U("XXC", utf8(969), "C") )
 aF(7, 1, utf8(969).."=2*"..c_pi.."*f", U(utf8(969), c_pi, "f") )
 
 addSubCat(7, 2, "Parallel Admittance", "")
+aF(7, 2, "(abs(Ym))^2=G^2+B^2", U("Ym", "G", "B"))
+aF(7, 2, utf8(952).."=arctan(G/B)", U(utf8(952), "G", "B"))
+aF(7, 2, "G=1/R", U("G", "R") )
+aF(7, 2, "B=BL+BC", U("B", "BL", "BC") )
+aF(7, 2, "BL=-1/("..utf8(969).."*L)", U("BL", utf8(969), "L") )
+aF(7, 2, "BC="..utf8(969).."*C)", U("BC", utf8(969), "C") )
+aF(7, 2, utf8(969).."=2*"..c_pi.."*f", U(utf8(969), c_pi, "f") )
+
 addSubCat(7, 3, "RLC Natural Response", "")
+aF(7, 3, "s1r=real(-"..utf8(945).."+sqrt("..utf8(945).."^2-"..utf8(969).."0^2))", U( "s1r", utf8(945), utf8(969).."0") )
+aF(7, 3, "s1i=imag(-"..utf8(945).."+sqrt("..utf8(945).."^2-"..utf8(969).."0^2))", U( "s1i", utf8(945), utf8(969).."0") )
+aF(7, 3, "s2r=real(-"..utf8(945).."-sqrt("..utf8(945).."^2-"..utf8(969).."0^2))", U( "s2r", utf8(945), utf8(969).."0") )
+aF(7, 3, "s2i=imag(-"..utf8(945).."-sqrt("..utf8(945).."^2-"..utf8(969).."0^2))", U( "s2i", utf8(945), utf8(969).."0") )
+aF(7, 3, utf8(969).."0=sqrt(1/(L*C))", U( utf8(969).."0", "L", "C" ) )
+aF(7, 3, utf8(945).."=1/(2*R*C)", U( utf8(945), "R", "C") )
+
 addSubCat(7, 4, "Under-damped case", "")
 addSubCat(7, 5, "Critical Damping", "")
 addSubCat(7, 6, "Over-damped Case", "")
@@ -3590,4 +3605,12 @@ end
 
 function on.help()
 	push_screen(aboutWindow)
+end
+
+function on.create()
+	platform.os = "3.1"
+end
+
+function on.construction()
+	platform.os = "3.2"
 end

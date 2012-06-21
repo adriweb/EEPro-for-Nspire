@@ -39,3 +39,14 @@ end
 function on.help()
 	push_screen(aboutWindow)
 end
+
+
+-- Still has to be worked on with Luna :
+
+function on.create()
+	platform.os = "3.1"
+end
+
+function on.construction()
+	platform.os = "3.2"
+end
