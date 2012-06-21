@@ -2723,11 +2723,18 @@ function manualSolver:paint(gc)
 	gc:fillRect(self.x+5, self.y+38, self.w-10, 2)
 	self.sb:update(math.floor(-(self.pl.oy-4)/30+.5))
 	
-	gc:setColorRGB(0,0,0)
-	gc:setFont("sansserif", "r", 9)
+	
+	gc:setFont("sansserif", "r", 10)
 	local name	= self.sub.name
 	local len	= gc:getStringWidth(name)
-	gc:drawString(name, self.x+(self.w-len)/2, 10, "top")
+	local x	= self.x+(self.w-len)/2
+	
+	--gc:setColorRGB(255,255,255)
+	--gc:fillRect(x-3, 10, len+6, 18)
+	
+	gc:setColorRGB(0,0,0)
+	gc:drawString(name, x, 10, "top")
+	--gc:drawRect(x-3, 10, len+6, 18)
 end
 
 function manualSolver:postPaint(gc)
