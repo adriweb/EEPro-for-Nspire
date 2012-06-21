@@ -16,7 +16,7 @@ function CategorySel:paint(gc)
 	
 	gc:setColorRGB(0,0,0)
 	gc:setFont("sansserif", "r", 16)
-	gc:drawString("Select your category:", 5, 0, "top")
+	gc:drawString("FormulaPro by TI-Planet", 5, 0, "top")
 	
 	gc:setColorRGB(220,220,220)
 	gc:setFont("sansserif", "r", 8)	
