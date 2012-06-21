@@ -142,7 +142,7 @@ aF(2, 4, "F=-1/2*(V^2*C)/d",      U("F","V","C","d")       )
 aF(2, 4, "W=1/2*V^2*C",           U("W","V","C")           )
 
 addSubCat(2, 5, "Parallel Wires", "")
-aF(2, 5, "scl="..c_Pi.."*"..c_e.."0*"..c_e.."r/arccosh(d/(2*ra))", U("cl",c_Pi,c_e.."0",c_e.."r","d","ra")     )
+aF(2, 5, "cl="..c_Pi.."*"..c_e.."0*"..c_e.."r/arccosh(d/(2*ra))", U("cl",c_Pi,c_e.."0",c_e.."r","d","ra")     )
 
 addSubCat(2, 6, "Coaxial Cable", "")
 aF(2, 6, "V=("..c_P.."l/(2*"..c_Pi.."*"..c_e.."0*"..c_e.."r))*ln(rb/ra)",  U("V",c_P.."l",c_Pi,c_e.."0",c_e.."r","ra")     )
@@ -222,7 +222,6 @@ addCatVar(4, "f0", "Critical frequency", "Hz")
 addCatVar(4, "I", "Thermionic current", "A")
 addCatVar(4, "L", "Deflecting plate length", "m")
 addCatVar(4, "Ls", "Beam length to destination", "m")
-addCatVar(4, "q", "Charge", "C") -- Missing from EEPro 89 !!! This is causing problem in the solving since it is not supposed to be entered... To be researched.
 addCatVar(4, "r", "Radius of circular path", "m")
 addCatVar(4, "S", "Surface area", "m2")
 addCatVar(4, "T", "Temperature", "K")

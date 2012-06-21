@@ -37,8 +37,9 @@ Constants["mp"     ]	= {info="Proton rest mass"                   , value="1.672
 Constants["pe"     ]	= {info="Proton-electron mass ratio"         , value="1836.15"               , unit=nil                  }
 Constants["Rbc"    ]	= {info="Rydberg constant"                   , value="1.0974 * 10^7"         , unit="m^-1"               }
 Constants["C"      ]	= {info="Speed of light in vacuum"           , value="2.9979 * 10^8"         , unit="m/s"                }
+Constants["q"      ]	= {info="e elementary charge"                , value="1.60218 * 10^-19"      , unit="C"                }
 Constants["pi"     ]	= {info="PI"                                 , value="pi"                    , unit=nil                  }
-Constants[utf8(956).."0"]	= {info="Magnetic permeability constant"     , value="4*pi*10^-7"           , unit=nil                  }
+Constants[utf8(956).."0"]	= {info="Magnetic permeability constant" , value="4*pi*10^-7"            , unit=nil                  }
 Constants[utf8(960)]	= Constants["pi"]
 Categories	=	{}
 Formulas	=	{}
@@ -184,7 +185,7 @@ aF(2, 4, "F=-1/2*(V^2*C)/d",      U("F","V","C","d")       )
 aF(2, 4, "W=1/2*V^2*C",           U("W","V","C")           )
 
 addSubCat(2, 5, "Parallel Wires", "")
-aF(2, 5, "scl="..c_Pi.."*"..c_e.."0*"..c_e.."r/arccosh(d/(2*ra))", U("cl",c_Pi,c_e.."0",c_e.."r","d","ra")     )
+aF(2, 5, "cl="..c_Pi.."*"..c_e.."0*"..c_e.."r/arccosh(d/(2*ra))", U("cl",c_Pi,c_e.."0",c_e.."r","d","ra")     )
 
 addSubCat(2, 6, "Coaxial Cable", "")
 aF(2, 6, "V=("..c_P.."l/(2*"..c_Pi.."*"..c_e.."0*"..c_e.."r))*ln(rb/ra)",  U("V",c_P.."l",c_Pi,c_e.."0",c_e.."r","ra")     )
@@ -264,7 +265,6 @@ addCatVar(4, "f0", "Critical frequency", "Hz")
 addCatVar(4, "I", "Thermionic current", "A")
 addCatVar(4, "L", "Deflecting plate length", "m")
 addCatVar(4, "Ls", "Beam length to destination", "m")
-addCatVar(4, "q", "Charge", "C") -- Missing from EEPro 89 !!! This is causing problem in the solving since it is not supposed to be entered... To be researched.
 addCatVar(4, "r", "Radius of circular path", "m")
 addCatVar(4, "S", "Surface area", "m2")
 addCatVar(4, "T", "Temperature", "K")
@@ -2771,7 +2771,7 @@ function manualSolver:pushed(cid, sid)
 				inp.focusUp	= -1
 			end
 			
-			if variabledata.unit ~= "unitless" then
+			if variabledata and variabledata.unit ~= "unitless" then
 				--unitlbl	= sLabel(variabledata.unit:gsub("([^%d]+)(%d)", numberToSub))
 				local itms	= {variabledata.unit}
 				for k,_ in pairs(Units[variabledata.unit]) do 
