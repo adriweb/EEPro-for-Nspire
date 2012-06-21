@@ -1041,7 +1041,6 @@ Units["Hz"]["GHz"]	= {Mt.G, 0}
 Units["rad/s"]	= {}
 Units["rad/s"]["RPM"]	= {1/(2*math.pi/60), 0}
 
-
 Units["A/m"]	= {}
 Units["A/m"]["mA/m"]	= {Mt.m, 0}
 
@@ -2516,13 +2515,14 @@ function sDropdown:open()
 	local ph	= self.parent.h
 	
 	self.screen.hh	= self.y+self.h+h>ph+py-10 and ph-py-self.y-self.h-10 or h
-	if self.screen.hh < 40 then
+	if self.y+self.h+h>ph+py-10 then
 		self.screen.hh = h < 100 and h or 100
 		self.screen.yy = self.y-self.screen.hh
 	end
 	
 	self.sList.ww = self.w + 13
 	self.sList.hh = self.screen.hh-2
+	self.sList.yy =self.sList.yy+1
 	self.sList:giveFocus()
 	push_screen(self.screen)
 end

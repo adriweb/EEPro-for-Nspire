@@ -70,7 +70,6 @@ Units["Hz"]["GHz"]	= {Mt.G, 0}
 Units["rad/s"]	= {}
 Units["rad/s"]["RPM"]	= {1/(2*math.pi/60), 0}
 
-
 Units["A/m"]	= {}
 Units["A/m"]["mA/m"]	= {Mt.m, 0}
 
