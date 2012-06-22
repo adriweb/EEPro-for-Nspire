@@ -1,3 +1,8 @@
+--------------------------
+---- FormulaPro v1.1b ----
+----- LGLP 3 License -----
+--------------------------
+
 function utf8(n)
 	return string.uchar(n)
 end
@@ -41,6 +46,11 @@ Constants["q"      ]	= {info="e elementary charge"                , value="1.602
 Constants["pi"     ]	= {info="PI"                                 , value="pi"                    , unit=nil                  }
 Constants[utf8(956).."0"]	= {info="Magnetic permeability constant" , value="4*pi*10^-7"            , unit=nil                  }
 Constants[utf8(960)]	= Constants["pi"]
+--------------------------
+---- FormulaPro v1.1b ----
+----- LGLP 3 License -----
+--------------------------
+
 Categories	=	{}
 Formulas	=	{}
 
@@ -969,6 +979,11 @@ addSubCat(16, 10, "Induction Motor I", "")
 addSubCat(16, 11, "Induction Motor II", "")
 addSubCat(16, 12, "1 f Induction Motor", "")
 addSubCat(16, 13, "Synchronous Machines", "")
+--------------------------
+---- FormulaPro v1.1b ----
+----- LGLP 3 License -----
+--------------------------
+
 Units	= {}
 
 function Units.mainToSub(main, sub, n)
@@ -2573,6 +2588,11 @@ function sDropdown:paint(gc)
 	gc:drawString(textLim(gc, text, self.w-5-22), self.x+5, self.y, "top")
 end
 
+--------------------------
+---- FormulaPro v1.1b ----
+----- LGLP 3 License -----
+--------------------------
+
 function math.solve(formula, tosolve)
 	local eq="max(exp" .. string.uchar(9654) .. "list(solve(" .. formula .. ", " .. tosolve ..")," .. tosolve .."))"
 	return math.eval(eq)
@@ -2653,6 +2673,11 @@ function find_data(known, cid, sid)
 	
 	return known
 end
+--------------------------
+---- FormulaPro v1.1b ----
+----- LGLP 3 License -----
+--------------------------
+
 CategorySel	= WScreen()
 CategorySel.iconS	= 48
 
@@ -3018,6 +3043,10 @@ end
 function usedFormulas.but.action(self)
 	remove_screen()
 end	
+--------------------------
+---- FormulaPro v1.1b ----
+----- LGLP 3 License -----
+--------------------------
 
 --[[
 
@@ -3581,17 +3610,22 @@ end
 
 
 Ref.addRefs()
+--------------------------
+---- FormulaPro v1.1b ----
+----- LGLP 3 License -----
+--------------------------
+
 only_screen(CategorySel)
 
 ----------------------------------------
 
 aboutWindow	= Dialog("About FormulaPro :", 50, 20, 280, 180)
 
-local aboutstr	= [[FormulaPro v1.0  -  Standalone version
+local aboutstr	= [[FormulaPro v1.1b  -  Standalone version
 -----------------------------
 Authors : Jim Bauwens, Adrien Bertrand
 (Adriweb). Credits also to Levak.
-LGPL License.
+LGPL3 License.
 More info and contact : 
 http://tiplanet.org  and  www.inspired-lua.org]]
 

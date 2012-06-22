@@ -1,14 +1,19 @@
+--------------------------
+---- FormulaPro v1.1b ----
+----- LGLP 3 License -----
+--------------------------
+
 only_screen(CategorySel)
 
 ----------------------------------------
 
 aboutWindow	= Dialog("About FormulaPro :", 50, 20, 280, 180)
 
-local aboutstr	= [[FormulaPro v1.0  -  Standalone version
+local aboutstr	= [[FormulaPro v1.1b  -  Standalone version
 -----------------------------
 Authors : Jim Bauwens, Adrien Bertrand
 (Adriweb). Credits also to Levak.
-LGPL License.
+LGPL3 License.
 More info and contact : 
 http://tiplanet.org  and  www.inspired-lua.org]]
 

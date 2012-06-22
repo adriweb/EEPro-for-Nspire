@@ -1,3 +1,8 @@
+--------------------------
+---- FormulaPro v1.1b ----
+----- LGLP 3 License -----
+--------------------------
+
 function math.solve(formula, tosolve)
 	local eq="max(exp" .. string.uchar(9654) .. "list(solve(" .. formula .. ", " .. tosolve ..")," .. tosolve .."))"
 	return math.eval(eq)

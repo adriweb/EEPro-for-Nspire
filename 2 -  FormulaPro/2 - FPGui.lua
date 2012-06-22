@@ -1,3 +1,8 @@
+--------------------------
+---- FormulaPro v1.1b ----
+----- LGLP 3 License -----
+--------------------------
+
 CategorySel	= WScreen()
 CategorySel.iconS	= 48
 

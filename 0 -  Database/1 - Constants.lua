@@ -1,3 +1,8 @@
+--------------------------
+---- FormulaPro v1.1b ----
+----- LGLP 3 License -----
+--------------------------
+
 function utf8(n)
 	return string.uchar(n)
 end
