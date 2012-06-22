@@ -33,6 +33,7 @@ function CategorySel:paint(gc)
 	for i, str in ipairs(splinfo) do
 		gc:drawString(str, 7, self.h-56+12 + i*10, "top")
 	end
+	self.sublist:giveFocus()
 end
 
 function CategorySel:pushed()

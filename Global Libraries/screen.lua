@@ -319,6 +319,7 @@ function WidgetManager:mouseDown(x, y)
 		self.focus	=	0
 	end
 end
+
 function WidgetManager:mouseUp(x, y)
 	if self.focus~=0 then
 		self:getWidget():mouseUp(x, y)

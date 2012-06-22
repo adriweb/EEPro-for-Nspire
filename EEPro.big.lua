@@ -2697,6 +2697,10 @@ CategorySel:appendWidget(CategorySel.sublist, 5, 5+24)
 CategorySel.sublist:setSize(-10, -70)
 CategorySel.sublist.cid	= 0
 
+function CategorySel.sublist:loseFocus()
+	return -1
+end
+
 function CategorySel.sublist:action(sid)
 	only_screen(SubCatSel, sid)
 end
