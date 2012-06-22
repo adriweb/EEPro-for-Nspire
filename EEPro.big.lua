@@ -2592,13 +2592,29 @@ function find_data(known, cid, sid)
 	local no
 	local dirty_exit	=	true
 	local tosolve
-	local couldnotsolve	= 0
+	local couldnotsolve	= {}
 	
+	local loops	= 0
 	while dirty_exit do
+		loops	= loops+1
+		if loops == 100 then error("too many loops!") end
 		dirty_exit	=	false
 		
 		for i, formula in ipairs(Formulas) do
-			if ((not cid) or (cid and formula.category == cid)) and ((not sid) or (formula.category == cid and formula.sub == sid)) and couldnotsolve ~= formula then
+		
+			local skip	= false
+			if couldnotsolve[formula] then
+				skip	= true
+				for k, v in pairs(known) do
+					if not couldnotsolve[formula][k] then
+						skip	= false
+						couldnotsolve[formula] = nil
+						break
+					end
+				end
+			end	
+				
+			if ((not cid) or (cid and formula.category == cid)) and ((not sid) or (formula.category == cid and formula.sub == sid)) and not skip then
 				no=0		
 					
 				for var in pairs(formula.variables) do
@@ -2617,12 +2633,12 @@ function find_data(known, cid, sid)
 						known[tosolve]	=	sol
 						done[formula]=true
 						var.store(tosolve, sol)
-						couldnotsolve	= 0
+						couldnotsolve[formula]	= nil
 						print(tosolve .. " = " .. sol)
 					else
 						print("Oops! Something went wrong:", r)
 						-- Need to issue a warning dialog
-						couldnotsolve	= formula
+						couldnotsolve[formula]	= copyTable(known)
 						
 					end	
 					dirty_exit	=	true
