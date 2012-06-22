@@ -9,9 +9,10 @@
 
 
 ## Who .... ?
-For now, here are the contributors to this project :
-
+For now, here are the contributors to the whole project :
 Adriweb, Critor, Excale, Jim Bauwens, Levak, NeoCrisis, Nick Steen.
+
+The FormulaPro team : Jim Bauwens and Adrien Bertrand ("Adriweb")
 
 We welcome everybody, so if you want to help us, contact us by email (see down there)
 
@@ -22,17 +23,19 @@ We welcome everybody, so if you want to help us, contact us by email (see down t
  
 The only requirement to run the .tns files is to have an Nspire OS >= 3.0. You can find the latest updates [here](http://education.ti.com).
 
-## What do we have to do, for now ?
-First, the formula/equation manager/solver part.  (Look at this specific part on the linked document)
+## What we have done, so far :
+Well, "FormulaPro", the formulas/equation part (2nd par of EEPro).
+This has been officially released (in beta) June 21st 2012 across multiple community websites :
+http://www.omnimaga.org/index.php?topic=13849 ; https://groups.google.com/forum/?fromgroups#!topic/tinspire/dlqZrAKpulM ; http://tiplanet.org/forum/viewtopic.php?p=126193 ; http://www.inspired-lua.org/2012/06/formulapro-v1-is-here/
 
 ![FormulaPro, comparison between our Nspire port and the TI-89 version](http://i.imgur.com/QsxVn.png)
 ![Some native-like GUI](http://i.imgur.com/8qud2.jpg)
-![Some native-like GUI](http://i.imgur.com/unSCe.png)
+![Some native-like GUI](http://i.imgur.com/ZaqAY.jpg)
 ![Some native-like GUI](http://i.imgur.com/0QC5K.jpg)
 
 Please refer to the document linked in the previous paragraph.
 
-At the same time, if you don't feel to be involved in a big thing, you can help by doing some of the Reference part :-)
+At the same time, if you don't wish to be involved in a big thing, you can help by doing some of the Reference part :-)
 
 Then, the *big* part is the Analysis one. (See the [EEPro Manual](http://tiplanet.org/modules/archives/eepro.pdf))
 
