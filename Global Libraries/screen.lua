@@ -412,9 +412,20 @@ DummyScreen	= Screen()
 
 
 function on.paint(gc)	
+    allWentWell, generalErrMsg = pcall(onpaint, gc)
+    if not allWentWell and errorHandler then
+        errorHandler.display = true
+        errorHandler.errorMessage = generalErrMsg
+    end
+end
+
+function onpaint(gc)
 	for _, screen in pairs(Screens) do
 		screen:draw(gc)	
-	end	
+	end
+	if errorHandler.display then
+	    errorPopup(gc)
+	end
 end
 
 function on.resize(x, y)
