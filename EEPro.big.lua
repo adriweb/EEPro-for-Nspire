@@ -1708,6 +1708,7 @@ function WidgetManager:mouseDown(x, y)
 		self.focus	=	0
 	end
 end
+
 function WidgetManager:mouseUp(x, y)
 	if self.focus~=0 then
 		self:getWidget():mouseUp(x, y)
@@ -2697,10 +2698,6 @@ CategorySel:appendWidget(CategorySel.sublist, 5, 5+24)
 CategorySel.sublist:setSize(-10, -70)
 CategorySel.sublist.cid	= 0
 
-function CategorySel.sublist:loseFocus()
-	return -1
-end
-
 function CategorySel.sublist:action(sid)
 	only_screen(SubCatSel, sid)
 end
@@ -2723,6 +2720,7 @@ function CategorySel:paint(gc)
 	for i, str in ipairs(splinfo) do
 		gc:drawString(str, 7, self.h-56+12 + i*10, "top")
 	end
+	self.sublist:giveFocus()
 end
 
 function CategorySel:pushed()

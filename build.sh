@@ -26,7 +26,7 @@ cd Global\ Libraries
 cd ..
 
 cat Database.big.lua lib.big.lua FormulaPro.big.lua Analysis.big.lua Reference.big.lua main.lua > EEPro.big.lua
-./luna EEPro.big.lua EEPro.tns
+luna EEPro.big.lua EEPro.tns
 
 echo "Done building"
 echo "Cleaning up"
