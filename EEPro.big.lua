@@ -1381,6 +1381,20 @@ function fillRoundRect(gc,x,y,wd,ht,radius)  -- wd = width and ht = height -- re
 end
 ----------
 
+local tstart = timer.start
+function timer.start(ms)
+    if not timer.isRunning then
+        tstart(ms)
+    end
+    timer.isRunning = true
+end
+local tstop = timer.stop
+function timer.stop()
+    timer.isRunning = false
+    tstop()
+end
+
+
 if platform.hw then
 	timer.multiplier = platform.hw() < 4 and 3.2 or 1
 else
@@ -1400,12 +1414,17 @@ function on.timer()
     if #timer.tasks > 0 then
         platform.window:invalidate()
     else
+    	--for _,screen in pairs(Screens) do
+    	--	screen:size()
+    	--end
         timer.stop()
     end
 end
 
 timer.tasks = {}
-timer.addTask = function(object, task) table.insert(timer.tasks, {object, task}) end
+
+timer.addTask = function(object, task) timer.start(0.01) table.insert(timer.tasks, {object, task}) end
+
 function timer.purgeTasks(object)
     local j = 1
     while j <= #timer.tasks do
@@ -1432,6 +1451,7 @@ end
 
 function Object:PushTask(task, t, ms, callback)
     table.insert(self.tasks, {task, t, ms, callback})
+    timer.start(0.01)
     if #self.tasks == 1 then
         local ok = task(self, t, ms, callback)
         if not ok then table.remove(self.tasks, 1) end
@@ -1619,7 +1639,6 @@ function scrollScreen(screen, d, callback)
   --  print("scrollScreen.  number of screens : ", #Screens)
     local dir = d or 1
     screen.x=dir*kXSize
-    timer.start(0.01)
     screen:Animate( {x=0}, 10, callback )
 end
 
@@ -1629,7 +1648,6 @@ function insertScreen(screen, ...)
     if current_screen() ~= DummyScreen then
         current_screen():screenLoseFocus()
         local coeff = pushFromBack and 1 or -1
-        timer.start(0.01)
 	    current_screen():Animate( {x=coeff*kXSize}, 10)
     end
 	table.insert(Screens, screen)
@@ -1652,7 +1670,6 @@ function push_screen(screen, ...)
     local theScreen = current_screen()
     pushFromBack = false
     insertScreen(screen, ...)
-    timer.start(0.01)
     scrollScreen(screen, 1, function() remove_screen_previous(theScreen) end)
 end
 
@@ -1661,7 +1678,6 @@ function push_screen_back(screen, ...)
     local theScreen = current_screen()
     pushFromBack = true
     insertScreen(screen, ...)
-    timer.start(0.01)
     scrollScreen(screen, -1, function() remove_screen_previous(theScreen) end)
 end
 

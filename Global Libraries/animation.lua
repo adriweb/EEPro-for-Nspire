@@ -1,5 +1,19 @@
 ----------
 
+local tstart = timer.start
+function timer.start(ms)
+    if not timer.isRunning then
+        tstart(ms)
+    end
+    timer.isRunning = true
+end
+local tstop = timer.stop
+function timer.stop()
+    timer.isRunning = false
+    tstop()
+end
+
+
 if platform.hw then
 	timer.multiplier = platform.hw() < 4 and 3.2 or 1
 else
@@ -19,12 +33,17 @@ function on.timer()
     if #timer.tasks > 0 then
         platform.window:invalidate()
     else
+    	--for _,screen in pairs(Screens) do
+    	--	screen:size()
+    	--end
         timer.stop()
     end
 end
 
 timer.tasks = {}
-timer.addTask = function(object, task) table.insert(timer.tasks, {object, task}) end
+
+timer.addTask = function(object, task) timer.start(0.01) table.insert(timer.tasks, {object, task}) end
+
 function timer.purgeTasks(object)
     local j = 1
     while j <= #timer.tasks do
@@ -51,6 +70,7 @@ end
 
 function Object:PushTask(task, t, ms, callback)
     table.insert(self.tasks, {task, t, ms, callback})
+    timer.start(0.01)
     if #self.tasks == 1 then
         local ok = task(self, t, ms, callback)
         if not ok then table.remove(self.tasks, 1) end
