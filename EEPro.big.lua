@@ -2986,24 +2986,23 @@ function CategorySel:paint(gc)
 	if not kIsInSubCatScreen then
         gc:setColorRGB(0,0,0)
         gc:setFont("sansserif", "r", 16)
-        gc:drawString("FormulaPro", 5, 0, "top")
+        gc:drawString("FormulaPro", self.x+5, 0, "top")
         
         gc:setFont("sansserif", "r", 12)
-        gc:drawString("v1.2", 130, 4, "top")
+        gc:drawString("v1.2", self.x+.4*self.w, 4, "top")
         
         gc:setFont("sansserif", "r", 12)
-        gc:drawString("by TI-Planet", .7*kXSize, 4, "top")
+        gc:drawString("by TI-Planet", self.x+self.w-gc:getStringWidth("by TI-Planet")-5, 4, "top")
         
         gc:setColorRGB(220,220,220)
         gc:setFont("sansserif", "r", 8)	
         gc:drawRect(5, self.h-46+10, self.w-10, 25+6)
         gc:setColorRGB(128,128,128)
-        gc:setFont("sansserif", "r", 8)
     end
 		
 	local splinfo	= Categories[self.sublist.sel].info:split("\n")
 	for i, str in ipairs(splinfo) do
-		gc:drawString(str, 7, self.h-56+12 + i*10, "top")
+		gc:drawString(str, self.x+7, self.h-56+12 + i*10, "top")
 	end
 	self.sublist:giveFocus()
 end
@@ -3050,7 +3049,7 @@ function SubCatSel:paint(gc)
 	gc:fillRect(self.x, self.y, self.w, self.h)
 	gc:setColorRGB(0,0,0)
 	gc:setFont("sansserif", "r", 16)
-	gc:drawString(Categories[self.cid].name, 5, 0, "top")	
+	gc:drawString(Categories[self.cid].name, self.x+5, 0, "top")	
 end
 
 function SubCatSel:pushed(sel)
@@ -3861,9 +3860,9 @@ References	= {
 Ref	= WScreen()
 
 RefList	= sList()
-RefList:setSize(-4, -4)
+RefList:setSize(-8, -32)
 
-Ref:appendWidget(RefList, 2, 2)
+Ref:appendWidget(RefList, 4, Ref.y+28)
 
 function Ref.addRefs()
 	for n, ref in ipairs(References) do
@@ -3885,23 +3884,27 @@ function Ref:pushed()
 	RefList:giveFocus()
 end
 
+function Ref:paint(gc)
+    gc:setFont("serif", "b", 16)
+    gc:drawString("Reference", self.x+6, -2, "top")
+    gc:setFont("serif", "r", 12)
+end
+
 function Ref:tabKey()
     push_screen(CategorySel)
 end
 
-function Ref:escapeKey()
-    push_screen(CategorySel)
-end
-
+Ref.escapeKey = Ref.tabKey
 
 Ref.addRefs()
+
 
 
 
 aboutWindow	= Dialog("About FormulaPro :", 50, 20, 280, 180)
 
 local aboutstr	= [[FormulaPro v1.2b
-------------------------------
+--------------------
 Jim Bauwens, Adrien "Adriweb" Bertrand
 Thanks also to Levak.
 LGPL3 License.

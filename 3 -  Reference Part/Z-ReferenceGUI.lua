@@ -14,9 +14,9 @@ References	= {
 Ref	= WScreen()
 
 RefList	= sList()
-RefList:setSize(-4, -4)
+RefList:setSize(-8, -32)
 
-Ref:appendWidget(RefList, 2, 2)
+Ref:appendWidget(RefList, 4, Ref.y+28)
 
 function Ref.addRefs()
 	for n, ref in ipairs(References) do
@@ -38,14 +38,18 @@ function Ref:pushed()
 	RefList:giveFocus()
 end
 
+function Ref:paint(gc)
+    gc:setFont("serif", "b", 16)
+    gc:drawString("Reference", self.x+6, -2, "top")
+    gc:setFont("serif", "r", 12)
+end
+
 function Ref:tabKey()
     push_screen(CategorySel)
 end
 
-function Ref:escapeKey()
-    push_screen(CategorySel)
-end
-
+Ref.escapeKey = Ref.tabKey
 
 Ref.addRefs()
+
 
