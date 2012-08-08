@@ -36,7 +36,7 @@ function RefBoolAlg:enterKey()
 end
 
 function RefBoolAlg:escapeKey()
-	remove_screen()
+	only_screen_back(Ref)
 end
 
 function RefBoolAlg:paint(gc)
@@ -66,3 +66,4 @@ function RefBoolAlg:paint(gc)
 		gc:drawString(RefBoolAlg.data[k][1+test(RefBoolAlg.dual)], 125-32*test(k==11)*test(pww()<330)+30*test(pww()>330)+12, 10+22*tmp, "top")
 	end
 end
+

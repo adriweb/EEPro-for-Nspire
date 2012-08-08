@@ -1,184 +1,7 @@
 --------------------------
-----   EEPro v1.2    ----
+---- FormulaPro v1.2b ----
 ----- LGLP 3 License -----
----- Adrien Bertrand  ----
-----   Jim Bauwens    ----
 --------------------------
---[[    Everyone is permitted to copy and distribute verbatim copies of this license document, 
-        but changing it is not allowed.
-        See http://www.gnu.org/licenses/lgpl.html for the full license.
-]]--
-
-
-----------
-
-if platform.hw then
-	timer.multiplier = platform.hw() < 4 and 3.2 or 1
-else
-	timer.multiplier = 3.2
-end
-
-function on.timer()
-    --current_screen():timer()
-    local j = 1
-    while j <= #timer.tasks do -- for each task
-        if timer.tasks[j][2]() then -- delete it if has ended
-            table.remove(timer.tasks, j)
-            sj = j - 1
-        end
-        j = j + 1
-    end
-    platform.window:invalidate()
-end
-
-timer.tasks = {}
-timer.addTask = function(object, task) table.insert(timer.tasks, {object, task}) end
-function timer.purgeTasks(object)
-    local j = 1
-    while j <= #timer.tasks do
-        if timer.tasks[j][1] == object then
-            table.remove(timer.tasks, j)
-            j = j - 1
-        end
-        j = j + 1
-    end
-end
-
-
----------- Animable Object class
-Object = class()
-function Object:init(x, y, w, h, r)
-    self.tasks = {}
-    self.x = x
-    self.y = y
-    self.w = w
-    self.h = h
-    self.r = r
-    self.visible = true
-end
-
-function Object:PushTask(task, t, ms, callback)
-    table.insert(self.tasks, {task, t, ms, callback})
-    if #self.tasks == 1 then
-        local ok = task(self, t, ms, callback)
-        if not ok then table.remove(self.tasks, 1) end
-    end
-end
-
-function Object:PopTask()
-    table.remove(self.tasks, 1)
-    if #self.tasks > 0 then
-        local task, t, ms, callback = unpack(self.tasks[1])
-        local ok = task(self, t, ms, callback)
-        if not ok then table.remove(self.tasks, 1) end
-    end
-end
-
-function Object:purgeTasks()
-    for i=1, #self.tasks do
-        self.tasks[i] = nil
-    end
-    collectgarbage()
-    timer.purgeTasks(self)
-    self.tasks = {}
-    return self
-end
-
-function Object:paint(gc)
-    -- to override
-end
-
-speed = 1
-    
-function Object:__Animate(t, ms, callback)
-    if not ms then ms = 50 end
-    if ms < 0 then print("Error: Invalid time divisor (must be >= 0)") return end
-    ms = ms / timer.multiplier
-    if ms == 0 then ms = 1 end
-    if not t or type(t) ~= "table" then print("Error: Target position is "..type(t)) return end
-    if not t.x then t.x = self.x end
-    if not t.y then t.y = self.y end
-    if not t.w then t.w = self.w end
-    if not t.h then t.h = self.h end
-    if not t.r then t.r = self.r else t.r = math.pi*t.r/180 end
-    local xinc = (t.x - self.x) / ms
-    local xside = xinc >= 0 and 1 or -1
-    local yinc = (t.y - self.y) / ms
-    local yside = yinc >= 0 and 1 or -1
-    local winc = (t.w - self.w) / ms
-    local wside = winc >= 0 and 1 or -1
-    local hinc = (t.h - self.h) / ms
-    local hside = hinc >= 0 and 1 or -1
-    local rinc = (t.r - self.r) / ms
-    local rside = rinc >= 0 and 1 or -1
-    timer.addTask(self, function()
-                    local b1, b2, b3, b4, b5 = false, false, false, false, false
-                    if (self.x + xinc * speed) * xside < t.x * xside then self.x = self.x + xinc * speed else b1 = true end
-                    if self.y * yside < t.y * yside then self.y = self.y + yinc * speed else b2 = true end
-                    if self.w * wside < t.w * wside then self.w = self.w + winc * speed else b3 = true end
-                    if self.h * hside < t.h * hside then self.h = self.h + hinc * speed else b4 = true end
-                    if self.r * rside < t.r * rside then self.r = self.r + rinc * speed else b5 = true end
-                    if self.w < 0 then self.w = 0 end
-                    if self.h < 0 then self.h = 0 end
-                    if b1 and b2 and b3 and b4 and b5 then
-                        self.x, self.y, self.w, self.h, self.r = t.x, t.y, t.w, t.h, t.r
-                        self:PopTask()
-                        if callback then callback(self) end
-                        return true
-                    end
-                    return false
-                end)
-    return true
-end
-
-function Object:__Delay(_, ms, callback)
-    if not ms then ms = 50 end
-    if ms < 0 then print("Error: Invalid time divisor (must be >= 0)") return end
-    ms = ms / timer.multiplier
-    if ms == 0 then ms = 1 end
-    local t = 0
-    timer.addTask(self, function()
-            if t < ms then
-                t = t + 1
-                return false
-            else
-                self:PopTask()
-                if callback then callback(self) end
-                return true
-            end
-        end)
-    return true
-end
-
-function Object:__setVisible(t, _, _)
-    timer.addTask(self, function()
-                      self.visible = t
-                      self:PopTask()
-                      return true
-                  end)
-    return true
-end
-
-function Object:Animate(t, ms, callback)
-    self:PushTask(self.__Animate, t, ms, callback)
-    return self
-end
-
-function Object:Delay(ms, callback)
-    self:PushTask(self.__Delay, false, ms, callback)
-    return self
-end
-
-function Object:setVisible(t)
-    self:PushTask(self.__setVisible, t, 1, false)
-    return self
-end
-
-
-timer.start(0.01)
-
-----------
-
 
 function utf8(n)
 	return string.uchar(n)
@@ -224,7 +47,7 @@ Constants["pi"     ]	= {info="PI"                                 , value="pi"  
 Constants[utf8(956).."0"]	= {info="Magnetic permeability constant" , value="4*pi*10^-7"            , unit=nil                  }
 Constants[utf8(960)]	= Constants["pi"]
 --------------------------
----- FormulaPro v1.2 ----
+---- FormulaPro v1.2b ----
 ----- LGLP 3 License -----
 --------------------------
 
@@ -1157,7 +980,7 @@ addSubCat(16, 11, "Induction Motor II", "")
 addSubCat(16, 12, "1 f Induction Motor", "")
 addSubCat(16, 13, "Synchronous Machines", "")
 --------------------------
----- FormulaPro v1.2 ----
+---- FormulaPro v1.2b ----
 ----- LGLP 3 License -----
 --------------------------
 
@@ -1307,9 +1130,9 @@ Units["H"][Mt.us.."H"]	= {Mt.u, 0}
 Units["H"]["nH"]	= {Mt.n, 0}
 
 Units["K"]	= {}
-Units["K"]["C"]	= {1, -273.15}
-Units["K"]["F"]	= {9/5, -459.67}
-Units["K"]["R"]	= {9/5, 0}
+Units["K"]["°C"]	= {1, -273.15}
+Units["K"]["°F"]	= {9/5, -459.67}
+Units["K"]["°R"]	= {9/5, 0}
 
 Units["J"]	= {}
 Units["J"]["GJ"]	= {Mt.G, 0} 
@@ -1522,12 +1345,10 @@ function horizontalBar(gc,y)
 	gc:fillRect(gc,0,y,pww(),1)
 end
 
-
 function nativeBar(gc, screen, y)
 	gc:setColorRGB(128,128,128)
 	gc:fillRect(screen.x+5, screen.y+y, screen.w-10, 2)
 end
-
 
 function drawSquare(gc,x,y,l)
 	gc:drawPolyLine(gc,{(x-l/2),(y-l/2), (x+l/2),(y-l/2), (x+l/2),(y+l/2), (x-l/2),(y+l/2), (x-l/2),(y-l/2)})
@@ -1558,12 +1379,171 @@ function fillRoundRect(gc,x,y,wd,ht,radius)  -- wd = width and ht = height -- re
     gc:fillArc(x, y, radius*2, radius*2, 85, 95);
     gc:fillArc(x, y + ht - (radius*2), radius*2, radius*2, 180, 95);
 end
+----------
 
-function drawLinearGradient(color1,color2)
-	-- syntax would be : color1 and color2 as {r,g,b}.
- 	-- don't really know how to do that. probably converting to hue/saturation/light mode and change the hue.
- 	-- todo with unpack(color1) and unpack(color2)
+if platform.hw then
+	timer.multiplier = platform.hw() < 4 and 3.2 or 1
+else
+	timer.multiplier = 3.2
 end
+
+function on.timer()
+    --current_screen():timer()
+    local j = 1
+    while j <= #timer.tasks do -- for each task
+        if timer.tasks[j][2]() then -- delete it if has ended
+            table.remove(timer.tasks, j)
+            sj = j - 1
+        end
+        j = j + 1
+    end
+    platform.window:invalidate()
+end
+
+timer.tasks = {}
+timer.addTask = function(object, task) table.insert(timer.tasks, {object, task}) end
+function timer.purgeTasks(object)
+    local j = 1
+    while j <= #timer.tasks do
+        if timer.tasks[j][1] == object then
+            table.remove(timer.tasks, j)
+            j = j - 1
+        end
+        j = j + 1
+    end
+end
+
+
+---------- Animable Object class
+Object = class()
+function Object:init(x, y, w, h, r)
+    self.tasks = {}
+    self.x = x
+    self.y = y
+    self.w = w
+    self.h = h
+    self.r = r
+    self.visible = true
+end
+
+function Object:PushTask(task, t, ms, callback)
+    table.insert(self.tasks, {task, t, ms, callback})
+    if #self.tasks == 1 then
+        local ok = task(self, t, ms, callback)
+        if not ok then table.remove(self.tasks, 1) end
+    end
+end
+
+function Object:PopTask()
+    table.remove(self.tasks, 1)
+    if #self.tasks > 0 then
+        local task, t, ms, callback = unpack(self.tasks[1])
+        local ok = task(self, t, ms, callback)
+        if not ok then table.remove(self.tasks, 1) end
+    end
+end
+
+function Object:purgeTasks()
+    for i=1, #self.tasks do
+        self.tasks[i] = nil
+    end
+    collectgarbage()
+    timer.purgeTasks(self)
+    self.tasks = {}
+    return self
+end
+
+function Object:paint(gc)
+    -- to override
+end
+
+speed = 1
+    
+function Object:__Animate(t, ms, callback)
+    if not ms then ms = 50 end
+    if ms < 0 then print("Error: Invalid time divisor (must be >= 0)") return end
+    ms = ms / timer.multiplier
+    if ms == 0 then ms = 1 end
+    if not t or type(t) ~= "table" then print("Error: Target position is "..type(t)) return end
+    if not t.x then t.x = self.x end
+    if not t.y then t.y = self.y end
+    if not t.w then t.w = self.w end
+    if not t.h then t.h = self.h end
+    if not t.r then t.r = self.r else t.r = math.pi*t.r/180 end
+    local xinc = (t.x - self.x) / ms
+    local xside = xinc >= 0 and 1 or -1
+    local yinc = (t.y - self.y) / ms
+    local yside = yinc >= 0 and 1 or -1
+    local winc = (t.w - self.w) / ms
+    local wside = winc >= 0 and 1 or -1
+    local hinc = (t.h - self.h) / ms
+    local hside = hinc >= 0 and 1 or -1
+    local rinc = (t.r - self.r) / ms
+    local rside = rinc >= 0 and 1 or -1
+    timer.addTask(self, function()
+                    local b1, b2, b3, b4, b5 = false, false, false, false, false
+                    if (self.x + xinc * speed) * xside < t.x * xside then self.x = self.x + xinc * speed else b1 = true end
+                    if self.y * yside < t.y * yside then self.y = self.y + yinc * speed else b2 = true end
+                    if self.w * wside < t.w * wside then self.w = self.w + winc * speed else b3 = true end
+                    if self.h * hside < t.h * hside then self.h = self.h + hinc * speed else b4 = true end
+                    if self.r * rside < t.r * rside then self.r = self.r + rinc * speed else b5 = true end
+                    if self.w < 0 then self.w = 0 end
+                    if self.h < 0 then self.h = 0 end
+                    if b1 and b2 and b3 and b4 and b5 then
+                        self.x, self.y, self.w, self.h, self.r = t.x, t.y, t.w, t.h, t.r
+                        self:PopTask()
+                        if callback then callback(self) end
+                        return true
+                    end
+                    return false
+                end)
+    return true
+end
+
+function Object:__Delay(_, ms, callback)
+    if not ms then ms = 50 end
+    if ms < 0 then print("Error: Invalid time divisor (must be >= 0)") return end
+    ms = ms / timer.multiplier
+    if ms == 0 then ms = 1 end
+    local t = 0
+    timer.addTask(self, function()
+            if t < ms then
+                t = t + 1
+                return false
+            else
+                self:PopTask()
+                if callback then callback(self) end
+                return true
+            end
+        end)
+    return true
+end
+
+function Object:__setVisible(t, _, _)
+    timer.addTask(self, function()
+                      self.visible = t
+                      self:PopTask()
+                      return true
+                  end)
+    return true
+end
+
+function Object:Animate(t, ms, callback)
+    self:PushTask(self.__Animate, t, ms, callback)
+    return self
+end
+
+function Object:Delay(ms, callback)
+    self:PushTask(self.__Delay, false, ms, callback)
+    return self
+end
+
+function Object:setVisible(t)
+    self:PushTask(self.__setVisible, t, 1, false)
+    return self
+end
+
+
 stdout	= print
 
 function pprint(...)
@@ -1666,7 +1646,7 @@ function push_screen(screen, ...)
     local theScreen = current_screen()
     pushFromBack = false
     insertScreen(screen, ...)
-    scrollScreen(screen, 1, function() remove_screen_previous(theScreen) end)
+    scrollScreen(screen, 1, function() remove_screen_previous(theScreen) timer.stop() end)
 end
 
 function push_screen_back(screen, ...)
@@ -1674,7 +1654,7 @@ function push_screen_back(screen, ...)
     local theScreen = current_screen()
     pushFromBack = true
     insertScreen(screen, ...)
-    scrollScreen(screen, -1, function() remove_screen_previous(theScreen) end)
+    scrollScreen(screen, -1, function() remove_screen_previous(theScreen) timer.stop() end)
 end
 
 function push_screen_direct(screen, ...)
@@ -2035,10 +2015,6 @@ function Dialog:paint(gc)
 end
 
 function Dialog:postPaint() end
-
-
-
-
 
 
 
@@ -2721,6 +2697,7 @@ end
 
 
 -------------------------------------------------------------------------------
+--									sDropdown							     --
 -------------------------------------------------------------------------------
 
 sDropdown	=	class(Widget)
@@ -2855,15 +2832,14 @@ function sDropdown:paint(gc)
 	
 	gc:drawString(textLim(gc, text, self.w-5-22), self.x+5, self.y, "top")
 end
-
 --------------------------
----- FormulaPro v1.2 ----
+---- FormulaPro v1.2b ----
 ----- LGLP 3 License -----
 --------------------------
 
 function math.solve(formula, tosolve)
-	local eq="max(exp" .. string.uchar(9654) .. "list(solve(" .. formula .. ", " .. tosolve ..")," .. tosolve .."))"
-	--local eq="nsolve(" .. formula .. ", " .. tosolve ..")"
+	--local eq="max(exp" .. string.uchar(9654) .. "list(solve(" .. formula .. ", " .. tosolve ..")," .. tosolve .."))"
+	local eq="nsolve(" .. formula .. ", " .. tosolve ..")"
 	return math.eval(eq)
 end
 
@@ -2931,7 +2907,6 @@ function find_data(known, cid, sid)
 					print("I can solve " .. tosolve .. " for " .. formula.formula)
 					
 					local sol,r	= math.solve(formula.formula, tosolve)
-					print("*******", sol, r)
 					if sol then 
 					    sol = round(sol,4)
 						known[tosolve]	=	sol
@@ -2957,8 +2932,10 @@ function find_data(known, cid, sid)
 	
 	return known
 end
+
+
 --------------------------
----- FormulaPro v1.2 ----
+---- FormulaPro v1.2b ----
 ----- LGLP 3 License -----
 --------------------------
 
@@ -3126,7 +3103,6 @@ function manualSolver:postPaint(gc)
 	--gc:setColorRGB(128,128,128)
 	--gc:drawRect(self.x, self.y, self.w, self.h-46)
 end
-
 
 
 function manualSolver:pushed(cid, sid)
@@ -3328,7 +3304,6 @@ function usedFormulas:screenGetFocus()
 	self:pushed()
 end
 
-
 function usedFormulas:removed()
 	if usedFormulas.ed.setVisible then
 		usedFormulas.ed:setVisible(false)
@@ -3343,10 +3318,12 @@ end
 function usedFormulas.but.action(self)
 	remove_screen()
 end	
+
 --------------------------
----- FormulaPro v1.2 ----
+---- FormulaPro v1.2b ----
 ----- LGLP 3 License -----
 --------------------------
+
 
 RefBoolAlg = Screen()
 
@@ -3416,6 +3393,7 @@ function RefBoolAlg:paint(gc)
 	end
 end
 
+
 RefBoolExpr = Screen()
 
 RefBoolExpr.data = {
@@ -3479,6 +3457,7 @@ end
 function RefBoolExpr:escapeKey()
 	only_screen_back(Ref)
 end
+
 
 RefConstants = Screen()
 
@@ -3567,6 +3546,8 @@ end
 function RefConstants:escapeKey()
 	only_screen_back(Ref)
 end
+
+
 Greek = Screen()
  
 Greek.font = "serif"
@@ -3630,6 +3611,8 @@ end
 function Greek:escapeKey()
 	only_screen_back(Ref)
 end
+
+
 ResColor = Screen()
 
 ResColor.colors = {
@@ -3833,6 +3816,8 @@ end
 function SIPrefixes:escapeKey()
 	only_screen_back(Ref)
 end
+
+
 References	= {
 	{title="Resistor color chart"     , info="", screen=ResColor    },
 	{title="Standard Component Values", info="", screen=nil         },
@@ -3883,14 +3868,7 @@ end
 
 Ref.addRefs()
 
---------------------------
----- FormulaPro v1.2 ----
------ LGLP 3 License -----
---------------------------
 
-push_screen_direct(CategorySel)
-
-----------------------------------------
 
 aboutWindow	= Dialog("About FormulaPro :", 50, 20, 280, 180)
 
@@ -3969,9 +3947,31 @@ How/where/when it happened etc.
     push_screen_direct(errorDialog)
 end
 
-----------------------------------------
+---------------------------------------------------------------
 
--- Still has to be worked on with Luna :
+function on.activate()
+	timer.stop()
+	timer.start(0.01)
+end
+
+function on.deactivate()
+	timer.stop()
+end
+
+function on.deactivate()
+	timer.stop()
+	print("tstop") 
+end
+
+function on.loseFocus()
+	timer.stop()
+	print("tstop")
+end
+
+function on.getFocus()
+	timer.stop()
+	timer.start(0.01)
+end
 
 function on.create()
 	platform.os = "3.1"
@@ -3997,3 +3997,11 @@ end
 if platform.registerErrorHandler then
     platform.registerErrorHandler( handleError )
 end
+
+----------------------------------------------  Launch !
+
+push_screen_direct(CategorySel)
+
+timer.stop() -- meh
+timer.start(0.01)
+

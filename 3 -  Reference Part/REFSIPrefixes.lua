@@ -51,5 +51,6 @@ function SIPrefixes:paint(gc)
 end
 
 function SIPrefixes:escapeKey()
-	remove_screen()
+	only_screen_back(Ref)
 end
+

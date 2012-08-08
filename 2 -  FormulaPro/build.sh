@@ -1,2 +1,2 @@
 #!/bin/sh
-cat *.lua>../FormulaPro.big.lua
+cat *.lua > ../FormulaPro.big.lua

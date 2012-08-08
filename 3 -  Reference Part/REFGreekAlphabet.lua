@@ -1,3 +1,4 @@
+
 Greek = Screen()
  
 Greek.font = "serif"
@@ -59,5 +60,6 @@ function Greek:enterKey()
 end
 
 function Greek:escapeKey()
-	remove_screen()
+	only_screen_back(Ref)
 end
+

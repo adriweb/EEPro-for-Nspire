@@ -1,3 +1,4 @@
+
 References	= {
 	{title="Resistor color chart"     , info="", screen=ResColor    },
 	{title="Standard Component Values", info="", screen=nil         },
@@ -37,9 +38,14 @@ function Ref:pushed()
 	RefList:giveFocus()
 end
 
+function Ref:tabKey()
+    push_screen(CategorySel)
+end
+
 function Ref:escapeKey()
-	only_screen(main)
+    push_screen(CategorySel)
 end
 
 
 Ref.addRefs()
+

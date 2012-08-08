@@ -1,11 +1,25 @@
 --------------------------
----- FormulaPro v1.1b ----
+---- FormulaPro v1.2b ----
 ----- LGLP 3 License -----
 --------------------------
 
 function math.solve(formula, tosolve)
-	local eq="max(exp" .. string.uchar(9654) .. "list(solve(" .. formula .. ", " .. tosolve ..")," .. tosolve .."))"
+	--local eq="max(exp" .. string.uchar(9654) .. "list(solve(" .. formula .. ", " .. tosolve ..")," .. tosolve .."))"
+	local eq="nsolve(" .. formula .. ", " .. tosolve ..")"
 	return math.eval(eq)
+end
+
+function round(num, idp)
+    if num >= 0.001 or num <= -0.001 then
+        local mult = 10^(idp or 0)
+        if num >= 0 then
+            return math.floor(num * mult + 0.5) / mult
+        else
+            return math.ceil(num * mult - 0.5) / mult
+        end
+    else
+        return tonumber(string.format("%.0"..(idp+1).."g", num))
+    end
 end
 
 function find_data(known, cid, sid)
@@ -58,8 +72,9 @@ function find_data(known, cid, sid)
 				if no==1 then
 					print("I can solve " .. tosolve .. " for " .. formula.formula)
 					
-					local sol,r	=	math.solve(formula.formula, tosolve)
+					local sol,r	= math.solve(formula.formula, tosolve)
 					if sol then 
+					    sol = round(sol,4)
 						known[tosolve]	=	sol
 						done[formula]=true
 						var.store(tosolve, sol)
@@ -75,7 +90,7 @@ function find_data(known, cid, sid)
 					break
 					
 				elseif no==2 then
-					print("I can not solve " .. formula.formula .. " because I don't know the value of multiple variables")
+					print("I cannot solve " .. formula.formula .. " because I don't know the value of multiple variables")
 				end
 			end
 		end
@@ -83,3 +98,5 @@ function find_data(known, cid, sid)
 	
 	return known
 end
+
+

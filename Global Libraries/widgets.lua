@@ -1,3 +1,4 @@
+
 function uCol(col)
 	return col[1] or 0, col[2] or 0, col[3] or 0
 end
@@ -626,6 +627,7 @@ end
 
 
 -------------------------------------------------------------------------------
+--									sDropdown							     --
 -------------------------------------------------------------------------------
 
 sDropdown	=	class(Widget)
@@ -760,4 +762,3 @@ function sDropdown:paint(gc)
 	
 	gc:drawString(textLim(gc, text, self.w-5-22), self.x+5, self.y, "top")
 end
-

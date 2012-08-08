@@ -28,7 +28,7 @@ RefConstants.data = {
 {"Proton mass energy (MeV)","mpc2","938.272 MeV"},
 {"Proton rest mass","mp","1.6726 x 10^-27 kg"},
 {"Proton-electron mass ratio","mp/me","1836.15"},
-{"Rydberg constant","r°","1.0974 x 10^7 m^-1"},
+{"Rydberg constant","r","1.0974 x 10^7 m^-1"},
 {"Speed of light in vacuum","C","2.9979 x 10^8 m/s"}
 }
 
@@ -84,5 +84,6 @@ function RefConstants:paint(gc)
 end
 
 function RefConstants:escapeKey()
-	remove_screen()
+	only_screen_back(Ref)
 end
+

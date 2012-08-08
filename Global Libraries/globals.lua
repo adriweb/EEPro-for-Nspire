@@ -131,12 +131,10 @@ function horizontalBar(gc,y)
 	gc:fillRect(gc,0,y,pww(),1)
 end
 
-
 function nativeBar(gc, screen, y)
 	gc:setColorRGB(128,128,128)
 	gc:fillRect(screen.x+5, screen.y+y, screen.w-10, 2)
 end
-
 
 function drawSquare(gc,x,y,l)
 	gc:drawPolyLine(gc,{(x-l/2),(y-l/2), (x+l/2),(y-l/2), (x+l/2),(y+l/2), (x-l/2),(y+l/2), (x-l/2),(y-l/2)})
@@ -166,10 +164,4 @@ function fillRoundRect(gc,x,y,wd,ht,radius)  -- wd = width and ht = height -- re
     gc:fillArc(x + wd - (radius*2), y, radius*2, radius*2,-2,91);
     gc:fillArc(x, y, radius*2, radius*2, 85, 95);
     gc:fillArc(x, y + ht - (radius*2), radius*2, radius*2, 180, 95);
-end
-
-function drawLinearGradient(color1,color2)
-	-- syntax would be : color1 and color2 as {r,g,b}.
- 	-- don't really know how to do that. probably converting to hue/saturation/light mode and change the hue.
- 	-- todo with unpack(color1) and unpack(color2)
 end

@@ -60,5 +60,6 @@ function RefBoolExpr:paint(gc)
 end
 
 function RefBoolExpr:escapeKey()
-	remove_screen()
+	only_screen_back(Ref)
 end
+

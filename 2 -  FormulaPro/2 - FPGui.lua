@@ -1,5 +1,5 @@
 --------------------------
----- FormulaPro v1.1b ----
+---- FormulaPro v1.2b ----
 ----- LGLP 3 License -----
 --------------------------
 
@@ -12,22 +12,30 @@ CategorySel.sublist:setSize(-10, -70)
 CategorySel.sublist.cid	= 0
 
 function CategorySel.sublist:action(sid)
-	only_screen(SubCatSel, sid)
+	push_screen(SubCatSel, sid)
 end
 
 function CategorySel:paint(gc)
 	gc:setColorRGB(255,255,255)
 	gc:fillRect(self.x, self.y, self.w, self.h)
 	
-	gc:setColorRGB(0,0,0)
-	gc:setFont("sansserif", "r", 16)
-	gc:drawString("FormulaPro by TI-Planet", 5, 0, "top")
-	
-	gc:setColorRGB(220,220,220)
-	gc:setFont("sansserif", "r", 8)	
-	gc:drawRect(5, self.h-46+10, self.w-10, 25+6)
-	gc:setColorRGB(128,128,128)
-	gc:setFont("sansserif", "r", 8)
+	if not kIsInSubCatScreen then
+        gc:setColorRGB(0,0,0)
+        gc:setFont("sansserif", "r", 16)
+        gc:drawString("FormulaPro", 5, 0, "top")
+        
+        gc:setFont("sansserif", "r", 12)
+        gc:drawString("v1.2", 130, 4, "top")
+        
+        gc:setFont("sansserif", "r", 12)
+        gc:drawString("by TI-Planet", .7*kXSize, 4, "top")
+        
+        gc:setColorRGB(220,220,220)
+        gc:setFont("sansserif", "r", 8)	
+        gc:drawRect(5, self.h-46+10, self.w-10, 25+6)
+        gc:setColorRGB(128,128,128)
+        gc:setFont("sansserif", "r", 8)
+    end
 		
 	local splinfo	= Categories[self.sublist.sel].info:split("\n")
 	for i, str in ipairs(splinfo) do
@@ -46,6 +54,10 @@ function CategorySel:pushed()
 	self.sublist:giveFocus()
 end
 
+function CategorySel:tabKey()
+    push_screen_back(Ref)
+end
+
 
 
 SubCatSel	= WScreen()
@@ -53,29 +65,33 @@ SubCatSel.sel	= 1
 
 SubCatSel.sublist	= sList()
 SubCatSel:appendWidget(SubCatSel.sublist, 5, 5+24)
-SubCatSel.back	=	sButton("Back")
+SubCatSel.back	=	sButton(utf8(9664).." Back")
 SubCatSel:appendWidget(SubCatSel.back, 5, -5)
 SubCatSel.sublist:setSize(-10, -66)
 SubCatSel.sublist.cid	= 0
 
 function SubCatSel.back:action() 
-	only_screen(CategorySel)	
+	SubCatSel:escapeKey()	
 end
 
-function SubCatSel.sublist:action (sub)
+function SubCatSel.sublist:action(sub)
 	local cid	= self.parent.cid
 	if #Categories[cid].sub[sub].formulas>0 then
-		only_screen(manualSolver, cid, sub)
+		push_screen(manualSolver, cid, sub)
 	end
 end
 
 function SubCatSel:paint(gc)
+	gc:setColorRGB(255,255,255)
+	gc:fillRect(self.x, self.y, self.w, self.h)
 	gc:setColorRGB(0,0,0)
 	gc:setFont("sansserif", "r", 16)
 	gc:drawString(Categories[self.cid].name, 5, 0, "top")	
 end
 
 function SubCatSel:pushed(sel)
+
+    kIsInSubCatScreen = true
 	self.cid	= sel
 	local items	= {}
 	for sid, subcat in ipairs(Categories[sel].sub) do
@@ -92,7 +108,8 @@ function SubCatSel:pushed(sel)
 end
 
 function SubCatSel:escapeKey()
-	only_screen(CategorySel)
+    kIsInSubCatScreen = false
+	only_screen_back(CategorySel)
 end
 
 
@@ -108,7 +125,7 @@ manualSolver:appendWidget(manualSolver.pl, 2, 4)
 manualSolver.sb	= scrollBar(-50)
 manualSolver:appendWidget(manualSolver.sb, -2, 3)
 
-manualSolver.back	=	sButton("Back")
+manualSolver.back	=	sButton(utf8(9664).." Back")
 manualSolver:appendWidget(manualSolver.back, 5, -5)
 
 manualSolver.usedFormulas	=	sButton("Formulas")
@@ -119,7 +136,7 @@ function manualSolver.back:action()
 end
 
 function manualSolver.usedFormulas:action()
-	push_screen(usedFormulas)
+	push_screen_direct(usedFormulas)
 end
 
 function manualSolver.sb:action(top)
@@ -152,7 +169,6 @@ function manualSolver:postPaint(gc)
 end
 
 
-
 function manualSolver:pushed(cid, sid)
 	self.pl.widgets	= {}
 	self.pl.focus	= 0
@@ -174,7 +190,7 @@ function manualSolver:pushed(cid, sid)
 			i=i+1
 			inp	= sInput()
 			inp.value	= ""
-			inp.number	= true
+			--inp.number	= true
 			
 			function inp:enterKey() 
 				manualSolver:solve()
@@ -221,8 +237,6 @@ function manualSolver:pushed(cid, sid)
 					lastdropdown = false
 				end			
 			end
-			
-			
 			
 			inp.getFocus = manualSolver.update
 		else
@@ -289,11 +303,11 @@ function manualSolver:solve()
 end
 
 function manualSolver:escapeKey()
-	only_screen(SubCatSel, self.cid)
+	only_screen_back(SubCatSel, self.cid)
 end
 
 function manualSolver:contextMenu()
-	push_screen(usedFormulas)
+	push_screen_direct(usedFormulas)
 end
 
 usedFormulas	= Dialog("Used formulas",10, 10, -20, -20)
@@ -354,7 +368,6 @@ function usedFormulas:screenGetFocus()
 	self:pushed()
 end
 
-
 function usedFormulas:removed()
 	if usedFormulas.ed.setVisible then
 		usedFormulas.ed:setVisible(false)
@@ -369,3 +382,4 @@ end
 function usedFormulas.but.action(self)
 	remove_screen()
 end	
+

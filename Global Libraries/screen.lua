@@ -1,3 +1,5 @@
+
+
 stdout	= print
 
 function pprint(...)
@@ -61,25 +63,89 @@ end
 --                        Screen  Class                         --
 ------------------------------------------------------------------
 
-Screen	=	class()
+Screen	=	class(Object)
 
 Screens	=	{}
 
+function scrollScreen(screen, d, callback)
+  --  print("scrollScreen.  number of screens : ", #Screens)
+    local dir = d or 1
+    screen.x=dir*kXSize
+	screen:Animate( {x=0}, 10, callback )
+end
+
+function insertScreen(screen, ...)
+  --  print("insertScreen")
+	screen:size()
+    if current_screen() ~= DummyScreen then
+        current_screen():screenLoseFocus()
+        local coeff = pushFromBack and 1 or -1
+	    current_screen():Animate( {x=coeff*kXSize}, 10 )
+    end
+	table.insert(Screens, screen)
+
+	platform.window:invalidate()
+	current_screen():pushed(...)
+end
+
+function insertScreen_direct(screen, ...)
+  --  print("insertScreen_direct")
+	screen:size()
+	table.insert(Screens, screen)
+	platform.window:invalidate()
+	current_screen():pushed(...)
+end
+
 function push_screen(screen, ...)
-	current_screen():screenLoseFocus()
+    --print("push_screen")
+    local args = ...
+    local theScreen = current_screen()
+    pushFromBack = false
+    insertScreen(screen, ...)
+    scrollScreen(screen, 1, function() remove_screen_previous(theScreen) timer.stop() end)
+end
+
+function push_screen_back(screen, ...)
+    --print("push_screen_back")
+    local theScreen = current_screen()
+    pushFromBack = true
+    insertScreen(screen, ...)
+    scrollScreen(screen, -1, function() remove_screen_previous(theScreen) timer.stop() end)
+end
+
+function push_screen_direct(screen, ...)
+   -- print("push_screen_direct")
 	table.insert(Screens, screen)
 	platform.window:invalidate()
 	current_screen():pushed(...)
 end
 
 function only_screen(screen, ...)
-	current_screen():screenLoseFocus()
-	Screens	=	{screen}
+   -- print("only_screen")
+    remove_screen(current_screen())
+	Screens	=	{}
+	push_screen(screen, ...)
 	platform.window:invalidate()
-	screen:pushed(...)	
+end
+
+function only_screen_back(screen, ...)
+ --   print("only_screen_back")
+    --Screens	=	{}
+	push_screen_back(screen, ...)
+	platform.window:invalidate()
+end
+
+function remove_screen_previous(...)
+  --  print("remove_screen_previous")
+	platform.window:invalidate()
+	current_screen():removed(...)
+	res=table.remove(Screens, #Screens-1)
+	current_screen():screenGetFocus()
+	return res
 end
 
 function remove_screen(...)
+  --  print("remove_screen")
 	platform.window:invalidate()
 	current_screen():removed(...)
 	res=table.remove(Screens)
@@ -92,14 +158,16 @@ function current_screen()
 end
 
 function Screen:init(xx,yy,ww,hh)
+
 	self.yy	=	yy
 	self.xx	=	xx
 	self.hh	=	hh
 	self.ww	=	ww
 	
-	
 	self:ext()
 	self:size(0)
+	
+	Object.init(self, self.x, self.y, self.w, self.h, 0)
 end
 
 function Screen:ext()
@@ -125,7 +193,7 @@ function Screen:screenLoseFocus() end
 function Screen:screenGetFocus() end
 
 function Screen:draw(gc)
-	self:size()
+	--self:size()
 	self:paint(gc)
 end
 
@@ -151,6 +219,8 @@ function Screen:contextMenu()	end
 
 function Screen:appended() end
 
+function Screen:resize(w,h) end
+
 function Screen:destroy()
 	self	= nil
 end
@@ -164,6 +234,12 @@ WidgetManager	= {}
 function WidgetManager:ext()
 	self.widgets	=	{}
 	self.focus	=	0
+end
+
+function WidgetManager:resize(w,h)
+    if self.x then  --already inited
+        self:size()
+    end
 end
 
 function WidgetManager:appendWidget(widget, xx, yy) 
@@ -196,7 +272,7 @@ function WidgetManager:postPaint(gc)
 end
 
 function WidgetManager:draw(gc)
-	self:size()
+	--self:size()
 	self:paint(gc)
 	self:drawWidgets(gc)
 	self:postPaint(gc)
@@ -332,19 +408,20 @@ function WidgetManager:mouseMove(x, y)
 	end
 end
 
+
+
 --------------------------
 -- Our new frankenstein --
 --------------------------
 
 WScreen	= addExtension(Screen, WidgetManager)
 
-
-
 --Dialog screen
 
 Dialog	=	class(WScreen)
 
 function Dialog:init(title,xx,yy,ww,hh)
+
 	self.yy	=	yy
 	self.xx	=	xx
 	self.hh	=	hh
@@ -354,6 +431,7 @@ function Dialog:init(title,xx,yy,ww,hh)
 	
 	self.widgets	=	{}
 	self.focus	=	0
+	    
 end
 
 function Dialog:paint(gc)
@@ -396,10 +474,6 @@ function Dialog:postPaint() end
 
 
 
-
-
-
-
 ---
 -- The dummy screen
 ---
@@ -433,9 +507,12 @@ function on.resize(x, y)
 	-- Global Ratio Constants for On-Calc (shouldn't be used often though...)
 	kXRatio = x/320
 	kYRatio = y/212
+	
+	kXSize, kYSize = x,y
+	
+	current_screen():resize(x,y)
 end
 
-function on.timer()			current_screen():timer()		 end
 function on.arrowKey(arrw)	current_screen():arrowKey(arrw)  end
 function on.enterKey()		current_screen():enterKey()		 end
 function on.escapeKey()		current_screen():escapeKey()	 end
@@ -447,4 +524,3 @@ function on.contextMenu()	current_screen():contextMenu()   end
 function on.mouseDown(x,y)	current_screen():mouseDown(x,y)	 end
 function on.mouseUp(x,y)	current_screen():mouseUp(x,y)	 end
 function on.mouseMove(x,y)	current_screen():mouseMove(x,y)  end
-

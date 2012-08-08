@@ -1,3 +1,4 @@
+
 ResColor = Screen()
 
 ResColor.colors = {
@@ -144,5 +145,5 @@ function Resistor:charIn(char)
 end
 
 function ResColor:escapeKey()
-	remove_screen()
+	only_screen_back(Ref)
 end
