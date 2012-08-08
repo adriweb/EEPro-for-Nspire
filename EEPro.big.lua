@@ -3918,7 +3918,6 @@ for i, line in ipairs(aboutstr:split("\n")) do
 	aboutWindow:appendWidget(aboutlabel, 10, 27 + i*14-12)
 end
 
-
 aboutWindow:appendWidget(aboutButton,-10,-5)
 
 function aboutWindow:postPaint(gc)
@@ -3980,30 +3979,6 @@ end
 
 ---------------------------------------------------------------
 
-function on.activate()
-	timer.stop()
-	timer.start(0.01)
-end
-
-function on.deactivate()
-	timer.stop()
-end
-
-function on.deactivate()
-	timer.stop()
-	print("tstop") 
-end
-
-function on.loseFocus()
-	timer.stop()
-	print("tstop")
-end
-
-function on.getFocus()
-	timer.stop()
-	timer.start(0.01)
-end
-
 function on.create()
 	platform.os = "3.1"
 end
@@ -4029,10 +4004,9 @@ if platform.registerErrorHandler then
     platform.registerErrorHandler( handleError )
 end
 
+
+
 ----------------------------------------------  Launch !
 
 push_screen_direct(CategorySel)
-
-timer.stop() -- meh
-timer.start(0.01)
 
