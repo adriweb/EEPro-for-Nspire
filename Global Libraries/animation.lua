@@ -16,7 +16,11 @@ function on.timer()
         end
         j = j + 1
     end
-    platform.window:invalidate()
+    if #timer.tasks > 0 then
+        platform.window:invalidate()
+    else
+        timer.stop()
+    end
 end
 
 timer.tasks = {}

@@ -714,7 +714,9 @@ function sDropdown:open()
 	self.sList.hh = self.screen.hh-2
 	self.sList.yy =self.sList.yy+1
 	self.sList:giveFocus()
-	push_screen(self.screen)
+	
+    self.screen:size()
+	push_screen_direct(self.screen)
 end
 
 function sDropdown:listAction(a,b)

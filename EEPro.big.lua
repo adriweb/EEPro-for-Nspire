@@ -1397,7 +1397,11 @@ function on.timer()
         end
         j = j + 1
     end
-    platform.window:invalidate()
+    if #timer.tasks > 0 then
+        platform.window:invalidate()
+    else
+        timer.stop()
+    end
 end
 
 timer.tasks = {}
@@ -1615,7 +1619,8 @@ function scrollScreen(screen, d, callback)
   --  print("scrollScreen.  number of screens : ", #Screens)
     local dir = d or 1
     screen.x=dir*kXSize
-	screen:Animate( {x=0}, 10, callback )
+    timer.start(0.01)
+    screen:Animate( {x=0}, 10, callback )
 end
 
 function insertScreen(screen, ...)
@@ -1624,7 +1629,8 @@ function insertScreen(screen, ...)
     if current_screen() ~= DummyScreen then
         current_screen():screenLoseFocus()
         local coeff = pushFromBack and 1 or -1
-	    current_screen():Animate( {x=coeff*kXSize}, 10 )
+        timer.start(0.01)
+	    current_screen():Animate( {x=coeff*kXSize}, 10)
     end
 	table.insert(Screens, screen)
 
@@ -1646,7 +1652,8 @@ function push_screen(screen, ...)
     local theScreen = current_screen()
     pushFromBack = false
     insertScreen(screen, ...)
-    scrollScreen(screen, 1, function() remove_screen_previous(theScreen) timer.stop() end)
+    timer.start(0.01)
+    scrollScreen(screen, 1, function() remove_screen_previous(theScreen) end)
 end
 
 function push_screen_back(screen, ...)
@@ -1654,7 +1661,8 @@ function push_screen_back(screen, ...)
     local theScreen = current_screen()
     pushFromBack = true
     insertScreen(screen, ...)
-    scrollScreen(screen, -1, function() remove_screen_previous(theScreen) timer.stop() end)
+    timer.start(0.01)
+    scrollScreen(screen, -1, function() remove_screen_previous(theScreen) end)
 end
 
 function push_screen_direct(screen, ...)
@@ -2054,7 +2062,9 @@ function on.resize(x, y)
 	
 	kXSize, kYSize = x,y
 	
-	current_screen():resize(x,y)
+	for _,screen in pairs(Screens) do
+		screen:resize(x,y)
+	end
 end
 
 function on.arrowKey(arrw)	current_screen():arrowKey(arrw)  end
@@ -2784,7 +2794,9 @@ function sDropdown:open()
 	self.sList.hh = self.screen.hh-2
 	self.sList.yy =self.sList.yy+1
 	self.sList:giveFocus()
-	push_screen(self.screen)
+	
+    self.screen:size()
+	push_screen_direct(self.screen)
 end
 
 function sDropdown:listAction(a,b)
@@ -3872,13 +3884,13 @@ Ref.addRefs()
 
 aboutWindow	= Dialog("About FormulaPro :", 50, 20, 280, 180)
 
-local aboutstr	= [[FormulaPro v1.2  -  Standalone version
+local aboutstr	= [[FormulaPro v1.2b
 ------------------------------
-Authors : Jim Bauwens, Adrien Bertrand
-(Adriweb). Credits also to Levak.
+Jim Bauwens, Adrien "Adriweb" Bertrand
+Thanks also to Levak.
 LGPL3 License.
 More info and contact : 
-http://tiplanet.org  and  www.inspired-lua.org]]
+tiplanet.org  -  inspired-lua.org]]
 
 local aboutButton	= sButton("OK")
 

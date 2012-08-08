@@ -2,13 +2,13 @@
 
 aboutWindow	= Dialog("About FormulaPro :", 50, 20, 280, 180)
 
-local aboutstr	= [[FormulaPro v1.2  -  Standalone version
+local aboutstr	= [[FormulaPro v1.2b
 ------------------------------
-Authors : Jim Bauwens, Adrien Bertrand
-(Adriweb). Credits also to Levak.
+Jim Bauwens, Adrien "Adriweb" Bertrand
+Thanks also to Levak.
 LGPL3 License.
 More info and contact : 
-http://tiplanet.org  and  www.inspired-lua.org]]
+tiplanet.org  -  inspired-lua.org]]
 
 local aboutButton	= sButton("OK")
 
