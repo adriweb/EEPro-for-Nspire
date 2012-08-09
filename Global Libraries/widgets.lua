@@ -70,6 +70,8 @@ end
 
 function Widget:getFocus() end
 function Widget:loseFocus() end
+function Widget:clearKey() 	end
+
 function Widget:enterKey() 
 	self.parent:switchFocus(1)
 end
@@ -497,20 +499,31 @@ function sList:paint(gc)
 end
 
 function sList:arrowKey(arrow)	
-	if arrow=="up" and self.sel>1 then
-		self.sel	= self.sel - 1
-		self:change(self.sel, self.items[self.sel])
-		if self.top>=self.sel then
-			self.top	= self.top - 1
-		end
+    
+	if arrow=="up" then
+	    if self.sel>1 then
+            self.sel	= self.sel - 1
+            if self.top>=self.sel then
+                self.top	= self.top - 1
+            end
+        else
+            self.top = self.h/self.ih < #self.items and math.ceil(#self.items - self.h/self.ih) or 0
+            self.sel = #self.items
+        end
+        self:change(self.sel, self.items[self.sel])
 	end
 
-	if arrow=="down" and self.sel<#self.items then
-		self.sel	= self.sel + 1
-		self:change(self.sel, self.items[self.sel])
-		if self.sel>(self.h/self.ih)+self.top then
-			self.top	= self.top + 1
-		end
+	if arrow=="down" then
+	    if self.sel<#self.items then
+            self.sel	= self.sel + 1
+            if self.sel>(self.h/self.ih)+self.top then
+                self.top	= self.top + 1
+            end
+        else
+            self.top = 0
+            self.sel = 1
+        end
+        self:change(self.sel, self.items[self.sel])
 	end
 end
 
