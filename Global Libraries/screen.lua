@@ -206,6 +206,7 @@ end
 function Screen:arrowKey()	end
 function Screen:enterKey()	end
 function Screen:backspaceKey()	end
+function Screen:clearKey() 	end
 function Screen:escapeKey()	end
 function Screen:tabKey()	end
 function Screen:backtabKey()	end
@@ -334,6 +335,13 @@ end
 function WidgetManager:enterKey()	
 	if self.focus~=0 then
 		self:getWidget():enterKey()
+	end
+	self:invalidate()
+end
+
+function WidgetManager:clearKey()	
+	if self.focus~=0 then
+		self:getWidget():clearKey()
 	end
 	self:invalidate()
 end
@@ -526,3 +534,4 @@ function on.contextMenu()	current_screen():contextMenu()   end
 function on.mouseDown(x,y)	current_screen():mouseDown(x,y)	 end
 function on.mouseUp(x,y)	current_screen():mouseUp(x,y)	 end
 function on.mouseMove(x,y)	current_screen():mouseMove(x,y)  end
+function on.clearKey()    	current_screen():clearKey()      end

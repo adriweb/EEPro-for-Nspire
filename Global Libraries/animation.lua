@@ -17,7 +17,7 @@ end
 if platform.hw then
 	timer.multiplier = platform.hw() < 4 and 3.2 or 1
 else
-	timer.multiplier = 3.2
+	timer.multiplier = platform.isDeviceModeRendering() and 3.2 or 1
 end
 
 function on.timer()

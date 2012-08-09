@@ -1398,7 +1398,7 @@ end
 if platform.hw then
 	timer.multiplier = platform.hw() < 4 and 3.2 or 1
 else
-	timer.multiplier = 3.2
+	timer.multiplier = platform.isDeviceModeRendering() and 3.2 or 1
 end
 
 function on.timer()
@@ -1774,6 +1774,7 @@ end
 function Screen:arrowKey()	end
 function Screen:enterKey()	end
 function Screen:backspaceKey()	end
+function Screen:clearKey() 	end
 function Screen:escapeKey()	end
 function Screen:tabKey()	end
 function Screen:backtabKey()	end
@@ -1902,6 +1903,13 @@ end
 function WidgetManager:enterKey()	
 	if self.focus~=0 then
 		self:getWidget():enterKey()
+	end
+	self:invalidate()
+end
+
+function WidgetManager:clearKey()	
+	if self.focus~=0 then
+		self:getWidget():clearKey()
 	end
 	self:invalidate()
 end
@@ -2094,6 +2102,7 @@ function on.contextMenu()	current_screen():contextMenu()   end
 function on.mouseDown(x,y)	current_screen():mouseDown(x,y)	 end
 function on.mouseUp(x,y)	current_screen():mouseUp(x,y)	 end
 function on.mouseMove(x,y)	current_screen():mouseMove(x,y)  end
+function on.clearKey()    	current_screen():clearKey()      end
 
 function uCol(col)
 	return col[1] or 0, col[2] or 0, col[3] or 0
@@ -2313,10 +2322,25 @@ function sInput:charIn(char)
 	self.value	=	self.value .. char
 end
 
+function sInput:clearKey()
+    if self:deleteInvalid() then return 0 end
+    self.value	=	""
+end
+
 function sInput:backspaceKey()
+    if self:deleteInvalid() then return 0 end
 	if not self.disabled then
 		self.value	=	self.value:usub(1,-2)
 	end
+end
+
+function sInput:deleteInvalid()
+    local isInvalid = string.find(self.value, "Invalid input")
+    if isInvalid then
+        self.value = self.value:usub(1, -19)
+        return true
+    end
+    return false
 end
 
 function sInput:enable()
@@ -2868,7 +2892,9 @@ end
 function math.solve(formula, tosolve)
 	--local eq="max(exp" .. string.uchar(9654) .. "list(solve(" .. formula .. ", " .. tosolve ..")," .. tosolve .."))"
 	local eq="nsolve(" .. formula .. ", " .. tosolve ..")"
-	return math.eval(eq)
+	local res = tostring(math.eval(eq)):gsub(utf8(8722), "-")
+	--print("-", eq, math.eval(eq), tostring(math.eval(eq)), tostring(math.eval(eq)):gsub(utf8(8722), "-"))
+	return tonumber(res)
 end
 
 function round(num, idp)
@@ -2883,6 +2909,7 @@ function round(num, idp)
         return tonumber(string.format("%.0"..(idp+1).."g", num))
     end
 end
+math.round = round -- just in case
 
 function find_data(known, cid, sid)
 	local done	= {}
@@ -3131,7 +3158,6 @@ function manualSolver:postPaint(gc)
 	--gc:drawRect(self.x, self.y, self.w, self.h-46)
 end
 
-
 function manualSolver:pushed(cid, sid)
 	self.pl.widgets	= {}
 	self.pl.focus	= 0
@@ -3155,8 +3181,13 @@ function manualSolver:pushed(cid, sid)
 			inp.value	= ""
 			--inp.number	= true
 			
-			function inp:enterKey() 
-				manualSolver:solve()
+			function inp:enterKey()
+                if not tonumber(self.value) and #self.value > 0 then
+			    	if not manualSolver:preSolve(self) then 
+			    	    self.value = self.value .. "   " .. utf8(8658) .. " Invalid input"
+			    	end
+			    end
+                manualSolver:solve()
 				self.parent:switchFocus(1)
 			end
 			
@@ -3223,6 +3254,15 @@ function manualSolver.update()
 	manualSolver:solve()
 end
 
+function manualSolver:preSolve(input)
+    local res, err
+    res, err = math.eval(input.value)
+    res = res and round(res,4)
+    print("Presolve : ", input.value .. " = " .. tostring(res), "(err ? = " .. tostring(err) .. ")")
+    input.value = res and tostring(res) or input.value
+    return res and 1 or false
+end
+
 function manualSolver:solve()
 	local inputed	= {}
 	local disabled	= {}
@@ -3235,8 +3275,9 @@ function manualSolver:solve()
 		end
 		
 		input:enable()
-		if input.value	~= "" then
-			inputed[variable]	= tonumber(input.value)
+		if input.value ~= "" then
+		    local tmpstr = input.value:gsub(utf8(8722), "-")
+			inputed[variable]	= tonumber(tmpstr)
 			if input.dropdown and input.dropdown.rvalue ~= variabledata.unit then
 				inputed[variable]	= Units.subToMain(variabledata.unit, input.dropdown.rvalue, inputed[variable])
 			end

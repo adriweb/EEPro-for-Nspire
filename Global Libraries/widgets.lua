@@ -217,10 +217,25 @@ function sInput:charIn(char)
 	self.value	=	self.value .. char
 end
 
+function sInput:clearKey()
+    if self:deleteInvalid() then return 0 end
+    self.value	=	""
+end
+
 function sInput:backspaceKey()
+    if self:deleteInvalid() then return 0 end
 	if not self.disabled then
 		self.value	=	self.value:usub(1,-2)
 	end
+end
+
+function sInput:deleteInvalid()
+    local isInvalid = string.find(self.value, "Invalid input")
+    if isInvalid then
+        self.value = self.value:usub(1, -19)
+        return true
+    end
+    return false
 end
 
 function sInput:enable()

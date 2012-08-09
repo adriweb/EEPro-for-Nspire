@@ -6,7 +6,9 @@
 function math.solve(formula, tosolve)
 	--local eq="max(exp" .. string.uchar(9654) .. "list(solve(" .. formula .. ", " .. tosolve ..")," .. tosolve .."))"
 	local eq="nsolve(" .. formula .. ", " .. tosolve ..")"
-	return math.eval(eq)
+	local res = tostring(math.eval(eq)):gsub(utf8(8722), "-")
+	--print("-", eq, math.eval(eq), tostring(math.eval(eq)), tostring(math.eval(eq)):gsub(utf8(8722), "-"))
+	return tonumber(res)
 end
 
 function round(num, idp)
@@ -21,6 +23,7 @@ function round(num, idp)
         return tonumber(string.format("%.0"..(idp+1).."g", num))
     end
 end
+math.round = round -- just in case
 
 function find_data(known, cid, sid)
 	local done	= {}

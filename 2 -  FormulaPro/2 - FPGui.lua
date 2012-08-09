@@ -167,7 +167,6 @@ function manualSolver:postPaint(gc)
 	--gc:drawRect(self.x, self.y, self.w, self.h-46)
 end
 
-
 function manualSolver:pushed(cid, sid)
 	self.pl.widgets	= {}
 	self.pl.focus	= 0
@@ -191,8 +190,13 @@ function manualSolver:pushed(cid, sid)
 			inp.value	= ""
 			--inp.number	= true
 			
-			function inp:enterKey() 
-				manualSolver:solve()
+			function inp:enterKey()
+                if not tonumber(self.value) and #self.value > 0 then
+			    	if not manualSolver:preSolve(self) then 
+			    	    self.value = self.value .. "   " .. utf8(8658) .. " Invalid input"
+			    	end
+			    end
+                manualSolver:solve()
 				self.parent:switchFocus(1)
 			end
 			
@@ -259,6 +263,15 @@ function manualSolver.update()
 	manualSolver:solve()
 end
 
+function manualSolver:preSolve(input)
+    local res, err
+    res, err = math.eval(input.value)
+    res = res and round(res,4)
+    print("Presolve : ", input.value .. " = " .. tostring(res), "(err ? = " .. tostring(err) .. ")")
+    input.value = res and tostring(res) or input.value
+    return res and 1 or false
+end
+
 function manualSolver:solve()
 	local inputed	= {}
 	local disabled	= {}
@@ -271,8 +284,9 @@ function manualSolver:solve()
 		end
 		
 		input:enable()
-		if input.value	~= "" then
-			inputed[variable]	= tonumber(input.value)
+		if input.value ~= "" then
+		    local tmpstr = input.value:gsub(utf8(8722), "-")
+			inputed[variable]	= tonumber(tmpstr)
 			if input.dropdown and input.dropdown.rvalue ~= variabledata.unit then
 				inputed[variable]	= Units.subToMain(variabledata.unit, input.dropdown.rvalue, inputed[variable])
 			end
