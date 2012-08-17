@@ -53,7 +53,7 @@ c_t  = utf8(964)
 c_Ohm = utf8(937)
 c_theta = utf8(952)
 
-addCat(1, "Resistive Circuits", "Performs routine calculations of resistive circuits")
+addCat(1, "Resistive Circuits", "") 
 
 addCatVar(1, "A", "Area", "m2")
 addCatVar(1, "G", "Conductance", "S")
@@ -79,34 +79,42 @@ addCatVar(1, utf8(961), "Resistivity", utf8(937).."*m")
 addCatVar(1, utf8(963), "Conductivity", "S/m")
 
 
-addSubCat(1, 1, "Resistance Formulas", "")
-aF(1, 1, "R=(" ..c_P .."*len)/A",           U("R",c_P,"len","A") )
-aF(1, 1, "G=(" ..c_O .."*A)/len",           U("G",c_O,"len","A") )
-aF(1, 1, "G=1/R",                             U("G","R")           )
-aF(1, 1, c_O .."=1/" ..c_P,                 U(c_O,c_P)           )
+addSubCat(1, 1, "Resistance Formulas", "") 
+aF(1, 1, "R="..utf8(961).."*len/A", U("R",""..utf8(961),"len","A")) 
+aF(1, 1, "G="..utf8(963).."*A/len", U("G",""..utf8(963),"A","len")) 
+aF(1, 1, "G=1/R", U("G","R")) 
+aF(1, 1, utf8(963).."=1/"..utf8(961), U(""..utf8(963),""..utf8(961).."")) 
 
-addSubCat(1, 2, "Ohm\'s Law and Power", "")
-aF(1, 2, "U=I*R",                 U("R","U","I") )
-aF(1, 2, "P=I*U",                 U("P","U","I") )
-aF(1, 2, "P=(U*U)/R",             U("P","U","R") )
-aF(1, 2, "P=U*U*G",               U("P","U","G") )
-aF(1, 2, "R=1/G",                 U("R","G")    )
 
-addSubCat(1, 3, "Temperature Effect", "")
-aF(1, 3, "RR2=RR1*(1+"..utf8(945).."*(T2-T1))", U("RR2","RR1","T1", "T2", utf8(945)) )
+addSubCat(1, 2, "Ohm\'s Law and Power", "") 
+aF(1, 2, "V=I*R", U("V","I","R")) 
+aF(1, 2, "P=V*I", U("P","V","I")) 
+aF(1, 2, "P=I^2*R", U("P","I","R")) 
+aF(1, 2, "P=V^2/R", U("P","V","R")) 
+aF(1, 2, "P=V^2*G", U("P","V","G")) 
+aF(1, 2, "R=1/G", U("R","G")) 
 
-addSubCat(1, 4, "Maximum DC Power Transfer", "")
-aF(1, 4, "Vl=(Vs*Rl)/(Rs+Rl)",    U("Vl","Vs","Rl","Rs") )
-aF(1, 4, "Il=Vs/(Rs+Rl)",         U("Il","Rs","Rs","Rl") )
-aF(1, 4, "P=Il*Vl",               U("P","Il", "Vl")      )
-aF(1, 3, "Pmax=(Vs*Vs)/(4*Rs)",   U("Pmax","Vs","Rs")    )
-aF(1, 3, "Rlm=Rs",                U("Rlm","Rs")          )
 
-addSubCat(1, 5, "V, I Source", "")
-aF(1, 5, "Is=Vs/Rs",              U("Is","Vs","Rs") )
-aF(1, 5, "Vs=Is*Rs",              U("Vs","Is","Rs") )
+addSubCat(1, 3, "Temperature Effect on Resistance", "") 
+aF(1, 3, "RR2=RR1*(1+"..utf8(945).."*(T2-T1))", U("RR2","RR1",""..utf8(945),"T2","T1")) 
 
-addCat(2, "Capacitors, E-Fields", "Compute electric field properties and capacitance of various types\nof structures")
+
+addSubCat(1, 4, "Maximum Power Transfer", "") 
+aF(1, 4, "Vl=Vs*Rl/(Rs+Rl)", U("Vl","Vs","Rl","Rs")) 
+aF(1, 4, "Il=Vs/(Rs+Rl)", U("Il","Vs","Rs","Rl")) 
+aF(1, 4, "P=Il*Vl", U("P","Il","Vl")) 
+aF(1, 4, "Pmax=Vs^2/(4*Rs)", U("Pmax","Vs","Rs")) 
+aF(1, 4, "Rlm=Rs", U("Rlm","Rs")) 
+
+
+addSubCat(1, 5, "Voltage and Current Source Equivalence", "") 
+aF(1, 5, "Is=Vs/Rs", U("Is","Vs","Rs")) 
+aF(1, 5, "Vs=Is*Rs", U("Vs","Is","Rs")) 
+
+
+
+
+addCat(2, "Capacitors and Electric Fields", "") 
 
 addCatVar(2, "A", "Area", "m2")
 addCatVar(2, "C", "Capacitance", "F")
@@ -128,38 +136,48 @@ addCatVar(2, utf8(949).."r", "Relative permittivity", "unitless")
 addCatVar(2, utf8(961).."l", "Line charge", "C/m")
 addCatVar(2, utf8(961).."s", "Charge density", "C/m2")
 
-addSubCat(2, 1, "Point Charge", "")
-aF(2, 1, "Er=Q/(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*r^2)",  U("Er","Q",c_Pi,c_e.."0",c_e.."r", "r") )
-aF(2, 1, "V=Q/(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*r)",     U("V","Q",c_Pi,c_e.."0",c_e.."r", "r")  )
 
-addSubCat(2, 2, "Long Charged Line", "")
-aF(2, 2, "Er="..c_P.."l/(2*"..c_Pi.."*"..c_e.."0*"..c_e.."r)",     U("Er",c_P.."l",c_Pi,c_e.."0",c_e.."r")  )
+addSubCat(2, 1, "Point Charge", "") 
+aF(2, 1, "Er=Q/(4*"..utf8(960).."*"..utf8(949).."0*"..utf8(949).."r*r^2)", U("Er","Q",""..utf8(960),""..utf8(949).."0",""..utf8(949).."r","r")) 
+aF(2, 1, "V=Q/(4*"..utf8(960).."*"..utf8(949).."0*"..utf8(949).."r*r)", U("V","Q",""..utf8(960),""..utf8(949).."0",""..utf8(949).."r","r")) 
 
-addSubCat(2, 3, "Charged Disk", "")
-aF(2, 3, "Ez=("..c_P.."s/(2*"..c_e.."0*"..c_e.."r))*(1-abs(z)/sqrt(ra^2+z^2))",     U("Ez",c_P.."s",c_e.."0",c_e.."r","z","ra")  )
-aF(2, 3, "Vz=("..c_P.."s/(2*"..c_e.."0*"..c_e.."r))*(sqrt(ra^2+z^2)-abs(z))",       U("Vz",c_P.."s",c_e.."0",c_e.."r","z","ra")  )
 
-addSubCat(2, 4, "Parallel Plates", "")
-aF(2, 4, "E=V/d",                 U("E","V","d")           )
-aF(2, 4, "C=("..c_e.."0*"..c_e.."r*A)/d",         U("C",c_e.."0",c_e.."r","A","d") )
-aF(2, 4, "Q=C*V",                 U("Q","C","V")           )
-aF(2, 4, "F=-1/2*(V^2*C)/d",      U("F","V","C","d")       )
-aF(2, 4, "W=1/2*V^2*C",           U("W","V","C")           )
+addSubCat(2, 2, "Long Charged Line", "") 
+aF(2, 2, "Er="..utf8(961).."l/(2*"..utf8(960).."*"..utf8(949).."0*"..utf8(949).."r*r)", U("Er",""..utf8(961).."l",""..utf8(960),""..utf8(949).."0",""..utf8(949).."r","r")) 
 
-addSubCat(2, 5, "Parallel Wires", "")
-aF(2, 5, "cl="..c_Pi.."*"..c_e.."0*"..c_e.."r/arccosh(d/(2*ra))", U("cl",c_Pi,c_e.."0",c_e.."r","d","ra")     )
 
-addSubCat(2, 6, "Coaxial Cable", "")
-aF(2, 6, "V=("..c_P.."l/(2*"..c_Pi.."*"..c_e.."0*"..c_e.."r))*ln(rb/ra)",  U("V",c_P.."l",c_Pi,c_e.."0",c_e.."r","ra")     )
-aF(2, 6, "Er=V/(r*ln(rb/ra))",            U("Er","V","r","rb","ra")          )
-aF(2, 6, "cl=(2*"..c_Pi.."*"..c_e.."0*"..c_e.."r)/ln(rb/ra)",      U("cl",c_Pi,c_e.."0",c_e.."r","rb","ra")    )
+addSubCat(2, 3, "Charged Disk", "") 
+aF(2, 3, "Ez="..utf8(961).."s/(2*"..utf8(949).."0*"..utf8(949).."r)*(1-(abs(z)/sqrt(ra^2+z^2)))", U("Ez",""..utf8(961).."s",""..utf8(949).."0",""..utf8(949).."r","z","ra")) 
+aF(2, 3, "Vz="..utf8(961).."s/(2*"..utf8(949).."0*"..utf8(949).."r)*(sqrt(ra^2+z^2)-abs(z))", U("Vz",""..utf8(961).."s",""..utf8(949).."0",""..utf8(949).."r","ra","z")) 
 
-addSubCat(2, 7, "Sphere", "")
-aF(2, 7, "V=(Q/(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r))*(1/ra-1/rb)", U("V","Q",c_Pi,c_e.."0",c_e.."r","ra","rb") )
-aF(2, 7, "Er=Q/(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*r^2)",          U("Er","Q","r",c_Pi,c_e.."0",c_e.."r")      )
-aF(2, 7, "C=(4*"..c_Pi.."*"..c_e.."0*"..c_e.."r*ra*rb)/(rb-ra)",  U("C",c_Pi,c_e.."0",c_e.."r","rb","ra")    )
 
-addCat(3, "Inductors and Magnetism", "Calculate electrical and magnetic properties of physical elements")
+addSubCat(2, 4, "Parallel Plates", "") 
+aF(2, 4, "E=V/d", U("E","V","d")) 
+aF(2, 4, "C="..utf8(949).."0*"..utf8(949).."r*A/d", U("C",""..utf8(949).."0",""..utf8(949).."r","A","d")) 
+aF(2, 4, "Q=C*V", U("Q","C","V")) 
+aF(2, 4, "F=-1/2*V^2*C/d", U("F","V","C","d")) 
+aF(2, 4, "W=1/2*V^2*C", U("W","V","C")) 
+
+
+addSubCat(2, 5, "Parallel Wires", "") 
+aF(2, 5, "cl="..utf8(960).."*"..utf8(949).."0*"..utf8(949).."r/arccosh(d/(2*ra))", U("cl",""..utf8(960),""..utf8(949).."0",""..utf8(949).."r","d","ra")) 
+
+
+addSubCat(2, 6, "Coaxial Cable", "") 
+aF(2, 6, "V="..utf8(961).."l/(2*"..utf8(960).."*"..utf8(949).."0*"..utf8(949).."r)*ln(rb/ra)", U("V",""..utf8(961).."l",""..utf8(960),""..utf8(949).."0",""..utf8(949).."r","rb","ra")) 
+aF(2, 6, "Er=V/(r*ln(rb/ra))", U("Er","V","r","rb","ra")) 
+aF(2, 6, "cl=2*"..utf8(960).."*"..utf8(949).."0*"..utf8(949).."r/ln(rb/ra)", U("cl",""..utf8(960),""..utf8(949).."0",""..utf8(949).."r","rb","ra")) 
+
+
+addSubCat(2, 7, "Sphere", "") 
+aF(2, 7, "V=Q/(4*"..utf8(960).."*"..utf8(949).."0*"..utf8(949).."r)*(1/ra-1/rb)", U("V","Q",""..utf8(960),""..utf8(949).."0",""..utf8(949).."r","ra","rb")) 
+aF(2, 7, "Er=Q/(4*"..utf8(960).."*"..utf8(949).."0*"..utf8(949).."r*r^2)", U("Er","Q",""..utf8(960),""..utf8(949).."0",""..utf8(949).."r","r")) 
+aF(2, 7, "C=4*"..utf8(960).."*"..utf8(949).."0*"..utf8(949).."r*ra*rb/(rb-ra)", U("C",""..utf8(960),""..utf8(949).."0",""..utf8(949).."r","ra","rb")) 
+
+
+
+
+addCat(3, "Inductors and Magnetism", "") 
 
 addCatVar(3, c_theta, "Angle", "rad")
 addCatVar(3, utf8(956).."r", "Relative permeability", "unitless")
@@ -191,33 +209,41 @@ addCatVar(3, "z", "Distance to loop z axis", "m")
 addCatVar(3, utf8(948), "Skin depth", "m") -- delta
 addCatVar(3, utf8(961), "Resistivity", utf8(937).."*m") -- rho
 
-addSubCat(3, 1, "Long Line", "")
-aF(3, 1, "B=("..c_u.."0*I)/(2*"..c_Pi.."*r)", U("B",c_u.."0","I","r",c_Pi) )
 
-addSubCat(3, 2, "Long Strip", "")
-aF(3, 2, "Bx=((-"..c_u.."0*Is)/(2*"..c_Pi.."))*(atan((x+d/2)/y)-atan((x-d/2)/y))", U("Bx",c_u.."0","Is",c_Pi,"x","d","y") )
-aF(3, 2, "By=(("..c_u.."0*Is)/(4*"..c_Pi.."))*ln((y^2-(x+d/2)^2)/(y^2-(x-d/2)^2))",    U("By",c_u.."0","Is",c_Pi,"x","d","y") )
-
-addSubCat(3, 3, "Parallel Wires", "")
-aF(3, 3, "Fw=("..c_u.."0*I1*I2)/(2*"..c_Pi.."*D)",               U("Fw",c_u.."0","I1","I2",c_Pi,"D"))
-aF(3, 3, "Bx=("..c_u.."0/(2*"..c_Pi.."))*(I1/x-I2/(D-x))",     U("Bx",c_u.."0","I1","I2",c_Pi,"D","x" ))
-aF(3, 3, "L=("..c_u.."0/(4*"..c_Pi.."))+("..c_u.."0/("..c_Pi.."))*arccosh(D/(2*a))", U("L",c_u.."0","a",c_Pi,"D" ))
-
-addSubCat(3, 4, "Loop", "")
-aF(3, 4, "B=("..c_u.."0*I*a^2)/(2*(sqrt(a^2+z^2))^3)", U("B", c_u.."0", "I", "a", "z") )
-aF(3, 4, "Ls=("..c_u.."0*a)*(ln(8*a/rr0)-2)", U(c_u.."0", "a", "rr0") )
-aF(3, 4, "L12=("..c_u.."0*a)*cos("..c_theta..")/(2*"..c_pi..")*ln((bl+d)/d)", U("L12", c_u.."0", "a", c_theta, c_pi, "bl", "d") )
-aF(3, 4, "T12=("..c_u.."0*a)*sin("..c_theta..")/(2*"..c_pi..")*I1*I2*ln((bl+d)/d)", U("T12", c_u.."0", "a", c_theta, c_pi, "I1", "I2", "bl", "d") )
-
-addSubCat(3, 5, "Coaxial Cable", "")
-aF(3, 5, "L="..c_u.."0/(8*"..c_pi..")+"..c_u.."0/(2*"..c_pi..")*ln(rb/ra)", U("L", c_u.."0", c_pi, "rb", "ra"))
-
-addSubCat(3, 6, "Skin Effect", "")
-aF(3, 6, utf8(948).."=1/(sqrt(("..c_pi.."*f*"..c_u.."0*"..c_u.."r)/"..utf8(961).."))", U(utf8(948), c_u.."0", c_u.."r", c_pi, "f", utf8(961)))
-aF(3, 6, "Reff=sqrt(("..c_pi.."*f*"..c_u.."0*"..c_u.."r*"..utf8(961).."))", U("Reff", c_u.."0", c_u.."r", c_pi, "f", utf8(961)))
+addSubCat(3, 1, "Long Line", "") 
+aF(3, 1, "B="..utf8(956).."0*I/(2*"..utf8(960).."*r)", U("B",""..utf8(956).."0","I",""..utf8(960),"r")) 
 
 
-addCat(4, "Electron Motion", "Investigate the trajectories of electrons under the influence \nof electric and magnetic fields")
+addSubCat(3, 2, "Long Strip", "") 
+aF(3, 2, "Bx=-"..utf8(956).."0*Is/(2*"..utf8(960)..")*(tan"..utf8(180).."((x+d/2)/y)-tan"..utf8(180).."((x-d/2)/y))", U("Bx",""..utf8(956).."0","Is",""..utf8(960),"tan","x","d","y")) 
+aF(3, 2, "By="..utf8(956).."0*Is/(4*"..utf8(960)..")*ln((y^2+(x+d/2)^2)/(y^2+(x-d/2)^2))", U("By",""..utf8(956).."0","Is",""..utf8(960),"y","x","d")) 
+
+
+addSubCat(3, 3, "Parallel Wires", "") 
+aF(3, 3, "Fw="..utf8(956).."0*I1*I2/(2*"..utf8(960).."*D)", U("Fw",""..utf8(956).."0","I1","I2",""..utf8(960),"D")) 
+aF(3, 3, "Bx="..utf8(956).."0/(2*"..utf8(960)..")*(I1/x-I2/(D-x))", U("Bx",""..utf8(956).."0",""..utf8(960),"I1","x","I2","D")) 
+aF(3, 3, "L="..utf8(956).."0/(4*"..utf8(960)..")+"..utf8(956).."0/"..utf8(960).."*arccosh(D/(2*a))", U("L",""..utf8(956).."0",""..utf8(960),"D","a")) 
+
+
+addSubCat(3, 4, "Loop", "") 
+aF(3, 4, "B="..utf8(956).."0*I*a^2/(2*sqrt(a^2+z^2)^3)", U("B",""..utf8(956).."0","I","a","z")) 
+aF(3, 4, "Ls="..utf8(956).."0*a*(ln(8*a/rr0)-2)", U("Ls",""..utf8(956).."0","a","rr0")) 
+aF(3, 4, "L12=-"..utf8(956).."0*a*cos("..utf8(952)..")/(2*"..utf8(960)..")*ln((bl+d)/d)", U("L12",""..utf8(956).."0","a",""..utf8(952),""..utf8(960),"bl","d")) 
+aF(3, 4, "T12="..utf8(956).."0*a*sin("..utf8(952)..")/(2*"..utf8(960)..")*I1*I2*ln((bl+d)/d)", U("T12",""..utf8(956).."0","a",""..utf8(952),""..utf8(960),"I1","I2","bl","d")) 
+
+
+addSubCat(3, 5, "Coaxial Cable", "") 
+aF(3, 5, "L="..utf8(956).."0/(8*"..utf8(960)..")+"..utf8(956).."0/(2*"..utf8(960)..")*ln(rb/ra)", U("L",""..utf8(956).."0",""..utf8(960),"rb","ra")) 
+
+
+addSubCat(3, 6, "Skin Effect", "") 
+aF(3, 6, utf8(948).."=1/sqrt("..utf8(960).."*f*"..utf8(956).."0*"..utf8(956).."r/"..utf8(961)..")", U(""..utf8(948),""..utf8(960),"f",""..utf8(956).."0",""..utf8(956).."r",""..utf8(961).."")) 
+aF(3, 6, "Reff=sqrt("..utf8(960).."*f*"..utf8(956).."0*"..utf8(956).."r*"..utf8(961)..")", U("Reff",""..utf8(960),"f",""..utf8(956).."0",""..utf8(956).."r",""..utf8(961).."")) 
+
+
+
+
+addCat(4, "Electron Motion", "") 
 
 addCatVar(4, "A0", "Richardson"..utf8(8217).."s constant", "A/(m2*K2)")
 addCatVar(4, "B", "Magnetic field", "T")
@@ -238,21 +264,26 @@ addCatVar(4, "yd", "Beam deflection on screen", "m")
 addCatVar(4, "z", "Distance along beam axis", "m")
 addCatVar(4, utf8(966), "Work function", "V")
 
-addSubCat(4, 1, "Beam Deflection", "")
-aF(4, 1, "v=sqrt(2*q/me*Va)", U("v", "q", "me", "Va"))
-aF(4, 1, "r=me*v/(q*B)", U("r", "me", "v", "q", "B"))
-aF(4, 1, "yd=(L*Ls)/(2*d*Va)*Vd", U("yd", "L", "Ls", "d", "Va", "Vd"))
-aF(4, 1, "y=q*Vd/(2*me*d*v^2)*z^2", U("y", "q", "Vd", "me", "d", "v", "z"))
 
-addSubCat(4, 2, "Thermionic Emission", "")
-aF(4, 2, "I=A0*S*T^2*exp(-(q*"..utf8(966)..")/(k*T))", U("A0", "S", "T", "q", "k", utf8(966)) )
-
-addSubCat(4, 3, "Photoemission", "")
-aF(4, 3, "h*f=q*"..utf8(966).."+1/2*me*v^2", U("h", "f", "q", utf8(966), "me", "v") )
-aF(4, 3, "f0=q*"..utf8(966).."/h", U("f0", "q", utf8(966), "h") )
+addSubCat(4, 1, "Beam Deflection", "") 
+aF(4, 1, "v=sqrt(2*(q/me)*Va)", U("v","q","me","Va")) 
+aF(4, 1, "r=me*v/(q*B)", U("r","me","v","q","B")) 
+aF(4, 1, "yd=L*Ls/(2*d*Va)*Vd", U("yd","L","Ls","d","Va","Vd")) 
+aF(4, 1, "y=q*Vd/(2*me*d*v^2)*z^2", U("y","q","Vd","me","d","v","z")) 
 
 
-addCat(5, "Meters and Bridge Circuits", "This category covers a variety of topics on meters, commonly used\nbridge and attenuator circuits")
+addSubCat(4, 2, "Thermionic Emi"..utf8(946).."ion", "") 
+aF(4, 2, "I=A0*S*T^2*exp(-q*"..utf8(966).."/(k*T))", U("I","A0","S","T","q",""..utf8(966),"k")) 
+
+
+addSubCat(4, 3, "Photoemi"..utf8(946).."ion", "") 
+aF(4, 3, "h*f=q*"..utf8(966).."+1/2*me*v^2", U("h","f","q",""..utf8(966),"me","v")) 
+aF(4, 3, "f0=q*"..utf8(966).."/h", U("f0","q",""..utf8(966),"h")) 
+
+
+
+
+addCat(5, "Meters and Bridge Circuits", "") 
 
 addCatVar(5, "a", "Resistance multiplier", "unitless")
 addCatVar(5, "b", "Resistance Multiplier", "unitless")
@@ -289,16 +320,53 @@ addCatVar(5, "Vs", "Source voltage", "V")
 addCatVar(5, "Vsen", "Voltage sensitivity", "V")
 addCatVar(5, utf8(969), "Radian frequency", "rad/s")
 
-addSubCat(5, 1, "A, V, W Meters", "")
-aF(5, 1, "Rsh=(Rm*Isen)/(Imax-Isen)", U("Rsh", "Rm", "Isen", "Imax") )
 
-addSubCat(5, 2, "Wheatstone Bridge", "")
-addSubCat(5, 3, "Wien Bridge", "")
-addSubCat(5, 4, "Maxwell Bridge", "")
-addSubCat(5, 5, "Attenuators - Symmetric R", "")
-addSubCat(5, 6, "Attenuators - Unsym R", "")
+addSubCat(5, 1, "A, V, Omega Meters", "") 
+aF(5, 1, "Rsh=Rm*Isen/(Imax-Isen)", U("Rsh","Rm","Isen","Imax")) 
+aF(5, 1, "Rs=(Vmax-Vsen)/Isen", U("Rs","Vmax","Vsen","Isen")) 
+aF(5, 1, "Isen=Vs/(Rs+Rm+Radj/2)", U("Isen","Vs","Rs","Rm","Radj")) 
 
-addCat(6, "RL and RC Circuits", "Compute the natural and transient properties of simple RL\nand RC circuits")
+
+addSubCat(5, 2, "Wheatstone Bridge", "") 
+aF(5, 2, "Rx/RR2=RR3/RR4", U("Rx","RR2","RR3","RR4")) 
+aF(5, 2, "Vm=eegalv(Rx,RR2,RR3,RR4,Rg,Rs,Vs)", U("Vm","Rx","RR2","RR3","RR4","Rg","Rs","Vs")) 
+aF(5, 2, "Ig=Vm/Rg", U("Ig","Vm","Rg")) 
+
+
+addSubCat(5, 3, "Wien Bridge", "") 
+aF(5, 3, "Cx=((RR3/RR1)-(Rs/Rx))*Cs", U("Cx","RR3","RR1","Rs","Rx","Cs")) 
+aF(5, 3, "Cx=1/("..utf8(969).."^2*Rs*Rx*Cs)", U("Cx",""..utf8(969),"Rs","Rx","Cs")) 
+aF(5, 3, "f=1/(2/"..utf8(960).."*Cs*Rs)", U("f",""..utf8(960),"Cs","Rs")) 
+aF(5, 3, utf8(969).."=2*"..utf8(960).."*f", U(""..utf8(969),""..utf8(960),"f")) 
+
+
+addSubCat(5, 4, "Maxwell Bridge", "") 
+aF(5, 4, "Cx=((RR3/RR1)-(Rs/Rx))*Cs", U("Cx","RR3","RR1","Rs","Rx","Cs")) 
+aF(5, 4, "Cx=1/("..utf8(969).."^2*Rs*Rx*Cs)", U("Cx",""..utf8(969),"Rs","Rx","Cs")) 
+aF(5, 4, "f=1/(2/"..utf8(960).."*Cs*Rs)", U("f",""..utf8(960),"Cs","Rs")) 
+aF(5, 4, utf8(969).."=2*"..utf8(960).."*f", U(""..utf8(969),""..utf8(960),"f")) 
+
+
+addSubCat(5, 5, "Owen Bridge", "") 
+aF(5, 5, "Lx=CC3*RR1*RR4", U("Lx","CC3","RR1","RR4")) 
+aF(5, 5, "Rx=CC3*RR1/CC4-RR2", U("Rx","CC3","RR1","CC4","RR2")) 
+
+
+addSubCat(5, 6, "Symmetrical Resistive Attenuator", "") 
+aF(5, 6, "a=(10^(DB/20)-1)/(10^(DB/20)+1)", U("a","DB")) 
+aF(5, 6, "b=2*10^(DB/20)/(10^(DB/10)-1)", U("b","DB")) 
+aF(5, 6, "c=(10^(DB/20)-1)", U("c","DB")) 
+
+
+addSubCat(5, 7, "Unsymmetrical Resistive Attenuator", "") 
+aF(5, 7, "Rj=Rl-Rk*Rr/(Rk+Rr)", U("Rj","Rl","Rk","Rr")) 
+aF(5, 7, "Rk=sqrt(Rl*Rr^2/(Rl-Rr))", U("Rk","Rl","Rr")) 
+aF(5, 7, "DB=20*LOG(sqrt((Rl-Rr)/Rr)+sqrt(Rl/Rr))", U("DB","Rl","Rr")) 
+
+
+
+
+addCat(6, "RL and RC Circuits", "") 
 
 addCatVar(6, "C", "Capacitor", "F")
 addCatVar(6, "Cs", "Series capacitance", "F")
@@ -324,55 +392,64 @@ addCatVar(6, "Vs", "Voltage stimulus", "V")
 addCatVar(6, utf8(969), "Radian frequency", "rad/s") -- lowercase omega
 addCatVar(6, "W", "Energy dissipated", "J")
 
-addSubCat(6, 1, "RL Natural Response", "")
-aF(6, 1, c_t.."=L/R",                           U(c_t,"L","R")                )
-aF(6, 1, "vL=I0*R*exp(-t/"..c_t..")",               U("vL","I0","R","t",c_t)      )
-aF(6, 1, "iL=I0*exp(-t/"..c_t..")",                 U("iL","I0","t",c_t)          )
-aF(6, 1, "W=1/2*L*I0^2*(1-exp(-2*t/"..c_t.."))",   U("W","L","I0","t",c_t)       )
 
-addSubCat(6, 2, "RC Natural Response", "")
-aF(6, 2, c_t.."=R*C",                           U(c_t,"R","C")                )
-aF(6, 2, "vC=V0*exp(-t/"..c_t..")",                 U("vC","V0","t",c_t)          )
-aF(6, 2, "iC=V0/R*exp(-t/"..c_t..")",               U("iC","V0","R","t",c_t)      )
-aF(6, 2, "W=1/2*C*V0^2*(1-exp(-2*t/"..c_t.."))",   U("W","C","V0","t",c_t)       )
+addSubCat(6, 1, "RL Natural Response", "") 
+aF(6, 1, utf8(964).."=L/R", U(""..utf8(964),"L","R")) 
+aF(6, 1, "vL=I0*R*exp(-t/"..utf8(964)..")", U("vL","I0","R","t",""..utf8(964).."")) 
+aF(6, 1, "iL=I0*exp(-t/"..utf8(964)..")", U("iL","I0","t",""..utf8(964).."")) 
+aF(6, 1, "W=1/2*L*I0^2*(1-exp(-2*t/"..utf8(964).."))", U("W","L","I0","t",""..utf8(964).."")) 
 
-addSubCat(6, 3, "RL Step response", "")
-aF(6, 3, c_t.."=L/R",                           U(c_t,"L","R")                )
-aF(6, 3, "vL=(Vs-I0*R)*exp(-t/"..c_t..")",          U("vL","I0","R","t",c_t)      )
-aF(6, 3, "iL=Vs/R+(I0-Vs/R)*exp(-t/"..c_t..")",     U("iL","Vs","R","I0","t",c_t) )
 
-addSubCat(6, 4, "RC Step Response", "")
-aF(6, 4, c_t.."=R*C",                           U(c_t,"R","C")                )
-aF(6, 4, "vC=Vs+(V0-Vs)*exp(-t/"..c_t..")",         U("vC","Vs","V0","t",c_t)     )
-aF(6, 4, "iC=(Vs-V0)/R*exp(-t/"..c_t..")",          U("iC","Vs","V0","R","t",c_t) )
+addSubCat(6, 2, "RC Natural Response", "") 
+aF(6, 2, utf8(964).."=R*C", U(""..utf8(964),"R","C")) 
+aF(6, 2, "vC=V0*exp(-t/"..utf8(964)..")", U("vC","V0","t",""..utf8(964).."")) 
+aF(6, 2, "iC=V0/R*exp(-t/"..utf8(964)..")", U("iC","V0","R","t",""..utf8(964).."")) 
+aF(6, 2, "W=1/2*C*V0^2*(1-exp(-2*t/"..utf8(964).."))", U("W","C","V0","t",""..utf8(964).."")) 
 
-addSubCat(6, 5, "RL Series to Parallel", "")
-aF(6, 5, utf8(969).."=2*"..c_pi.."*f", U(utf8(969), c_pi, "f") )
-aF(6, 5, "Qs=("..utf8(969).."*Ls)/Rs" , U("Qs", utf8(969), "Ls", "Rs") )
-aF(6, 5, "Rp=(Rs^2+"..utf8(969).."^2*Ls^2)/Rs", U("Rp", utf8(969),"Rs", "Ls" ) )
-aF(6, 5, "Lp=(Rs^2+"..utf8(969).."^2*Ls^2)/("..utf8(969).."^2*Ls)", U("Lp", "Rs", utf8(969), "Ls" ) )
-aF(6, 5, "Qp=Rp/("..utf8(969).."*Lp)", U("Qp", "Rp", utf8(969)) )
-aF(6, 5, "Rs=("..utf8(969).."^2*Lp^2*Rp)/(Rp^2+"..utf8(969).."^2*Lp^2)", U("Lp", "Rs", utf8(969), "Rp" ) )
-aF(6, 5, "Ls=(Rp^2*Lp)/(Rp^2+"..utf8(969).."^2*Lp^2)", U("Ls", "Rp", utf8(969), "Lp" ) )
-aF(6, 5, "Rp=Rs*(1+Qs^2)", U("Rp", "Rs", "Qs") )
-aF(6, 5, "Lp=Ls*(1+1/(Qs^2))", U("Lp", "Ls", "Qs") )
-aF(6, 5, "Rs=Rp/(1+Qp^2)", U("Rs", "Rp", "Qp") )
-aF(6, 5, "Ls=(Qp^2*Lp)/(1+Qp^2)", U("Ls", "Qp", "Lp") )
 
-addSubCat(6, 6, "RC Series to Parallel", "")
-aF(6, 6, utf8(969).."=2*"..c_pi.."*f", U(utf8(969), c_pi, "f") )
-aF(6, 6, "Qs=1/("..utf8(969).."*Rs*Cs)" , U("Qs", utf8(969), "Rs", "Cs") )
-aF(6, 6, "Rp=Rs*(1+1/("..utf8(969).."^2*Rs^2*Cs^2))", U("Rp", utf8(969),"Rs", "Cs" ) )
-aF(6, 6, "Cp=Cs/(1+"..utf8(969).."^2*Cs^2*Rs^2)", U("Cp", "Cs", utf8(969), "Rs" ) )
-aF(6, 6, "Qp="..utf8(969).."*Rp*Cp", U("Qp", "Rp", utf8(969), "Cp") )
-aF(6, 6, "Rs=Rp/(1+"..utf8(969).."^2*Rp^2*Cp^2)", U("Rs", "Rp", utf8(969), "Cp" ) )
-aF(6, 6, "Cs=(1+"..utf8(969).."^2*Rp^2*Cp^2)/("..utf8(969).."^2*Rp^2*Cp)", U("Cs", "Cp", utf8(969), "Rp" ) )
-aF(6, 6, "Rp=Rs*(1+Qs^2)", U("Rp", "Rs", "Qs") )
-aF(6, 6, "Cp=Cs/(1+1/(Qs^2))", U("Cp", "Cs", "Qs") )
-aF(6, 6, "Rs=Rp/(1+Qp^2)", U("Rs", "Rp", "Qp") )
-aF(6, 6, "Cs=(Cp*(1+Qp^2))/(Qp^2)", U("Cs", "Cp", "Qp") )
+addSubCat(6, 3, "RL Step Response", "") 
+aF(6, 3, utf8(964).."=L/R", U(""..utf8(964),"L","R")) 
+aF(6, 3, "vL=(Vs-I0*R)*exp(-t/"..utf8(964)..")", U("vL","Vs","I0","R","t",""..utf8(964).."")) 
+aF(6, 3, "iL=Vs/R+(I0-Vs/R)*exp(-t/"..utf8(964)..")", U("iL","Vs","R","I0","t",""..utf8(964).."")) 
 
-addCat(7, "RLC Circuits", "Compute the impedance, admittance, natural response and\ntransient behavior of RLC circuits")
+
+addSubCat(6, 4, "RC Step Response", "") 
+aF(6, 4, utf8(964).."=R*C", U(""..utf8(964),"R","C")) 
+aF(6, 4, "vC=Vs+(V0-Vs)*exp(-t/"..utf8(964)..")", U("vC","Vs","V0","t",""..utf8(964).."")) 
+aF(6, 4, "iC=(Vs-V0)/R*exp(-t/"..utf8(964)..")", U("iC","Vs","V0","R","t",""..utf8(964).."")) 
+
+
+addSubCat(6, 5, "RL Series-Parallel", "") 
+aF(6, 5, utf8(969).."=2*"..utf8(960).."*f", U(""..utf8(969),""..utf8(960),"f")) 
+aF(6, 5, "Qs="..utf8(969).."*Ls/Rs", U("Qs",""..utf8(969),"Ls","Rs")) 
+aF(6, 5, "Rp=(Rs^2+"..utf8(969).."^2*Ls^2)/Rs", U("Rp","Rs",""..utf8(969),"Ls")) 
+aF(6, 5, "Lp=(Rs^2+"..utf8(969).."^2*Ls^2)/("..utf8(969).."^2*Ls)", U("Lp","Rs",""..utf8(969),"Ls")) 
+aF(6, 5, "Qp=Rp/("..utf8(969).."*Lp)", U("Qp","Rp",""..utf8(969),"Lp")) 
+aF(6, 5, "Rs="..utf8(969).."^2*Lp^2*Rp/(Rp^2+"..utf8(969).."^2*Lp^2)", U("Rs",""..utf8(969),"Lp","Rp")) 
+aF(6, 5, "Ls=Rp^2*Lp/(Rp^2+"..utf8(969).."^2*Lp^2)", U("Ls","Rp","Lp",""..utf8(969).."")) 
+aF(6, 5, "Rp=Rs*(1+Qs^2)", U("Rp","Rs","Qs")) 
+aF(6, 5, "Lp=Ls*(1+1/Qs^2)", U("Lp","Ls","Qs")) 
+aF(6, 5, "Rs=Rp/(1+Qp^2)", U("Rs","Rp","Qp")) 
+aF(6, 5, "Ls=Qp^2*Lp/(1+Qp^2)", U("Ls","Qp","Lp")) 
+
+
+addSubCat(6, 6, "RC Series-Parallel", "") 
+aF(6, 6, utf8(969).."=2*"..utf8(960).."*f", U(""..utf8(969),""..utf8(960),"f")) 
+aF(6, 6, "Qs=1/("..utf8(969).."*Rs*Cs)", U("Qs",""..utf8(969),"Rs","Cs")) 
+aF(6, 6, "Rp=Rs*(1+1/("..utf8(969).."^2*Rs^2*Cs^2))", U("Rp","Rs",""..utf8(969),"Cs")) 
+aF(6, 6, "Cp=Cs/(1+"..utf8(969).."^2*Cs^2*Rs^2)", U("Cp","Cs",""..utf8(969),"Rs")) 
+aF(6, 6, "Qp="..utf8(969).."*Rp*Cp", U("Qp",""..utf8(969),"Rp","Cp")) 
+aF(6, 6, "Rs=Rp/(1+"..utf8(969).."^2*Rp^2*Cp^2)", U("Rs","Rp",""..utf8(969),"Cp")) 
+aF(6, 6, "Cs=(1+"..utf8(969).."^2*Rp^2*Cp^2)/("..utf8(969).."^2*Rp^2*Cp)", U("Cs",""..utf8(969),"Rp","Cp")) 
+aF(6, 6, "Rp=Rs*(1+Qs^2)", U("Rp","Rs","Qs")) 
+aF(6, 6, "Cp=Cs/(1+1/Qs^2)", U("Cp","Cs","Qs")) 
+aF(6, 6, "Rs=Rp/(1+Qp^2)", U("Rs","Rp","Qp")) 
+aF(6, 6, "Cs=Cp*(1+Qp^2)/Qp^2", U("Cs","Cp","Qp")) 
+
+
+
+
+addCat(7, "RLC Circuits", "") 
 
 addCatVar(7, utf8(945), "Neper"..utf8(8217).."s frequency", "rad/s") --alpha, apostrophe
 addCatVar(7, "A1", "Constant", "V")
@@ -409,36 +486,65 @@ addCatVar(7, "XL", "Inductive reactance", utf8(937))
 addCatVar(7, "Ym", "Admittance "..utf8(8211).." magnitude", "S")
 addCatVar(7, "Zm", "Impedance "..utf8(8211).." magnitude", "S")
 
-addSubCat(7, 1, "Series Impedance", "")
-aF(7, 1, "(abs(Zm))^2=R^2+X^2", U("Zm", "R", "X"))
-aF(7, 1, utf8(952).."=arctan(X/R)", U(utf8(952), "X", "R"))
-aF(7, 1, "X=XL+XXC", U("X", "XL", "XXC") )
-aF(7, 1, "XL="..utf8(969).."*L", U("XL", utf8(969), "L") )
-aF(7, 1, "XXC=-1/("..utf8(969).."*C)", U("XXC", utf8(969), "C") )
-aF(7, 1, utf8(969).."=2*"..c_pi.."*f", U(utf8(969), c_pi, "f") )
 
-addSubCat(7, 2, "Parallel Admittance", "")
-aF(7, 2, "(abs(Ym))^2=G^2+B^2", U("Ym", "G", "B"))
-aF(7, 2, utf8(952).."=arctan(G/B)", U(utf8(952), "G", "B"))
-aF(7, 2, "G=1/R", U("G", "R") )
-aF(7, 2, "B=BL+BC", U("B", "BL", "BC") )
-aF(7, 2, "BL=-1/("..utf8(969).."*L)", U("BL", utf8(969), "L") )
-aF(7, 2, "BC="..utf8(969).."*C)", U("BC", utf8(969), "C") )
-aF(7, 2, utf8(969).."=2*"..c_pi.."*f", U(utf8(969), c_pi, "f") )
+addSubCat(7, 1, "Series Impedance", "") 
+aF(7, 1, "abs(Zm)^2=R^2+X^2", U("Zm","R","X")) 
+aF(7, 1, utf8(952).."=tan"..utf8(180).."(X/R)", U(""..utf8(952),"tan","X","R")) 
+aF(7, 1, "X=XL+XXC", U("X","XL","XXC")) 
+aF(7, 1, "XL="..utf8(969).."*L", U("XL",""..utf8(969),"L")) 
+aF(7, 1, "XXC=-1/("..utf8(969).."*C)", U("XXC",""..utf8(969),"C")) 
+aF(7, 1, utf8(969).."=2*"..utf8(960).."*f", U(""..utf8(969),""..utf8(960),"f")) 
 
-addSubCat(7, 3, "RLC Natural Response", "")
-aF(7, 3, "s1r=real(-"..utf8(945).."+sqrt("..utf8(945).."^2-"..utf8(969).."0^2))", U( "s1r", utf8(945), utf8(969).."0") )
-aF(7, 3, "s1i=imag(-"..utf8(945).."+sqrt("..utf8(945).."^2-"..utf8(969).."0^2))", U( "s1i", utf8(945), utf8(969).."0") )
-aF(7, 3, "s2r=real(-"..utf8(945).."-sqrt("..utf8(945).."^2-"..utf8(969).."0^2))", U( "s2r", utf8(945), utf8(969).."0") )
-aF(7, 3, "s2i=imag(-"..utf8(945).."-sqrt("..utf8(945).."^2-"..utf8(969).."0^2))", U( "s2i", utf8(945), utf8(969).."0") )
-aF(7, 3, utf8(969).."0=sqrt(1/(L*C))", U( utf8(969).."0", "L", "C" ) )
-aF(7, 3, utf8(945).."=1/(2*R*C)", U( utf8(945), "R", "C") )
 
-addSubCat(7, 4, "Under-damped case", "")
-addSubCat(7, 5, "Critical Damping", "")
-addSubCat(7, 6, "Over-damped Case", "")
+addSubCat(7, 2, "Parallel Admittance", "") 
+aF(7, 2, "abs(Ym)^2=G^2+B^2", U("Ym","G","B")) 
+aF(7, 2, utf8(952).."=tan"..utf8(180).."(G/B)", U(""..utf8(952),"tan","G","B")) 
+aF(7, 2, "G=1/R", U("G","R")) 
+aF(7, 2, "B=BL+BC", U("B","BL","BC")) 
+aF(7, 2, "BL=-1/("..utf8(969).."*L)", U("BL",""..utf8(969),"L")) 
+aF(7, 2, "BC="..utf8(969).."*C", U("BC",""..utf8(969),"C")) 
+aF(7, 2, utf8(969).."=2*"..utf8(960).."*f", U(""..utf8(969),""..utf8(960),"f")) 
 
-addCat(8, "AC Circuits", "Calculate properties of AC circuits")
+
+addSubCat(7, 3, "RLC Natural Response", "") 
+aF(7, 3, "s1r=real(-"..utf8(945).."+sqrt("..utf8(945).."^2-"..utf8(969).."0^2))", U("s1r",""..utf8(945),""..utf8(969).."0")) 
+aF(7, 3, "s1i=imag(-"..utf8(945).."+sqrt("..utf8(945).."^2-"..utf8(969).."0^2))", U("s1i",""..utf8(945),""..utf8(969).."0")) 
+aF(7, 3, "s2r=real(-"..utf8(945).."-sqrt("..utf8(945).."^2-"..utf8(969).."0^2))", U("s2r",""..utf8(945),""..utf8(969).."0")) 
+aF(7, 3, "s2i=imag(-"..utf8(945).."-sqrt("..utf8(945).."^2-"..utf8(969).."0^2))", U("s2i",""..utf8(945),""..utf8(969).."0")) 
+aF(7, 3, utf8(969).."0=sqrt(1/(L*C))", U(""..utf8(969).."0","L","C")) 
+aF(7, 3, utf8(945).."=1/(2*R*C)", U(""..utf8(945),"R","C")) 
+
+
+addSubCat(7, 4, "Underdamped Transient Case", "") 
+aF(7, 4, utf8(969).."0=sqrt(1/(L*C))", U(""..utf8(969).."0","L","C")) 
+aF(7, 4, utf8(945).."=1/(2*R*C)", U(""..utf8(945),"R","C")) 
+aF(7, 4, utf8(969).."d=sqrt("..utf8(969).."0^2-"..utf8(945).."^2)", U(""..utf8(969).."d",""..utf8(969).."0",""..utf8(945).."")) 
+aF(7, 4, "v=B1*exp(-"..utf8(945).."*t)*cos("..utf8(969).."d*t)+B2*exp(-"..utf8(945).."*t)*sin("..utf8(969).."d*t)", U("v","B1",""..utf8(945),"t",""..utf8(969).."d","B2")) 
+aF(7, 4, "B1=V0", U("B1","V0")) 
+aF(7, 4, "B2=-"..utf8(945).."/"..utf8(969).."d*(V0-2R*I0)", U("B2",""..utf8(945),""..utf8(969).."d","V0","R","I0")) 
+
+
+addSubCat(7, 5, "Critically-Damped Transient Case", "") 
+aF(7, 5, utf8(945).."=1/(2*R*C)", U(""..utf8(945),"R","C")) 
+aF(7, 5, utf8(969).."0=sqrt(1/(L*C))", U(""..utf8(969).."0","L","C")) 
+aF(7, 5, "v=D1*t*exp(-"..utf8(945).."*t)+D2*exp(-"..utf8(945).."*t)", U("v","D1","t",""..utf8(945),"D2")) 
+aF(7, 5, "D1=I0/C+"..utf8(945).."*V0", U("D1","I0","C",""..utf8(945),"V0")) 
+aF(7, 5, "D2=V0", U("D2","V0")) 
+
+
+addSubCat(7, 6, "Overdamped Transient Case", "") 
+aF(7, 6, "s1=-"..utf8(945).."+sqrt("..utf8(945).."^2-"..utf8(969).."0^2)", U("s1",""..utf8(945),""..utf8(969).."0")) 
+aF(7, 6, "s2=-"..utf8(945).."-sqrt("..utf8(945).."^2-"..utf8(969).."0^2)", U("s2",""..utf8(945),""..utf8(969).."0")) 
+aF(7, 6, utf8(969).."0=1/sqrt(L*C)", U(""..utf8(969).."0","L","C")) 
+aF(7, 6, utf8(945).."=1/(2*R*C)", U(""..utf8(945),"R","C")) 
+aF(7, 6, "v=A1*exp(s1*t)+A2*exp(s2*t)", U("v","A1","s1","t","A2","s2")) 
+aF(7, 6, "A1=(V0*s2+1/C*(V0/R+I0))/(s2-s1)", U("A1","V0","s2","C","R","I0","s1")) 
+aF(7, 6, "A2=-(V0*s1+1/C*(V0/R+I0))/(s2-s1)", U("A2","V0","s1","C","R","I0","s2")) 
+
+
+
+
+addCat(8, "AC Circuits", "") 
 
 addCatVar(8, "C", "Capacitance", "F")
 addCatVar(8, "f", "Frequency", "Hz")
@@ -467,13 +573,58 @@ addCatVar(8, "Z2m", "Impedance 2 magnitude", utf8(937))
 addCatVar(8, "Z"..utf8(95), "Complex impedance", utf8(937))
 addCatVar(8, "Zm", "Impedance magnitude", utf8(937))
 
-addSubCat(8, 1, "RL Series Impedance", "")
-addSubCat(8, 2, "RC Series Impedance", "")
-addSubCat(8, 3, "Impedance - Admittance", "")
-addSubCat(8, 4, "2 Z's in Series", "")
-addSubCat(8, 5, "2 Z's in Parallel", "")
 
-addCat(9, "Polyphase Circuits", "")
+addSubCat(8, 1, "RL Series Impedance", "") 
+aF(8, 1, "I=Im*sin("..utf8(969).."*t)", U("I","Im",""..utf8(969),"t")) 
+aF(8, 1, "abs(Zm)^2=R^2+"..utf8(969).."^2*L^2", U("Zm","R",""..utf8(969),"L")) 
+aF(8, 1, "VR=Zm*Im*sin("..utf8(969).."*t)*cos("..utf8(952)..")", U("VR","Zm","Im",""..utf8(969),"t",""..utf8(952).."")) 
+aF(8, 1, "VL=Zm*Im*cos("..utf8(969).."*t)*sin("..utf8(952)..")", U("VL","Zm","Im",""..utf8(969),"t",""..utf8(952).."")) 
+aF(8, 1, "V=VR+VL", U("V","VR","VL")) 
+aF(8, 1, "Vm=Im*Zm", U("Vm","Im","Zm")) 
+aF(8, 1, utf8(952).."=tan"..utf8(180).."("..utf8(969).."*L/R)", U(""..utf8(952),"tan",""..utf8(969),"L","R")) 
+aF(8, 1, utf8(969).."=2*"..utf8(960).."*f", U(""..utf8(969),""..utf8(960),"f")) 
+
+
+addSubCat(8, 2, "RC Series Impedance", "") 
+aF(8, 2, "I=Im*sin("..utf8(969).."*t)", U("I","Im",""..utf8(969),"t")) 
+aF(8, 2, "abs(Zm)^2=R^2+1/("..utf8(969).."*C)^2", U("Zm","R",""..utf8(969),"C")) 
+aF(8, 2, "VR=Zm*Im*sin("..utf8(969).."*t)*cos("..utf8(952)..")", U("VR","Zm","Im",""..utf8(969),"t",""..utf8(952).."")) 
+aF(8, 2, "VC=Zm*Im*cos("..utf8(969).."*t)*sin("..utf8(952)..")", U("VC","Zm","Im",""..utf8(969),"t",""..utf8(952).."")) 
+aF(8, 2, "V=VR+VC", U("V","VR","VC")) 
+aF(8, 2, "Vm=Im*Zm", U("Vm","Im","Zm")) 
+aF(8, 2, utf8(952).."=tan"..utf8(180).."(-1/("..utf8(969).."*C*R))", U(""..utf8(952),"tan",""..utf8(969),"C","R")) 
+aF(8, 2, utf8(969).."=2*"..utf8(960).."*f", U(""..utf8(969),""..utf8(960),"f")) 
+
+
+addSubCat(8, 3, "Impedance "..utf8(60).."-"..utf8(62).." Admittance", "") 
+aF(8, 3, "Y"..utf8(95).."=1/Z"..utf8(95), U("Y")) 
+
+
+addSubCat(8, 4, "Two Impedances in Series", "") 
+aF(8, 4, "abs(Zm)^2=R^2+X^2", U("Zm","R","X")) 
+aF(8, 4, utf8(952).."=tan"..utf8(180).."(X/R)", U(""..utf8(952),"tan","X","R")) 
+aF(8, 4, "R=RR1+RR2", U("R","RR1","RR2")) 
+aF(8, 4, "X=XX1+XX2", U("X","XX1","XX2")) 
+aF(8, 4, "abs(Z1m)^2=RR1^2+XX1^2", U("Z1m","RR1","XX1")) 
+aF(8, 4, "abs(Z2m)^2=RR2^2+XX2^2", U("Z2m","RR2","XX2")) 
+aF(8, 4, utf8(952).."1=tan"..utf8(180).."(XX1/RR1)", U(""..utf8(952).."1","tan","XX1","RR1")) 
+aF(8, 4, utf8(952).."2=tan"..utf8(180).."(XX2/RR2)", U(""..utf8(952).."2","tan","XX2","RR2")) 
+
+
+addSubCat(8, 5, "Two Impedances in Parallel", "") 
+aF(8, 5, "abs(Zm)^2=((RR1*RR2-XX1*XX2)^2+(RR1*XX2+RR2*XX1)^2)/((RR1+RR2)^2+(XX1+XX2)^2)", U("Zm","RR1","RR2","XX1","XX2")) 
+aF(8, 5, utf8(952).."=tan"..utf8(180).."((XX1*RR2+RR1*XX2)/(RR1*RR2-XX1*XX2))-tan"..utf8(180).."((XX1+XX2)/(RR1+RR2))", U(""..utf8(952),"tan","XX1","RR2","RR1","XX2")) 
+aF(8, 5, "R=Zm*cos("..utf8(952)..")", U("R","Zm",""..utf8(952).."")) 
+aF(8, 5, "X=Zm*sin("..utf8(952)..")", U("X","Zm",""..utf8(952).."")) 
+aF(8, 5, "abs(Z1m)^2=RR1^2+XX1^2", U("Z1m","RR1","XX1")) 
+aF(8, 5, "abs(Z2m)^2=RR2^2+XX2^2", U("Z2m","RR2","XX2")) 
+aF(8, 5, utf8(952).."1=tan"..utf8(180).."(XX1/RR1)", U(""..utf8(952).."1","tan","XX1","RR1")) 
+aF(8, 5, utf8(952).."2=tan"..utf8(180).."(XX2/RR2)", U(""..utf8(952).."2","tan","XX2","RR2")) 
+
+
+
+
+addCat(9, "Polyphase Circuits", "") 
 
 addCatVar(9, "IL", "Line current", "A")
 addCatVar(9, "Ip", "Phase current", "A")
@@ -485,11 +636,32 @@ addCatVar(9, "Vp", "Phase voltage", "V")
 addCatVar(9, "W1", "Wattmeter 1", "W")
 addCatVar(9, "W2", "Wattmeter 2", "W")
 
-addSubCat(9, 1, "Balanced D Network", "")
-addSubCat(9, 2, "Balance Wye Network", "")
-addSubCat(9, 3, "Power Measurements", "")
 
-addCat(10, "Electrical Resonance", "")
+addSubCat(9, 1, "Balanced Delta Network", "") 
+aF(9, 1, "VL=Vp", U("VL","Vp")) 
+aF(9, 1, "IL=sqrt(3)*Ip", U("IL","Ip")) 
+aF(9, 1, "P=Vp*Ip*cos("..utf8(952)..")", U("P","Vp","Ip",""..utf8(952).."")) 
+aF(9, 1, "PT=3*Vp*Ip*cos("..utf8(952)..")", U("PT","Vp","Ip",""..utf8(952).."")) 
+aF(9, 1, "PT=sqrt(3)*VL*IL*cos("..utf8(952)..")", U("PT","VL","IL",""..utf8(952).."")) 
+
+
+addSubCat(9, 2, "Balanced Wye Network", "") 
+aF(9, 2, "VL=sqrt(3)*Vp", U("VL","Vp")) 
+aF(9, 2, "IL=Ip", U("IL","Ip")) 
+aF(9, 2, "P=Vp*Ip*cos("..utf8(952)..")", U("P","Vp","Ip",""..utf8(952).."")) 
+aF(9, 2, "PT=3*Vp*Ip*cos("..utf8(952)..")", U("PT","Vp","Ip",""..utf8(952).."")) 
+aF(9, 2, "PT=sqrt(3)*VL*IL*cos("..utf8(952)..")", U("PT","VL","IL",""..utf8(952).."")) 
+
+
+addSubCat(9, 3, "Power Measurements", "") 
+aF(9, 3, "W1=VL*IL*cos("..utf8(952).."+"..utf8(960).."/6)", U("W1","VL","IL",""..utf8(952),""..utf8(960).."")) 
+aF(9, 3, "W2=VL*IL*cos("..utf8(952).."-"..utf8(960).."/6)", U("W2","VL","IL",""..utf8(952),""..utf8(960).."")) 
+aF(9, 3, "PT=sqrt(3)*VL*IL*cos("..utf8(952)..")", U("PT","VL","IL",""..utf8(952).."")) 
+
+
+
+
+addCat(10, "Electrical Resonance", "") 
 
 addCatVar(10, utf8(945), "Damping coefficient", "rad/s")
 addCatVar(10, utf8(946), "Bandwidth", "rad/s")
@@ -511,12 +683,51 @@ addCatVar(10, "Yres", "Admittance at resonance", "S")
 addCatVar(10, "Z", "Impedance", utf8(937))
 addCatVar(10, "Zres", "Impedance at resonance", utf8(937))
 
-addSubCat(10, 1, "Parallel Resonance I", "")
-addSubCat(10, 2, "Parallel Resonance II", "")
-addSubCat(10, 3, "Lossy Inductor", "")
-addSubCat(10, 4, "Series Resonance", "")
 
-addCat(11, "Op. Amp Circuits", "")
+addSubCat(10, 1, "Parallel Resonance I", "") 
+aF(10, 1, "Vm=Im/sqrt(1/R^2+("..utf8(969).."*C-1/("..utf8(969).."*L))^2)", U("Vm","Im","R",""..utf8(969),"C","L")) 
+aF(10, 1, utf8(952).."=tan"..utf8(180).."(("..utf8(969).."*C-1/("..utf8(969).."*L))*R)", U(""..utf8(952),"tan",""..utf8(969),"C","L","R")) 
+aF(10, 1, utf8(969).."0=1/sqrt(L*C)", U(""..utf8(969).."0","L","C")) 
+aF(10, 1, utf8(969).."1=-1/(2*R*C)+sqrt(1/(2*R*C)^2+1/(L*C))", U(""..utf8(969).."1","R","C","L")) 
+aF(10, 1, utf8(969).."2= 1/(2*R*C)+sqrt(1/(2*R*C)^2+1/(L*C))", U(""..utf8(969).."2","R","C","L")) 
+aF(10, 1, utf8(946).."="..utf8(969).."2-"..utf8(969).."1", U(""..utf8(946),""..utf8(969).."2",""..utf8(969).."1")) 
+aF(10, 1, "Q="..utf8(969).."0/"..utf8(946), U("Q",""..utf8(969).."0",""..utf8(946).."")) 
+aF(10, 1, "Q=R*sqrt(C/L)", U("Q","R","C","L")) 
+aF(10, 1, "Q="..utf8(969).."0*R*C", U("Q",""..utf8(969).."0","R","C")) 
+
+
+addSubCat(10, 2, "Parallel Resonance II", "") 
+aF(10, 2, "Q="..utf8(969).."0/"..utf8(946), U("Q",""..utf8(969).."0",""..utf8(946).."")) 
+aF(10, 2, utf8(969).."1="..utf8(969).."0*(-1/(2*Q)+sqrt(1/(2*Q)^2+1))", U(""..utf8(969).."1",""..utf8(969).."0","Q")) 
+aF(10, 2, utf8(969).."2="..utf8(969).."0*( 1/(2*Q)+sqrt(1/(2*Q)^2+1))", U(""..utf8(969).."2",""..utf8(969).."0","Q")) 
+aF(10, 2, utf8(945).."=1/(2*R*C)", U(""..utf8(945),"R","C")) 
+aF(10, 2, utf8(945).."="..utf8(969).."0/(2*Q)", U(""..utf8(945),""..utf8(969).."0","Q")) 
+aF(10, 2, utf8(969).."d=sqrt("..utf8(969).."0^2-"..utf8(945).."^2)", U(""..utf8(969).."d",""..utf8(969).."0",""..utf8(945).."")) 
+aF(10, 2, utf8(969).."d="..utf8(969).."0*sqrt(1-1/(4*Q^2))", U(""..utf8(969).."d",""..utf8(969).."0","Q")) 
+
+
+addSubCat(10, 3, "Resonance in a Lo"..utf8(946).."y Inductor", "") 
+aF(10, 3, utf8(969).."0=sqrt(1/(L*C)-(R/L)^2)", U(""..utf8(969).."0","L","C","R")) 
+aF(10, 3, "Yres=(L+Rg*R*C)/(L*Rg)", U("Yres","L","Rg","R","C")) 
+aF(10, 3, "Zres=1/Yres", U("Zres","Yres")) 
+aF(10, 3, utf8(969).."m=sqrt(sqrt((1/(L*C))^2*(1+2*R/Rg)+(R/L)^2*(2/(L*C)))-(R/L)^2)", U(""..utf8(969).."m","L","C","R","Rg")) 
+
+
+addSubCat(10, 4, "Series Resonance", "") 
+aF(10, 4, utf8(969).."0=(1/sqrt(L*C))", U(""..utf8(969).."0","L","C")) 
+aF(10, 4, "Z=sqrt(R^2+("..utf8(969).."*L-1/("..utf8(969).."*C))^2)", U("Z","R",""..utf8(969),"L","C")) 
+aF(10, 4, utf8(952).."=tan"..utf8(180).."(("..utf8(969).."*L-1/("..utf8(969).."*C))/R)", U(""..utf8(952),"tan",""..utf8(969),"L","C","R")) 
+aF(10, 4, utf8(969).."1=-R/(2*L)+sqrt((R/(2*L))^2+1/(L*C))", U(""..utf8(969).."1","R","L","C")) 
+aF(10, 4, utf8(969).."2=R/(2*L)+sqrt((R/(2*L))^2+1/(L*C))", U(""..utf8(969).."2","R","L","C")) 
+aF(10, 4, utf8(946).."="..utf8(969).."2-"..utf8(969).."1", U(""..utf8(946),""..utf8(969).."2",""..utf8(969).."1")) 
+aF(10, 4, utf8(946).."=R/L", U(""..utf8(946),"R","L")) 
+aF(10, 4, "Q="..utf8(969).."0*L/R", U("Q",""..utf8(969).."0","L","R")) 
+aF(10, 4, "Q=1/R*sqrt(L/C)", U("Q","R","L","C")) 
+
+
+
+
+addCat(11, "OpAmp Circuits", "") 
 
 addCatVar(11, "Acc", "Common Mode current gain", "unitless", "")
 addCatVar(11, "Aco", "Common Mode gain from real OpAmp", "unitless")
@@ -545,7 +756,7 @@ addCatVar(11, "Rout", "Output resistance", utf8(937))
 addCatVar(11, "Rp", "Bias current resistor", utf8(937))
 addCatVar(11, "Rs", "Voltage divide resistor", utf8(937))
 addCatVar(11, "tr", "10-90"..utf8(37).." rise time", "s")
-addCatVar(11, utf8(8710).."VH", "Hysteresis", "V")
+addCatVar(11, "dVH", "Hysteresis", "V")
 addCatVar(11, "VL", "Detection threshold, low", "V")
 addCatVar(11, "Vomax", "Maximum circuit output", "V")
 addCatVar(11, "VR", "Reference voltage", "V")
@@ -554,16 +765,64 @@ addCatVar(11, "VU", "Detection threshold, high", "V")
 addCatVar(11, "Vz1", "Zener breakdown 1", "V")
 addCatVar(11, "Vz2", "Zener breakdown 2", "V")
 
-addSubCat(11, 1, "Basic Inverter", "")
-addSubCat(11, 2, "Non-Inverting Amplifier", "")
-addSubCat(11, 3, "Current Amplifier", "")
-addSubCat(11, 4, "Transconductance Amplifier", "")
-addSubCat(11, 5, "Lvl. Detector Invert", "")
-addSubCat(11, 6, "Lvl. Detector Non-Invert", "")
-addSubCat(11, 7, "Differentiator", "")
-addSubCat(11, 8, "Diff. Amplifier", "")
 
-addCat(12, "Solid State Devices", "")
+addSubCat(11, 1, "Basic Inverter", "") 
+aF(11, 1, "Av=-Rf/RR1", U("Av","Rf","RR1")) 
+aF(11, 1, "Rp=RR1*Rf/(RR1+Rf)", U("Rp","RR1","Rf")) 
+aF(11, 1, "fcp=fop*Av*(RR1/Rf)", U("fcp","fop","Av","RR1","Rf")) 
+aF(11, 1, "tr=0.35*Rf/(fop*Av*RR1)", U("tr","Rf","fop","Av","RR1")) 
+
+
+addSubCat(11, 2, "Non-Inverting Amplifier", "") 
+aF(11, 2, "Av=1+Rf/RR1", U("Av","Rf","RR1")) 
+aF(11, 2, "Rp=RR1*Rf/(RR1+Rf)", U("Rp","RR1","Rf")) 
+
+
+addSubCat(11, 3, "Current Amplifier", "") 
+aF(11, 3, "Aic=(Rs+Rf)*Av/(Rl+Ro+Rs*(1+Av))", U("Aic","Rs","Rf","Av","Rl","Ro")) 
+aF(11, 3, "Rin=Rf/(1+Av)", U("Rin","Rf","Av")) 
+aF(11, 3, "Rout=Rs*(1+Av)", U("Rout","Rs","Av")) 
+
+
+addSubCat(11, 4, "Transconductance Amplifier", "") 
+aF(11, 4, "Agc=1/Rs", U("Agc","Rs")) 
+aF(11, 4, "Rout=Rs*(1+Av)", U("Rout","Rs","Av")) 
+
+
+addSubCat(11, 5, "Level Detector (Inverting)", "") 
+aF(11, 5, "RR1=Rp*Rf/(Rp+Rf)", U("RR1","Rp","Rf")) 
+aF(11, 5, "dVH=(Vz1+Vz2)*Rp/(Rp+Rf)", U("VH","Vz1","Vz2","Rp","Rf")) 
+aF(11, 5, "VU=(VR*Rf+Rp*Vz1)/(Rf+Rp)", U("VU","VR","Rf","Rp","Vz1")) 
+aF(11, 5, "VL=(VR*Rf-Rp*Vz2)/(Rf+Rp)", U("VL","VR","Rf","Rp","Vz2")) 
+
+
+addSubCat(11, 6, "Level Detector (Non-inverting)", "") 
+aF(11, 6, "RR1=Rp*Rf/(Rp+Rf)", U("RR1","Rp","Rf")) 
+aF(11, 6, "dVH=(Vz1+Vz2)*Rp/(Rp+Rf)", U("VH","Vz1","Vz2","Rp","Rf")) 
+aF(11, 6, "VU=(VR*(Rf+Rp)+Rp*Vz2)/Rf", U("VU","VR","Rf","Rp","Vz2")) 
+aF(11, 6, "VL=(VR*(Rp+Rf)-Rp*Vz1)/Rf", U("VL","VR","Rp","Rf","Vz1")) 
+
+
+addSubCat(11, 7, "Differentiator", "") 
+aF(11, 7, "Rf=Vomax/IIf", U("Rf","Vomax","IIf")) 
+aF(11, 7, "Rp=Rf", U("Rp","Rf")) 
+aF(11, 7, "CC1=Vomax/(Rf*Vrate)", U("CC1","Vomax","Rf","Vrate")) 
+aF(11, 7, "RR1=1/(2*"..utf8(960).."*fd*CC1)", U("RR1",""..utf8(960),"fd","CC1")) 
+aF(11, 7, "fd=1/(2*"..utf8(960).."*Rf*CC1)", U("fd",""..utf8(960),"Rf","CC1")) 
+aF(11, 7, "Cp=10/(2*"..utf8(960).."*f0*Rp)", U("Cp",""..utf8(960),"f0","Rp")) 
+aF(11, 7, "Cf=1/(4*"..utf8(960).."*f0*Rf)", U("Cf",""..utf8(960),"f0","Rf")) 
+
+
+addSubCat(11, 8, "Differential Amplifier", "") 
+aF(11, 8, "Ad=RR3/RR1", U("Ad","RR3","RR1")) 
+aF(11, 8, "Aco=RR3^2/(RR1*(RR1+RR3)*CMRR)", U("Aco","RR3","RR1","CMRR")) 
+aF(11, 8, "Ad=(Av*RR3)/sqrt(RR1^2*Av^2+RR3^2)", U("Ad","Av","RR3","RR1")) 
+aF(11, 8, "Acc=(RR4*RR1-RR2*RR3)/(RR1*(RR2+RR4))", U("Acc","RR4","RR1","RR2","RR3")) 
+
+
+
+
+addCat(12, "Solid State Devices", "") 
 
 addCatVar(12, utf8(945), "CB current gain", "unitless")
 addCatVar(12, "aLGJ", "Linearly graded junction parameter", "1/m4")
@@ -718,22 +977,153 @@ addCatVar(12, "xp", "Depletion width, p side", "m")
 addCatVar(12, "Z", "JFET width", "m")
 
 
-addSubCat(12, 1, "Semiconductor Basics", "")
-addSubCat(12, 2, "PN Junctions", "")
-addSubCat(12, 3, "PN Junction Currents", "")
-addSubCat(12, 4, "Transistor Currents", "")
-addSubCat(12, 5, "Ebers-Moll Equations", "")
-addSubCat(12, 6, "Ideal Currents - pnp", "")
-addSubCat(12, 7, "Switching Transients", "")
-addSubCat(12, 8, "MOS Transistor I", "")
-addSubCat(12, 9, "MOS Transistor II", "")
-addSubCat(12, 10, "MOS Inverter R Load", "")
-addSubCat(12, 11, "MOS Inverter Sat Load", "")
-addSubCat(12, 12, "MOS Inverter Depl. Ld", "")
-addSubCat(12, 13, "CMOS Transistor Pair", "")
-addSubCat(12, 14, "Junction FET", "")
+addSubCat(12, 1, "Semiconductor Basics", "") 
+aF(12, 1, utf8(961).."n=1/(q*"..utf8(956).."n*Nd)", U(""..utf8(961).."n","q",""..utf8(956).."n","Nd")) 
+aF(12, 1, utf8(961).."p=1/(q*"..utf8(956).."p*Na)", U(""..utf8(961).."p","q",""..utf8(956).."p","Na")) 
+aF(12, 1, "Dn=((k*TT)/q)*"..utf8(956).."n", U("Dn","k","TT","q",""..utf8(956).."n")) 
+aF(12, 1, "Dp=((k*TT)/q)*"..utf8(956).."p", U("Dp","k","TT","q",""..utf8(956).."p")) 
+aF(12, 1, "Ei=EF+(k*TT*ln(Na/ni(TT)))", U("Ei","EF","k","TT","Na")) 
+aF(12, 1, "EF=Ei+(k*TT*ln(Nd/ni(TT)))", U("EF","Ei","k","TT","Nd")) 
+aF(12, 1, "Ei=(Ec+Ev)/2+3/4*(k*TT)*ln(mp/mn)", U("Ei","Ec","Ev","k","TT","mp","mn")) 
+aF(12, 1, "N/N0=erfc(x/(2*sqrt(D*t)))", U("N","N0","x","D","t")) 
+aF(12, 1, "N=Qtot/(A*sqrt("..utf8(960).."*D*t))*exp(-x^2/(4*D*t))", U("N","Qtot","A",""..utf8(960),"D","t","x")) 
 
-addCat(13, "Linear Amplifiers", "")
+
+addSubCat(12, 2, "PN Junctions", "") 
+aF(12, 2, "Vbi=k*TT/q*ln(Nd*Na/ni(TT)^2)", U("Vbi","k","TT","q","Nd","Na")) 
+aF(12, 2, "xn=sqrt(2*"..utf8(949).."s*"..utf8(949).."0*abs(Vbi-Va)*Na/(q*Nd*(Na+Nd)))", U("xn",""..utf8(949).."s",""..utf8(949).."0","Vbi","Va","Na","q","Nd")) 
+aF(12, 2, "xp=(Nd/Na)*xn", U("xp","Nd","Na","xn")) 
+aF(12, 2, "xd=xn+xp", U("xd","xn","xp")) 
+aF(12, 2, "Cj="..utf8(949).."s*"..utf8(949).."0*Aj/xd", U("Cj",""..utf8(949).."s",""..utf8(949).."0","Aj","xd")) 
+aF(12, 2, "Vbi=2*k*TT/q*ln(aLGJ*xd/(2*ni(TT)))", U("Vbi","k","TT","q","aLGJ","xd")) 
+aF(12, 2, "xd=(12*"..utf8(949).."s*"..utf8(949).."0/(q*aLGJ)*abs(Vbi-Va))^(1/3)", U("xd",""..utf8(949).."s",""..utf8(949).."0","q","aLGJ","Vbi","Va")) 
+
+
+addSubCat(12, 3, "PN Junction Currents", "") 
+aF(12, 3, "I=q*Aj*(Dn/LLn*npo+Dp/Lp*pno)*(exp(q*Va/(k*TT))-1)", U("I","q","Aj","Dn","LLn","npo","Dp","Lp","pno","Va","k","TT")) 
+aF(12, 3, "I=I0*(exp(q*Va/(k*TT))-1)", U("I","I0","q","Va","k","TT")) 
+aF(12, 3, "I0=q*Aj*(Dn/LLn*npo+Dp/Lp*pno)", U("I0","q","Aj","Dn","LLn","npo","Dp","Lp","pno")) 
+aF(12, 3, "IRG0=-q*Aj*ni(TT)*xd/(2*"..utf8(964).."o)", U("IRG0","q","Aj","TT","xd",""..utf8(964).."o")) 
+aF(12, 3, "IRG=q*Aj*ni(TT)*xd/(2*"..utf8(964).."o)*(exp(q*Va/(2*k*TT))-1)", U("IRG","q","Aj","TT","xd",""..utf8(964).."o","Va","k")) 
+aF(12, 3, "Go=q/(k*TT)*(I+I0)", U("Go","q","k","TT","I","I0")) 
+aF(12, 3, "ts="..utf8(964).."p*ln(1+IIf/Ir)", U("ts",""..utf8(964).."p","IIf","Ir")) 
+aF(12, 3, "1/(1+Ir/IIf)=erf(sqrt(ts/"..utf8(964).."p))", U("Ir","IIf","ts",""..utf8(964).."p")) 
+
+
+addSubCat(12, 4, "Transistor Currents", "") 
+aF(12, 4, utf8(945).."=IC/IE", U(""..utf8(945),"IC","IE")) 
+aF(12, 4, utf8(946).."="..utf8(945).."/(1-"..utf8(945)..")", U(""..utf8(946),""..utf8(945).."")) 
+aF(12, 4, "IE=IB+IC", U("IE","IB","IC")) 
+aF(12, 4, "IC="..utf8(945).."*IE+ICB0", U("IC",""..utf8(945),"IE","ICB0")) 
+aF(12, 4, "IC="..utf8(945).."/(1-"..utf8(945)..")*IB+ICB0/(1-"..utf8(945)..")", U("IC",""..utf8(945),"IB","ICB0")) 
+aF(12, 4, "IC="..utf8(946).."*IB+ICE0", U("IC",""..utf8(946),"IB","ICE0")) 
+aF(12, 4, "ICE0=ICB0*("..utf8(946).."+1)", U("ICE0","ICB0",""..utf8(946).."")) 
+
+
+addSubCat(12, 5, "Ebers-Moll Equations", "") 
+aF(12, 5, "IE=IIf-"..utf8(945).."r*Ir", U("IE","IIf",""..utf8(945).."r","Ir")) 
+aF(12, 5, "IC="..utf8(945).."f*IIf-Ir", U("IC",""..utf8(945).."f","IIf","Ir")) 
+aF(12, 5, "IB=(1-"..utf8(945).."f)*IIf+(1-"..utf8(945).."r)*Ir", U("IB",""..utf8(945).."f","IIf",""..utf8(945).."r","Ir")) 
+aF(12, 5, utf8(946).."f="..utf8(945).."f/(1-"..utf8(945).."f)", U(""..utf8(946).."f",""..utf8(945).."f")) 
+aF(12, 5, utf8(946).."r="..utf8(945).."r/(1-"..utf8(945).."r)", U(""..utf8(946).."r",""..utf8(945).."r")) 
+aF(12, 5, utf8(945).."f*IIf=Is", U(""..utf8(945).."f","IIf","Is")) 
+aF(12, 5, utf8(945).."r*Ir=Is", U(""..utf8(945).."r","Ir","Is")) 
+aF(12, 5, "ICB0=(1-"..utf8(945).."r*"..utf8(945).."f)*Ir0", U("ICB0",""..utf8(945).."r",""..utf8(945).."f","Ir0")) 
+aF(12, 5, "ICE0=ICB0*("..utf8(946).."f+1)", U("ICE0","ICB0",""..utf8(946).."f")) 
+aF(12, 5, "ICE0=Ir0*(1-"..utf8(945).."f*"..utf8(945).."r)/(1-"..utf8(945).."f)", U("ICE0","Ir0",""..utf8(945).."f",""..utf8(945).."r")) 
+
+
+addSubCat(12, 6, "Ideal Currents - pnp", "") 
+aF(12, 6, "IE=q*A1*(DE*nE/LE+DB*pB/WB)*(exp((q*VEB)/(k*TT))-1)-q*A2*DB/WB*pB*(exp((q*VCB)/(k*TT))-1)", U("IE","q","A1","DE","nE","LE","DB","pB","WB","VEB","k","TT","A2","VCB")) 
+aF(12, 6, "IC=q*A1*DB*pB/WB*(exp((q*VEB)/(k*TT))-1)-q*A2*(DC*nC/LC+DB*pB/WB)*(exp((q*VCB)/(k*TT))-1)", U("IC","q","A1","DB","pB","WB","VEB","k","TT","A2","DC","nC","LC","VCB")) 
+aF(12, 6, "IB=q*A1*DE/LE*nE*(exp((q*VBE)/(k*TT))-1)+q*A2*DC/LC*nC*(exp((q*VCB)/(k*TT))-1)", U("IB","q","A1","DE","LE","nE","VBE","k","TT","A2","DC","LC","nC","VCB")) 
+aF(12, 6, utf8(945).."=((DB*pB)/WB)/(DB*pB/WB+DE*nE/LE)", U(""..utf8(945),"DB","pB","WB","DE","nE","LE")) 
+
+
+addSubCat(12, 7, "Switching Transients", "") 
+aF(12, 7, "Qsat=ICsat*"..utf8(964).."t", U("Qsat","ICsat",""..utf8(964).."t")) 
+aF(12, 7, "ICsat=VCC/Rl", U("ICsat","VCC","Rl")) 
+aF(12, 7, "tr="..utf8(964).."B*ln(1/(1-(ICsat*"..utf8(964).."t)/(IB*"..utf8(964).."B)))", U("tr",""..utf8(964).."B","ICsat",""..utf8(964).."t","IB")) 
+aF(12, 7, "tsd1="..utf8(964).."B*ln(IB*"..utf8(964).."B/(ICsat*"..utf8(964).."t))", U("tsd1",""..utf8(964).."B","IB","ICsat",""..utf8(964).."t")) 
+aF(12, 7, "tsd2="..utf8(964).."B*ln(2*IB*"..utf8(964).."B/(ICsat*"..utf8(964).."t*(1+IB*"..utf8(964).."B/(ICsat*"..utf8(964).."t))))", U("tsd2",""..utf8(964).."B","IB","ICsat",""..utf8(964).."t")) 
+aF(12, 7, "VCEs=k*TT/q*ln(1+IC/IB*(1-"..utf8(945).."r)/("..utf8(945).."r*(1-IC/IB*(1-"..utf8(945).."f)/"..utf8(945).."f)))", U("VCEs","k","TT","q","IC","IB",""..utf8(945).."r",""..utf8(945).."f")) 
+
+
+addSubCat(12, 8, "MOS Transistor I", "") 
+aF(12, 8, utf8(966).."F=k*TT/q*ln(ni(TT)/p)", U(""..utf8(966).."F","k","TT","q","p")) 
+aF(12, 8, "xd=sqrt(2*"..utf8(949).."s*"..utf8(949).."0*(2*"..utf8(966).."F)/(q*Na))", U("xd",""..utf8(949).."s",""..utf8(949).."0",""..utf8(966).."F","q","Na")) 
+aF(12, 8, "Qb0=-sqrt(2*q*Na*"..utf8(949).."s*"..utf8(949).."0*abs(2*"..utf8(966).."F))", U("Qb0","q","Na",""..utf8(949).."s",""..utf8(949).."0",""..utf8(966).."F")) 
+aF(12, 8, "Qb=-sqrt(2*q*Na*"..utf8(949).."s*"..utf8(949).."0*abs(-2*"..utf8(966).."F+VSB))", U("Qb","q","Na",""..utf8(949).."s",""..utf8(949).."0",""..utf8(966).."F","VSB")) 
+aF(12, 8, "Cox="..utf8(949).."ox*"..utf8(949).."0/tox", U("Cox",""..utf8(949).."ox",""..utf8(949).."0","tox")) 
+aF(12, 8, utf8(131).."=1/Cox*sqrt(2*q*Na*"..utf8(949).."s*"..utf8(949).."0)", U("Cox","q","Na",""..utf8(949).."s",""..utf8(949).."0")) 
+aF(12, 8, "VT0="..utf8(966).."GC-2*"..utf8(966).."F-Qb0/Cox-Qox/Cox", U("VT0",""..utf8(966).."GC",""..utf8(966).."F","Qb0","Cox","Qox")) 
+
+
+addSubCat(12, 9, "MOS Transistor II", "") 
+aF(12, 9, "kn1="..utf8(956).."n*Cox", U("kn1",""..utf8(956).."n","Cox")) 
+aF(12, 9, "kn1="..utf8(956).."n*"..utf8(949).."ox*"..utf8(949).."0/tox", U("kn1",""..utf8(956).."n",""..utf8(949).."ox",""..utf8(949).."0","tox")) 
+aF(12, 9, "kn=kn1*W/L", U("kn","kn1","W","L")) 
+aF(12, 9, "IDmod=kn/2*(VGS-VT)^2*(1+"..utf8(137).."*VDS)", U("IDmod","kn","VGS","VT","VDS")) 
+aF(12, 9, "ID=when(VGS-VT"..utf8(156).."VDS,kn/2*(2*(VGS-VT)*VDS-VDS^2),kn/2*(VGS-VT)^2)", U("ID","VGS","VT","VDS","kn")) 
+aF(12, 9, "VT=VT0+"..utf8(131).."*(sqrt(abs(-2*"..utf8(966).."F+VSB))-sqrt(2*"..utf8(966).."F))", U("VT","VT0",""..utf8(966).."F","VSB")) 
+aF(12, 9, "gm=kn*(VGS-VT)", U("gm","kn","VGS","VT")) 
+aF(12, 9, "Ttr=4/3*L^2/("..utf8(956).."n*(VGS-VT))", U("Ttr","L",""..utf8(956).."n","VGS","VT")) 
+aF(12, 9, "ffmax=gm/(2*"..utf8(960).."*Cox*W*L)", U("ffmax","gm",""..utf8(960),"Cox","W","L")) 
+aF(12, 9, "gd=kn*(VGS-VT)", U("gd","kn","VGS","VT")) 
+
+
+addSubCat(12, 10, "MOS Inverter (Resistive Load)", "") 
+aF(12, 10, "kD="..utf8(956).."n*Cox*WD/LD", U("kD",""..utf8(956).."n","Cox","WD","LD")) 
+aF(12, 10, "VOH=VDD", U("VOH","VDD")) 
+aF(12, 10, "VOL^2-2*(1/(kD*Rl)+VDD-VT)*VOL+2*VDD/(kD*Rl)=0", U("VOL","kD","Rl","VDD","VT")) 
+aF(12, 10, "kD/2*(2*(VIH-VT)*Vo-Vo^2)=(VDD-Vo)/Rl", U("kD","VIH","VT","Vo","VDD","Rl")) 
+aF(12, 10, "kD/2*(VM-VT)^2=(VDD-VM)/Rl", U("kD","VM","VT","VDD","Rl")) 
+
+
+addSubCat(12, 11, "MOS Inverter (Saturated Load)", "") 
+aF(12, 11, "kL="..utf8(956).."n*Cox*WL/LL", U("kL",""..utf8(956).."n","Cox","WL","LL")) 
+aF(12, 11, "kD="..utf8(956).."n*Cox*WD/LD", U("kD",""..utf8(956).."n","Cox","WD","LD")) 
+aF(12, 11, "KR=kD/kL", U("KR","kD","kL")) 
+aF(12, 11, "VOH=VDD-(VT0+"..utf8(131).."*(sqrt(VOH+2*"..utf8(966).."F)-sqrt(2*"..utf8(966).."F)))", U("VOH","VDD","VT0",""..utf8(966).."F")) 
+aF(12, 11, "KR*(2*(Vin-VTD)*Vo-Vo^2)=(VDD-Vo-VTL)^2", U("KR","Vin","VTD","Vo","VDD","VTL")) 
+aF(12, 11, "VTL=VT0+"..utf8(131).."*(sqrt(Vo+2*"..utf8(966).."F)-sqrt(2*"..utf8(966).."F))", U("VTL","VT0","Vo",""..utf8(966).."F")) 
+aF(12, 11, "VIH=(2*(VDD-VTL))/(sqrt(3*KR)+1)+VT0", U("VIH","VDD","VTL","KR","VT0")) 
+aF(12, 11, "Vo=(VDD-VTL+VT0+VT0*sqrt(KR))/(1+sqrt(KR))", U("Vo","VDD","VTL","VT0","KR")) 
+aF(12, 11, "gmL=kL*(VDD-VTL)", U("gmL","kL","VDD","VTL")) 
+aF(12, 11, utf8(964).."L=CL/gmL", U(""..utf8(964).."L","CL","gmL")) 
+aF(12, 11, "tch="..utf8(964).."L*(V1/Vo-1)", U("tch",""..utf8(964).."L","V1","Vo")) 
+aF(12, 11, utf8(964).."D=CL/(kD*(V1-VT0))", U(""..utf8(964).."D","CL","kD","V1","VT0")) 
+aF(12, 11, "tdis="..utf8(964).."D*((2*VTD)/(V1-VTD)+ln(2*(V1-VTD)/Vo-1))", U("tdis",""..utf8(964).."D","VTD","V1","Vo")) 
+
+
+addSubCat(12, 12, "MOS Inverter (Depletion Load)", "") 
+aF(12, 12, "kL="..utf8(956).."n*Cox*WL/LL", U("kL",""..utf8(956).."n","Cox","WL","LL")) 
+aF(12, 12, "kD="..utf8(956).."n*Cox*WD/LD", U("kD",""..utf8(956).."n","Cox","WD","LD")) 
+aF(12, 12, "kD/2*(2*(VOH-VT0)*VOL-VOL^2)=kL/2*VTL^2", U("kD","VOH","VT0","VOL","kL","VTL")) 
+aF(12, 12, "VTL=VTL0+"..utf8(131).."*(sqrt(Vo+2*"..utf8(966).."F)-sqrt(2*"..utf8(966).."F))", U("VTL","VTL0","Vo",""..utf8(966).."F")) 
+aF(12, 12, "tch=CL*VL/I0", U("tch","CL","VL","I0")) 
+aF(12, 12, "I0=kL*VTL^2", U("I0","kL","VTL")) 
+
+
+addSubCat(12, 13, "CMOS Transistor Pair", "") 
+aF(12, 13, "kP="..utf8(956).."p*Cox*WP/lP", U("kP",""..utf8(956).."p","Cox","WP","lP")) 
+aF(12, 13, "kN="..utf8(956).."n*Cox*WN/lNN", U("kN",""..utf8(956).."n","Cox","WN","lNN")) 
+aF(12, 13, "VIH=2*Vo+VTN+(kP/kN)*(VDD-abs(VTP))/(1+kP/kN)", U("VIH","Vo","VTN","kP","kN","VDD","VTP")) 
+aF(12, 13, "VIL=(2*Vo-VDD-VTP+kN/kP*VTN)/(1+kN/kP)", U("VIL","Vo","VDD","VTP","kN","kP","VTN")) 
+aF(12, 13, "kN/2*(Vin-VTN)^2=kP/2*(VDD-Vin-abs(VTP))^2", U("kN","Vin","VTN","kP","VDD","VTP")) 
+
+
+addSubCat(12, 14, "Junction FET", "") 
+aF(12, 14, "ID=2*q*Z*"..utf8(956).."n*Nd*b/L*(VDD-2/3*(Vbi-Vp)*(((VDD+Vbi-VG)/(Vbi-Vp))^1.5-((Vbi-VG)/(Vbi-Vp))^1.5))", U("ID","q","Z",""..utf8(956).."n","Nd","b","L","VDD","Vbi","Vp","VG")) 
+aF(12, 14, "IDsat=2*q*Z*"..utf8(956).."n*Nd*b/L*(VDsat-2/3*(Vbi-Vp)*(((VDD+Vbi-VG)/(Vbi-Vp))^1.5-((Vbi-VG)/(Vbi-Vp))^1.5))", U("IDsat","q","Z",""..utf8(956).."n","Nd","b","L","VDsat","Vbi","Vp","VDD","VG")) 
+aF(12, 14, "b=sqrt(2*"..utf8(949).."0*"..utf8(949).."s/(q*Nd)*(Vbi+VDsat-VG))", U("b",""..utf8(949).."0",""..utf8(949).."s","q","Nd","Vbi","VDsat","VG")) 
+aF(12, 14, "VDsat=VG-Vp", U("VDsat","VG","Vp")) 
+aF(12, 14, "IDsat=ID0*(1-VG/Vp)^2", U("IDsat","ID0","VG","Vp")) 
+
+
+
+
+addCat(13, "Linear Amplifiers", "") 
 
 addCatVar(13, utf8(945).."0", "Current gain, CE", "unitless")
 addCatVar(13, "Ac", "Common mode gain", "unitless")
@@ -761,19 +1151,92 @@ addCatVar(13, "Rl", "Load resistance", utf8(937))
 addCatVar(13, "Ro", "Output resistance", utf8(937))
 addCatVar(13, "Rs", "Source resistance", utf8(937))
 
-addSubCat(13, 1, "BJT (CB)", "")
-addSubCat(13, 2, "BJT (CE)", "")
-addSubCat(13, 3, "BJT (CC)", "")
-addSubCat(13, 4, "FET (Common Gate)", "")
-addSubCat(13, 5, "FET (Common Source)", "")
-addSubCat(13, 6, "FET (Common Drain)", "")
-addSubCat(13, 7, "Darlington (CC-CC)", "")
-addSubCat(13, 8, "Darlington (CC-CE)", "")
-addSubCat(13, 9, "EC Amplifier", "")
-addSubCat(13, 10, "Differential Amplifier", "")
-addSubCat(13, 11, "Source Coupled JFET", "")
 
-addCat(14, "Class A, B, C Amps", "")
+addSubCat(13, 1, "BJT (Common Base)", "") 
+aF(13, 1, utf8(946).."0="..utf8(945).."0/(1-"..utf8(945).."0)", U(""..utf8(946).."0",""..utf8(945).."0")) 
+aF(13, 1, "Rin=re+rb/"..utf8(946).."0", U("Rin","re","rb",""..utf8(946).."0")) 
+aF(13, 1, "Ro=rrc", U("Ro","rrc")) 
+aF(13, 1, "Ai="..utf8(945).."0", U("Ai",""..utf8(945).."0")) 
+aF(13, 1, "Av="..utf8(945).."0*Rl/(re+rb/"..utf8(946).."0)", U("Av",""..utf8(945).."0","Rl","re","rb",""..utf8(946).."0")) 
+aF(13, 1, "Aov=("..utf8(945).."0*rrc)*(Rin/(Rin+Rs))/(re+rb/"..utf8(946).."0)", U("Aov",""..utf8(945).."0","rrc","Rin","Rs","re","rb",""..utf8(946).."0")) 
+
+
+addSubCat(13, 2, "BJT (Common Emitter)", "") 
+aF(13, 2, utf8(946).."0="..utf8(945).."0/(1-"..utf8(945).."0)", U(""..utf8(946).."0",""..utf8(945).."0")) 
+aF(13, 2, "Rin=rb+"..utf8(946).."0*re", U("Rin","rb",""..utf8(946).."0","re")) 
+aF(13, 2, "Ro=rrc", U("Ro","rrc")) 
+aF(13, 2, "Ai=-"..utf8(946).."0", U("Ai",""..utf8(946).."0")) 
+aF(13, 2, "Av=-"..utf8(946).."0*Rl/("..utf8(946).."0*re+rb)", U("Av",""..utf8(946).."0","Rl","re","rb")) 
+aF(13, 2, "Aov=-"..utf8(946).."0*Rl/(Rs+Rin)", U("Aov",""..utf8(946).."0","Rl","Rs","Rin")) 
+
+
+addSubCat(13, 3, "BJT (Common Collector)", "") 
+aF(13, 3, utf8(946).."0="..utf8(945).."0/(1-"..utf8(945).."0)", U(""..utf8(946).."0",""..utf8(945).."0")) 
+aF(13, 3, "Rin=rb+"..utf8(946).."0*re+("..utf8(946).."0+1)*Rl", U("Rin","rb",""..utf8(946).."0","re","Rl")) 
+aF(13, 3, "Ro=re+(Rs+rb)/"..utf8(946).."0", U("Ro","re","Rs","rb",""..utf8(946).."0")) 
+aF(13, 3, "Ai=rrc/(rrc*(1-"..utf8(945).."0)+Rl+re)", U("Ai","rrc",""..utf8(945).."0","Rl","re")) 
+aF(13, 3, "Av="..utf8(945).."0*Rl/(re+Rl)", U("Av",""..utf8(945).."0","Rl","re")) 
+aF(13, 3, "Aov=("..utf8(946).."0+1)*Rl/(Rs+Rin+("..utf8(946).."0+1)*Rl)", U("Aov",""..utf8(946).."0","Rl","Rs","Rin")) 
+
+
+addSubCat(13, 4, "FET (Common Gate)", "") 
+aF(13, 4, utf8(956).."=gm*rd", U(""..utf8(956),"gm","rd")) 
+aF(13, 4, "Rin=(Rl+rd)/("..utf8(956).."+1)", U("Rin","Rl","rd",""..utf8(956).."")) 
+aF(13, 4, "Av=("..utf8(956).."+1)*Rl/(rd+Rl)", U("Av",""..utf8(956),"Rl","rd")) 
+aF(13, 4, "Ro=rd+("..utf8(956).."+1)*RG", U("Ro","rd",""..utf8(956),"RG")) 
+
+
+addSubCat(13, 5, "FET (Common Source)", "") 
+aF(13, 5, utf8(956).."=gm*rd", U(""..utf8(956),"gm","rd")) 
+aF(13, 5, "Rin=(Rl+rd)/("..utf8(956).."+1)", U("Rin","Rl","rd",""..utf8(956).."")) 
+aF(13, 5, "Av=-gm*(rd*Rl/(rd+Rl))", U("Av","gm","rd","Rl")) 
+aF(13, 5, "Ro=rd", U("Ro","rd")) 
+
+
+addSubCat(13, 6, "FET (Common Drain)", "") 
+aF(13, 6, utf8(956).."=gm*rd", U(""..utf8(956),"gm","rd")) 
+aF(13, 6, "Rin=(Rl+rd)/("..utf8(956).."+1)", U("Rin","Rl","rd",""..utf8(956).."")) 
+aF(13, 6, "Av="..utf8(956).."*Rl/(("..utf8(956).."+1)*Rl+rd)", U("Av",""..utf8(956),"Rl","rd")) 
+aF(13, 6, "Ro=rd/("..utf8(956).."+1)", U("Ro","rd",""..utf8(956).."")) 
+
+
+addSubCat(13, 7, "Darlington (CC-CC)", "") 
+aF(13, 7, "Rin="..utf8(946).."0*(re+"..utf8(946).."0*(re+Rl))", U("Rin",""..utf8(946).."0","re","Rl")) 
+aF(13, 7, "Ro=re+("..utf8(946).."0*(re+rb)+Rs)/"..utf8(946).."0^2", U("Ro","re",""..utf8(946).."0","rb","Rs")) 
+aF(13, 7, "Ai="..utf8(946).."0^2*RBA/(RBA+"..utf8(946).."0*(Rl+re))", U("Ai",""..utf8(946).."0","RBA","Rl","re")) 
+
+
+addSubCat(13, 8, "Darlington (CC-CE)", "") 
+aF(13, 8, "Rin=rb+"..utf8(946).."0*re", U("Rin","rb",""..utf8(946).."0","re")) 
+aF(13, 8, "Ro=rrc/"..utf8(946).."0", U("Ro","rrc",""..utf8(946).."0")) 
+aF(13, 8, "Av=-Rl/(re+Rs/"..utf8(946).."0^2)", U("Av","Rl","re","Rs",""..utf8(946).."0")) 
+
+
+addSubCat(13, 9, "Emitter-Coupled Amplifier", "") 
+aF(13, 9, utf8(946).."0="..utf8(945).."0/(1-"..utf8(945).."0)", U(""..utf8(946).."0",""..utf8(945).."0")) 
+aF(13, 9, "Av=Rl*("..utf8(946).."0/(2*"..utf8(946).."0*re+Rl))", U("Av","Rl",""..utf8(946).."0","re")) 
+aF(13, 9, "Ai=-"..utf8(945).."0*"..utf8(946).."0", U("Ai",""..utf8(945).."0",""..utf8(946).."0")) 
+aF(13, 9, "Rin="..utf8(946).."0*re+rb", U("Rin",""..utf8(946).."0","re","rb")) 
+aF(13, 9, "Ro=rrc", U("Ro","rrc")) 
+
+
+addSubCat(13, 10, "Differential Amplifier", "") 
+aF(13, 10, "Ad=-1/2*gm*RCA", U("Ad","gm","RCA")) 
+aF(13, 10, "Ac=-"..utf8(945).."0*RCA/(2*REA+re)", U("Ac",""..utf8(945).."0","RCA","REA","re")) 
+aF(13, 10, "Rid=2*(rb+"..utf8(946).."0*re)", U("Rid","rb",""..utf8(946).."0","re")) 
+aF(13, 10, "Ric="..utf8(946).."0*REA", U("Ric",""..utf8(946).."0","REA")) 
+
+
+addSubCat(13, 11, "Source-Coupled JFET Pair", "") 
+aF(13, 11, "Ad=-1/2*gm*(rd*RDA)/(rd+RDA)", U("Ad","gm","rd","RDA")) 
+aF(13, 11, "Ac=-"..utf8(956).."*RDA/(("..utf8(956).."+1)*2*Rs+rd+RDA)", U("Ac",""..utf8(956),"RDA","Rs","rd")) 
+aF(13, 11, utf8(956).."=gm*rd", U(""..utf8(956),"gm","rd")) 
+aF(13, 11, "CMMR=gm*Rs", U("CMMR","gm","Rs")) 
+
+
+
+
+addCat(14, "Class A, B and C Amplifiers", "") 
 
 addCatVar(14, "gm", "Transconductance", "S")
 addCatVar(14, "hFE", "CE current gain", "unitless")
@@ -781,7 +1244,7 @@ addCatVar(14, "hOE", "CE output conductance", "S")
 addCatVar(14, "I", "Current", "A")
 addCatVar(14, "IB", "Base current", "A")
 addCatVar(14, "IC", "Collector Current", "A")
-addCatVar(14, utf8(8710).."IC", "Current swing from operating pt.", "A")
+addCatVar(14, "dIC", "Current swing from operating pt.", "A")
 addCatVar(14, "ICBO", "Collector current EB open", "A")
 addCatVar(14, "ICQ", "Current at operating point", "A")
 addCatVar(14, "Idc", "DC current", "A")
@@ -790,8 +1253,8 @@ addCatVar(14, "K", "Constant", "unitless")
 addCatVar(14, "m", "Constant", "1/K")
 addCatVar(14, utf8(962), "Efficiency", "unitless")
 addCatVar(14, "n", "Turns ratio", "unitless")
-addCatVar(14, "N1", utf8(35).." turns in primary", "unitless")
-addCatVar(14, "N2", utf8(35).." turns in secondary", "unitless")
+addCatVar(14, "N1","# turns in primary", "unitless")
+addCatVar(14, "N2","# turns in secondary", "unitless")
 addCatVar(14, "Pd", "Power dissipated", "W")
 addCatVar(14, "Pdc", "DC power input to amp", "W")
 addCatVar(14, "Po", "Power output", "W")
@@ -808,12 +1271,12 @@ addCatVar(14, "Rxt", "External emitter resistance", utf8(937))
 addCatVar(14, "S", "Instability factor", "unitless")
 addCatVar(14, "TA", "Ambient temperature", "K")
 addCatVar(14, "TJ", "Junction temperature", "K")
-addCatVar(14, utf8(8710).."Tj", "Change in temperature", "K")
+addCatVar(14, "dTj", "Change in temperature", "K")
 addCatVar(14, "V0", "Voltage across tank circuit", "V")
 addCatVar(14, "V1", "Voltage across tuned circuit", "V")
 addCatVar(14, "VBE", "Base emitter voltage", "V")
 addCatVar(14, "VCC", "Collector supply voltage", "V")
-addCatVar(14, utf8(8710).."VCE", "Voltage swing from operating pt.", "V")
+addCatVar(14, "dVCE", "Voltage swing from operating pt.", "V")
 addCatVar(14, "VCEmx", "Maximum transistor rating", "V")
 addCatVar(14, "VCEmn", "Minimum transistor rating", "V")
 addCatVar(14, "Vm", "Maximum amplitude", "V")
@@ -823,18 +1286,62 @@ addCatVar(14, "XC1", utf8(960).." equivalent circuit parameter", utf8(937))
 addCatVar(14, "XC2", utf8(960).." equivalent circuit parameter", utf8(937))
 addCatVar(14, "XL", utf8(960).." series reactance", utf8(937))
 
-addSubCat(14, 1, "Class A Amplifier", "")
-addSubCat(14, 2, "Power Transistor", "")
-addSubCat(14, 3, "Push-Pull Principle", "")
-addSubCat(14, 4, "Class B Amplifier", "")
-addSubCat(14, 5, "Class C Amplifier", "")
 
-addCat(15, "Transformers", "")
+addSubCat(14, 1, "Class A Amplifier", "") 
+aF(14, 1, "R=n^2*Rl", U("R","n","Rl")) 
+aF(14, 1, "dIC=dVCE/R", U("dIC","dVCE","R")) 
+aF(14, 1, "Imax=ICQ+dIC", U("Imax","ICQ","dIC")) 
+aF(14, 1, "Pdc=VCC*ICQ", U("Pdc","VCC","ICQ")) 
+aF(14, 1, "PP=VCEmx-VCEmn", U("PP","VCEmx","VCEmn")) 
+aF(14, 1, "VPP=n*PP", U("VPP","n","PP")) 
+aF(14, 1, "Po=(dIC)^2*R/8", U("Po","dIC","R")) 
+aF(14, 1, "x=Po/Pdc", U("Po","Pdc"))
+
+
+addSubCat(14, 2, "Power Transistor", "") 
+aF(14, 2, "TJ=TA+"..utf8(952).."JA*Pd", U("TJ","TA",""..utf8(952).."JA","Pd")) 
+aF(14, 2, "IC=hFE*IB+(1+hFE)*ICBO", U("IC","hFE","IB","ICBO")) 
+aF(14, 2, "IB=-(IC*Rxt-VBE)/(Rxt+RB)", U("IB","IC","Rxt","VBE","RB")) 
+aF(14, 2, "IC=-hFE*VBE/(hFE*Rxt+RB)+hFE*(Rxt+RB)/(hFE*Rxt+RB)*ICBO", U("IC","hFE","VBE","Rxt","RB","ICBO")) 
+aF(14, 2, "S=(1+RB/Rxt)*hFE/(hFE+RB/Rxt)", U("S","RB","Rxt","hFE")) 
+aF(14, 2, "IC=-hFE*IB+S*ICBO*(1+m*dTj)", U("IC","hFE","IB","S","ICBO","m","Tj")) 
+
+
+addSubCat(14, 3, "Push-Pull Principle", "") 
+aF(14, 3, "R=VCC/Imax", U("R","VCC","Imax")) 
+aF(14, 3, "Po=VCC^2/(2*R)", U("Po","VCC","R")) 
+aF(14, 3, "Po=(N2/(2*N1))^2*VCC^2/(2*RR2)", U("Po","N2","N1","VCC","RR2")) 
+
+
+addSubCat(14, 4, "Class B Amplifier", "") 
+aF(14, 4, "Po=K^2*VCC^2/(2*R)", U("Po","K","VCC","R")) 
+aF(14, 4, "Idc=2*K*Imax/"..utf8(960), U("Idc","K","Imax",""..utf8(960).."")) 
+aF(14, 4, "Pdc=2*K*Imax*VCC/"..utf8(960), U("Pdc","K","Imax","VCC",""..utf8(960).."")) 
+aF(14, 4, "Pdc=2*K*VCC^2/("..utf8(960).."*R)", U("Pdc","K","VCC",""..utf8(960),"R")) 
+aF(14, 4, "x=Po/Pdc", U("Po","Pdc")) 
+aF(14, 4, "x="..utf8(960).."*K/4", U(""..utf8(960),"K")) 
+aF(14, 4, "Pd=2*VCC^2/("..utf8(960).."*R)*(K-K^2*"..utf8(960).."/4)", U("Pd","VCC",""..utf8(960),"R","K")) 
+aF(14, 4, "V1=gm*Rl*Vm/(2*sqrt(2))*(1/(1+hOE*Rl/2))", U("V1","gm","Rl","Vm","hOE")) 
+aF(14, 4, "IC=gm*Vm/"..utf8(960).."*(1/(1+hOE*Rl/2))", U("IC","gm","Vm",""..utf8(960),"hOE","Rl")) 
+
+
+addSubCat(14, 5, "Class C Amplifier", "") 
+aF(14, 5, "x=I^2*Rrc/(I^2*(Rrc+RR0))", U("I","Rrc","RR0")) 
+aF(14, 5, "XXC=V0^2/(Q*Po)", U("XXC","V0","Q","Po")) 
+aF(14, 5, "XL=XXC*Q^2/(Q^2+1)", U("XL","XXC","Q")) 
+aF(14, 5, "XC1=-Rl/Q", U("XC1","Rl","Q")) 
+aF(14, 5, "XL=1/Q*(Rl+sqrt(Rl*RR2))", U("XL","Q","Rl","RR2")) 
+aF(14, 5, "XC2=-RR2/Q", U("XC2","RR2","Q")) 
+
+
+
+
+addCat(15, "Transformers", "") 
 
 addCatVar(15, "I1", "Primary current", "A")
 addCatVar(15, "I2", "Secondary current", "A")
-addCatVar(15, "N1", utf8(35).." primary turns", "unitless")
-addCatVar(15, "N2", utf8(35).." secondary turns", "unitless")
+addCatVar(15, "N1","# primary turns", "unitless")
+addCatVar(15, "N2","# secondary turns", "unitless")
 addCatVar(15, "RR1", "Primary resistance", utf8(937))
 addCatVar(15, "RR2", "Secondary resistance", utf8(937))
 addCatVar(15, "Rin", "Equiv. primary resistance", utf8(937))
@@ -848,13 +1355,27 @@ addCatVar(15, "Xl", "Reactive part of load", utf8(937))
 addCatVar(15, "Zin", "Primary impedance", utf8(937))
 addCatVar(15, "ZL", "Secondary load", utf8(937))
 
-addSubCat(15, 1, "Ideal Transformer", "")
-addSubCat(15, 2, "Linear Equiv. Circuit", "")
 
-addCat(16, "Motors, Generators", "")
+addSubCat(15, 1, "Ideal Transformer", "") 
+aF(15, 1, "V1/V2=N1/N2", U("V1","V2","N1","N2")) 
+aF(15, 1, "I1*N1=I2*N2", U("I1","N1","I2","N2")) 
+aF(15, 1, "V1*I1=V2*I2", U("V1","I1","V2","I2")) 
+aF(15, 1, "Zin=(N1/N2)^2*ZL", U("Zin","N1","N2","ZL")) 
+
+
+addSubCat(15, 2, "Linear Equivalent Circuit", "") 
+aF(15, 2, "V1=N1/N2*V2", U("V1","N1","N2","V2")) 
+aF(15, 2, "I1=I2*N2/N1", U("I1","I2","N2","N1")) 
+aF(15, 2, "Rin=RR1+(N1/N2)^2*(RR2+Rl)", U("Rin","RR1","N1","N2","RR2","Rl")) 
+aF(15, 2, "Xin=XX1+(N1/N2)^2*(XX2+Xl)", U("Xin","XX1","N1","N2","XX2","Xl")) 
+
+
+
+
+addCat(16, "Motors and Generators", "") 
 
 addCatVar(16, "A", "Area", "m2")
-addCatVar(16, "ap", utf8(35).." parallel paths", "unitless")
+addCatVar(16, "ap","# parallel paths", "unitless")
 addCatVar(16, "B", "Magnetic induction", "T")
 addCatVar(16, "Ea", "Average emf induced in armature", "V")
 addCatVar(16, "Ef", "Field voltage", "V")
@@ -874,11 +1395,11 @@ addCatVar(16, "Kf", "Field coefficient", "A/Wb")
 addCatVar(16, "KM", "Induction motor constant", "unitless")
 addCatVar(16, "L", "Length of each turn", "m")
 addCatVar(16, utf8(952), "Phase delay", "r")
-addCatVar(16, "N", "Total "..utf8(35).." armature coils", "unitless")
-addCatVar(16, "Ns", utf8(35).." stator coils", "unitless")
+addCatVar(16, "N", "Total # armature coils", "unitless")
+addCatVar(16, "Ns","# stator coils", "unitless")
 addCatVar(16, utf8(961), "Resistivity", utf8(937).."/m")
 addCatVar(16, utf8(966), "Flux", "Wb")
-addCatVar(16, "p", utf8(35).." poles", "unitless")
+addCatVar(16, "p","# poles", "unitless")
 addCatVar(16, "P", "Power", "W")
 addCatVar(16, "Pa", "Mechanical power", "W")
 addCatVar(16, "Pma", "Power in rotor per phase", "W")
@@ -918,16 +1439,122 @@ addCatVar(16, "Wf", "Magnetic energy", "J")
 addCatVar(16, "XL", "Inductive reactance", utf8(937))
 
 
-addSubCat(16, 1, "Energy Conversion", "")
-addSubCat(16, 2, "DC Generator", "")
-addSubCat(16, 3, "Sep. Excited DC Gen.", "")
-addSubCat(16, 4, "DC Shunt Generator", "")
-addSubCat(16, 5, "DC Series Generator", "")
-addSubCat(16, 6, "Sep Excite DC Motor", "")
-addSubCat(16, 7, "DC Shunt Motor", "")
-addSubCat(16, 8, "DC Series Motor", "")
-addSubCat(16, 9, "Perm Magnet Motor", "")
-addSubCat(16, 10, "Induction Motor I", "")
-addSubCat(16, 11, "Induction Motor II", "")
-addSubCat(16, 12, "1 f Induction Motor", "")
-addSubCat(16, 13, "Synchronous Machines", "")
+addSubCat(16, 1, "Energy Conversion", "") 
+aF(16, 1, "Wf=1/2*H*B*L*A", U("Wf","H","B","L","A")) 
+aF(16, 1, "Wf=1/2*Rel*"..utf8(966).."^2", U("Wf","Rel",""..utf8(966).."")) 
+aF(16, 1, "F=B^2/(2*"..utf8(956).."0)", U("F","B",""..utf8(956).."0")) 
+aF(16, 1, "Es=Ns*"..utf8(969).."s*"..utf8(966).."/sqrt(2)", U("Es","Ns",""..utf8(969).."s",""..utf8(966).."")) 
+
+
+addSubCat(16, 2, "DC Generator", "") 
+aF(16, 2, utf8(969).."me=p/2*"..utf8(969).."m", U(""..utf8(969).."me","p",""..utf8(969).."m")) 
+aF(16, 2, "Eta=p/"..utf8(960).."*"..utf8(969).."m*"..utf8(966), U("Eta","p",""..utf8(960),""..utf8(969).."m",""..utf8(966).."")) 
+aF(16, 2, "Ea=N/ap*(p/"..utf8(960)..")*"..utf8(969).."m*"..utf8(966), U("Ea","N","ap","p",""..utf8(960),""..utf8(969).."m",""..utf8(966).."")) 
+aF(16, 2, "Ea=K*"..utf8(969).."m*"..utf8(966), U("Ea","K",""..utf8(969).."m",""..utf8(966).."")) 
+aF(16, 2, "K=N*p/(ap*"..utf8(960)..")", U("K","N","p","ap",""..utf8(960).."")) 
+aF(16, 2, "T*"..utf8(969).."m=Ea*Ia+Ef*IIf", U("T",""..utf8(969).."m","Ea","Ia","Ef","IIf")) 
+aF(16, 2, "T=K*"..utf8(966).."*Ia", U("T","K",""..utf8(966),"Ia")) 
+aF(16, 2, "Ra="..utf8(961).."*N/ap^2*(L/A)", U("Ra",""..utf8(961),"N","ap","L","A")) 
+aF(16, 2, "Vf=Rf*IIf", U("Vf","Rf","IIf")) 
+aF(16, 2, "Vt=K*"..utf8(969).."m*"..utf8(966).."-Ra*Ia", U("Vt","K",""..utf8(969).."m",""..utf8(966),"Ra","Ia")) 
+aF(16, 2, "Ts=K*"..utf8(966).."*Ia+Tlo"..utf8(946), U("Ts","K",""..utf8(966),"Ia","Tlo"..utf8(946).."")) 
+
+
+addSubCat(16, 3, "Separately-Excited DC Generator", "") 
+aF(16, 3, "IIf=Vfs/(Re+Rf)", U("IIf","Vfs","Re","Rf")) 
+aF(16, 3, "Ea=K*"..utf8(969).."m*"..utf8(966), U("Ea","K",""..utf8(969).."m",""..utf8(966).."")) 
+aF(16, 3, "Vt=IL*Rl", U("Vt","IL","Rl")) 
+aF(16, 3, "Vt=Ea-Ra*IL", U("Vt","Ea","Ra","IL")) 
+aF(16, 3, "IL=K*"..utf8(966).."*"..utf8(969).."m/(Ra+Rl)", U("IL","K",""..utf8(966),""..utf8(969).."m","Ra","Rl")) 
+
+
+addSubCat(16, 4, "DC Shunt Generator", "") 
+aF(16, 4, "Ea=K*"..utf8(969).."m*"..utf8(966), U("Ea","K",""..utf8(969).."m",""..utf8(966).."")) 
+aF(16, 4, "Vt=(Re+Rf)*IIf", U("Vt","Re","Rf","IIf")) 
+aF(16, 4, "Vt=IL*Rl", U("Vt","IL","Rl")) 
+aF(16, 4, "Vt=Ea-Ra*Ia", U("Vt","Ea","Ra","Ia")) 
+aF(16, 4, "Ia=IL+IIf", U("Ia","IL","IIf")) 
+aF(16, 4, "Ea=Ra*Ia+(Re+Rf)*IIf", U("Ea","Ra","Ia","Re","Rf","IIf")) 
+
+
+addSubCat(16, 5, "DC Series Generator", "") 
+aF(16, 5, "Ia=IIf", U("Ia","IIf")) 
+aF(16, 5, "Vt=Ea-(Ra+Rs)*IL", U("Vt","Ea","Ra","Rs","IL")) 
+
+
+addSubCat(16, 6, "Separately-Excited DC Motor", "") 
+aF(16, 6, "Vf=Rf*IIf", U("Vf","Rf","IIf")) 
+aF(16, 6, "Vt=K*"..utf8(966).."*"..utf8(969).."m+Ra*Ia", U("Vt","K",""..utf8(966),""..utf8(969).."m","Ra","Ia")) 
+aF(16, 6, "TL=K*"..utf8(966).."*Ia-Tlo"..utf8(946), U("TL","K",""..utf8(966),"Ia","Tlo"..utf8(946).."")) 
+aF(16, 6, "Ea=K*"..utf8(969).."m*"..utf8(966), U("Ea","K",""..utf8(969).."m",""..utf8(966).."")) 
+aF(16, 6, "T=K*Ia*"..utf8(966), U("T","K","Ia",""..utf8(966).."")) 
+aF(16, 6, utf8(969).."m=Vt/(K*"..utf8(966)..")-Ra*T/(K*"..utf8(966)..")^2", U(""..utf8(969).."m","Vt","K",""..utf8(966),"Ra","T")) 
+aF(16, 6, "T=Tlo"..utf8(946).."+TL", U("T","Tlo"..utf8(946),"TL")) 
+aF(16, 6, "P=T*"..utf8(969).."m", U("P","T",""..utf8(969).."m")) 
+
+
+addSubCat(16, 7, "DC Shunt Motor", "") 
+aF(16, 7, "Vt=(Re+Rf)*IIf", U("Vt","Re","Rf","IIf")) 
+aF(16, 7, "Vt=K*"..utf8(966).."*"..utf8(969).."m+Ra*Ia", U("Vt","K",""..utf8(966),""..utf8(969).."m","Ra","Ia")) 
+aF(16, 7, "TL=K*"..utf8(966).."*Ia-Tlo"..utf8(946), U("TL","K",""..utf8(966),"Ia","Tlo"..utf8(946).."")) 
+aF(16, 7, "Ea=K*"..utf8(969).."m*"..utf8(966), U("Ea","K",""..utf8(969).."m",""..utf8(966).."")) 
+aF(16, 7, utf8(969).."m=Vt/(K*"..utf8(966)..")-(Ra+Rd)*T/(K*"..utf8(966)..")^2", U(""..utf8(969).."m","Vt","K",""..utf8(966),"Ra","Rd","T")) 
+aF(16, 7, "T=Tlo"..utf8(946).."+TL", U("T","Tlo"..utf8(946),"TL")) 
+aF(16, 7, "T=K*"..utf8(966).."*Ia", U("T","K",""..utf8(966),"Ia")) 
+
+
+addSubCat(16, 8, "DC Series Motor", "") 
+aF(16, 8, "Vt=K*"..utf8(966).."*"..utf8(969).."m+(Ra+Rs+Rd)*IL", U("Vt","K",""..utf8(966),""..utf8(969).."m","Ra","Rs","Rd","IL")) 
+aF(16, 8, "TL=K*"..utf8(966).."*IL-Tlo"..utf8(946), U("TL","K",""..utf8(966),"IL","Tlo"..utf8(946).."")) 
+aF(16, 8, "Ea=K*"..utf8(969).."m*"..utf8(966), U("Ea","K",""..utf8(969).."m",""..utf8(966).."")) 
+aF(16, 8, "T=K*"..utf8(966).."*IL", U("T","K",""..utf8(966),"IL")) 
+aF(16, 8, utf8(969).."m=Vt/(K*"..utf8(966)..")-(Ra+Rs+Rd)*T/(K*"..utf8(966)..")^2", U(""..utf8(969).."m","Vt","K",""..utf8(966),"Ra","Rs","Rd","T")) 
+aF(16, 8, "T=Tlo"..utf8(946).."+TL", U("T","Tlo"..utf8(946),"TL")) 
+aF(16, 8, "K*"..utf8(966).."=Kf*IL", U("K",""..utf8(966),"Kf","IL")) 
+aF(16, 8, "T=Kf*IL^2", U("T","Kf","IL")) 
+
+
+addSubCat(16, 9, "Permanent Magnet Motor", "") 
+aF(16, 9, "Ea=K*"..utf8(966).."*"..utf8(969).."m", U("Ea","K",""..utf8(966),""..utf8(969).."m")) 
+aF(16, 9, "T=K*"..utf8(966).."*Ia", U("T","K",""..utf8(966),"Ia")) 
+aF(16, 9, "Vt=Ea+Ra*Ia", U("Vt","Ea","Ra","Ia")) 
+aF(16, 9, "T=Tlo"..utf8(946).."+TL", U("T","Tlo"..utf8(946),"TL")) 
+aF(16, 9, utf8(969).."m=Vt/(K*"..utf8(966)..")-Ra*T/(K*"..utf8(966)..")^2", U(""..utf8(969).."m","Vt","K",""..utf8(966),"Ra","T")) 
+
+
+addSubCat(16, 10, "Induction Motor I", "") 
+aF(16, 10, utf8(969).."r="..utf8(969).."s-p/2*"..utf8(969).."m", U(""..utf8(969).."r",""..utf8(969).."s","p",""..utf8(969).."m")) 
+aF(16, 10, "s=1-p/2*("..utf8(969).."m/"..utf8(969).."s)", U("s","p",""..utf8(969).."m",""..utf8(969).."s")) 
+aF(16, 10, "Pr/Pma=s", U("Pr","Pma","s")) 
+aF(16, 10, utf8(969).."r=s*"..utf8(969).."s", U(""..utf8(969).."r","s",""..utf8(969).."s")) 
+aF(16, 10, "Pma=3*Ir*Ema", U("Pma","Ir","Ema")) 
+aF(16, 10, "Pme=3*(p/2)*("..utf8(969).."m/"..utf8(969).."s)*Pma", U("Pme","p",""..utf8(969).."m",""..utf8(969).."s","Pma")) 
+aF(16, 10, "Pme=T*"..utf8(969).."m", U("Pme","T",""..utf8(969).."m")) 
+aF(16, 10, "T=3*(p/2)*(Pma/"..utf8(969).."s)", U("T","p","Pma",""..utf8(969).."s")) 
+aF(16, 10, "Pma=Rr*Ir^2+(1-s)/s*Rr*Ir^2", U("Pma","Rr","Ir","s")) 
+aF(16, 10, "Pa=(1-s)/s*Rr*Ir^2", U("Pa","s","Rr","Ir")) 
+aF(16, 10, "Rr=RR1/KM^2", U("Rr","RR1","KM")) 
+
+
+addSubCat(16, 11, "Induction Motor II", "") 
+aF(16, 11, "Pma=Rr/s*Ir^2", U("Pma","Rr","s","Ir")) 
+aF(16, 11, "T=3/2*(p*Pma/"..utf8(969).."s)", U("T","p","Pma",""..utf8(969).."s")) 
+aF(16, 11, "T=3/2*(p/"..utf8(969).."s)*(Rr/s)*(Va^2/((Rst+Rr/s)^2+XL^2))", U("T","p",""..utf8(969).."s","Rr","s","Va","Rst","XL")) 
+aF(16, 11, "Tmmax=3/4*(p/"..utf8(969).."s)*(Va^2/(sqrt(Rst^2+XL^2)+Rst))", U("Tmmax","p",""..utf8(969).."s","Va","Rst","XL")) 
+aF(16, 11, "sm=Rr/sqrt(Rs^2+XL^2)", U("sm","Rr","Rs","XL")) 
+aF(16, 11, "Tgmax=-(3/4)*(p/"..utf8(969).."s)*(Va^2/(sqrt(Rs^2+XL^2)-Rst))", U("Tgmax","p",""..utf8(969).."s","Va","Rs","XL","Rst")) 
+aF(16, 11, "Rr=RR1/KM^2", U("Rr","RR1","KM")) 
+
+
+addSubCat(16, 12, "Single-Phase Induction Motor", "") 
+aF(16, 12, "sf=1-p/2*("..utf8(969).."m/"..utf8(969).."s)", U("sf","p",""..utf8(969).."m",""..utf8(969).."s")) 
+aF(16, 12, "Tf=p/2*(1/"..utf8(969).."s)*(Isf^2*Rr/(2*sf))", U("Tf","p",""..utf8(969).."s","Isf","Rr","sf")) 
+aF(16, 12, "Tb=-(p/2)*(1/"..utf8(969).."s)*(Isb^2*Rr/(2*(2-sf)))", U("Tb","p",""..utf8(969).."s","Isb","Rr","sf")) 
+
+
+addSubCat(16, 13, "Synchronous Machines", "") 
+aF(16, 13, utf8(969).."m=2/p*"..utf8(969).."s", U(""..utf8(969).."m","p",""..utf8(969).."s")) 
+aF(16, 13, "TTmax=3*(p/2)*(IIf*Va/"..utf8(969).."s)", U("TTmax","p","IIf","Va",""..utf8(969).."s")) 
+aF(16, 13, "Pma=Va*Ia*cos("..utf8(952)..")", U("Pma","Va","Ia",""..utf8(952).."")) 
+aF(16, 13, "T=Pme/"..utf8(969).."m", U("T","Pme",""..utf8(969).."m")) 
+aF(16, 13, "T=3*(p/2)*(Pma/"..utf8(969).."s)", U("T","p","Pma",""..utf8(969).."s"))
