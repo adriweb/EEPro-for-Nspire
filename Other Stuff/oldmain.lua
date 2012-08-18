@@ -104,7 +104,7 @@ main.items[3].icon	= image.new("\048\000\000\000\048\000\000\000\000\000\000\000
 
 aboutWindow	= Dialog("About FormulaPro :", 50, 20, 280, 180)
 
-local aboutstr	= [[FormulaPro v1.2b  -  Standalone version
+local aboutstr	= [[FormulaPro v1.3  -  Standalone version
 ------------------------------
 Authors : Jim Bauwens, Adrien Bertrand
 (Adriweb). Credits also to Levak.

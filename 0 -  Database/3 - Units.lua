@@ -1,7 +1,9 @@
 --------------------------
----- FormulaPro v1.2b ----
+---- FormulaPro v1.3 ----
 ----- LGLP 3 License -----
 --------------------------
+
+local mathpi = math.pi
 
 Units	= {}
 
@@ -25,6 +27,7 @@ or
 n subunit = (n-b)/a mainunit
 
 --]]
+
 
 Mt	= {}
 
@@ -73,7 +76,7 @@ Units["Hz"]["MHz"]	= {Mt.M, 0}
 Units["Hz"]["GHz"]	= {Mt.G, 0}
 
 Units["rad/s"]	= {}
-Units["rad/s"]["RPM"]	= {1/(2*math.pi/60), 0}
+Units["rad/s"]["RPM"]	= {1/(2*mathpi/60), 0}
 
 Units["A/m"]	= {}
 Units["A/m"]["mA/m"]	= {Mt.m, 0}
@@ -124,13 +127,15 @@ Units["C"][Mt.us.."C"]	= {Mt.u, 0}
 
 Units["m2/(V*s)"]	= {}
 
-Units["A/V^2"]	= {}
+Units["A/V2"]	= {}
+Units["A/V2"]["mA/V2"]	= {Mt.m  , 0}
+
 
 Units["N/m"]	= {}
 Units["N/m"]["daN"]	= {Mt.da, 0}
 
 Units["rad"]	= {}
-Units["rad"]["degree"]	= {180/math.pi, 0}
+Units["rad"]["degree"]	= {180/mathpi, 0}
 
 Units["F"]	= {}
 Units["F"]["kF"]	= {Mt.k, 0}

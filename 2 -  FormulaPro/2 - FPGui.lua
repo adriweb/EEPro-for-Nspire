@@ -1,5 +1,5 @@
 --------------------------
----- FormulaPro v1.2b ----
+---- FormulaPro v1.3 ----
 ----- LGLP 3 License -----
 --------------------------
 
@@ -25,7 +25,7 @@ function CategorySel:paint(gc)
         gc:drawString("FormulaPro", self.x+5, 0, "top")
         
         gc:setFont("sansserif", "r", 12)
-        gc:drawString("v1.2", self.x+.4*self.w, 4, "top")
+        gc:drawString("v1.3", self.x+.4*self.w, 4, "top")
         
         gc:setFont("sansserif", "r", 12)
         gc:drawString("by TI-Planet", self.x+self.w-gc:getStringWidth("by TI-Planet")-5, 4, "top")
@@ -218,20 +218,24 @@ function manualSolver:pushed(cid, sid)
 				inp.focusUp	= -1
 			end
 			
-			if variabledata and variabledata.unit ~= "unitless" then
-				--unitlbl	= sLabel(variabledata.unit:gsub("([^%d]+)(%d)", numberToSub))
-				local itms	= {variabledata.unit}
-				for k,_ in pairs(Units[variabledata.unit]) do 
-					table.insert(itms, k)
-				end
-				inp.dropdown	= sDropdown(itms)
-				inp.dropdown.unitmode	= true
-				inp.dropdown.change	= self.update
-				inp.dropdown.focusUp	= nodropdown and -5 or -4
-				inp.dropdown.focusDown	= 2
-				self.pl:appendWidget(inp.dropdown, -2, i*30-28)
-				nodropdown	= false
-				lastdropdown	= inp.dropdown
+			if variabledata then
+			    if variabledata.unit ~= "unitless" then
+                    --unitlbl	= sLabel(variabledata.unit:gsub("([^%d]+)(%d)", numberToSub))
+                    local itms	= {variabledata.unit}
+                    for k,_ in pairs(Units[variabledata.unit]) do 
+                        table.insert(itms, k)
+                    end
+                    inp.dropdown	= sDropdown(itms)
+                    inp.dropdown.unitmode	= true
+                    inp.dropdown.change	= self.update
+                    inp.dropdown.focusUp	= nodropdown and -5 or -4
+                    inp.dropdown.focusDown	= 2
+                    self.pl:appendWidget(inp.dropdown, -2, i*30-28)
+                    nodropdown	= false
+                    lastdropdown	= inp.dropdown
+                else
+                    self.pl:appendWidget(sLabel("Unitless"), -32, i*30-28)
+                end
 			else 
 				nodropdown	= true
 				inp.focusDown	= 1
