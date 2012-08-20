@@ -4428,7 +4428,7 @@ function Ref.addRefs()
 		if ref.screen then
 			table.insert(RefList.items, ref.title)
 		else
-			--table.insert(RefList.items, ref.title .. " (not yet done)")  -- TODO !
+			table.insert(RefList.items, ref.title .. " (not yet done)")  -- TODO !
 		end
 	end
 end
