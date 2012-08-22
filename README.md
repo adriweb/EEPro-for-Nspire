@@ -27,10 +27,10 @@ Well, "FormulaPro", the formulas/equation part (2nd part of EEPro).
 This has been officially released (in beta) June 21st 2012 across multiple community websites :
 http://www.omnimaga.org/index.php?topic=13849 ; https://groups.google.com/forum/?fromgroups#!topic/tinspire/dlqZrAKpulM ; http://tiplanet.org/forum/viewtopic.php?p=126193 ; http://www.inspired-lua.org/2012/06/formulapro-v1-is-here/
 
-![FormulaPro, comparison between our Nspire port and the TI-89 version](http://i.imgur.com/QsxVn.png)
-![Some native-like GUI](http://i.imgur.com/8qud2.jpg)
-![Some native-like GUI](http://i.imgur.com/ZaqAY.jpg)
-![Some native-like GUI](http://i.imgur.com/0QC5K.jpg)
+![Home Screen of FormulaPro](http://i.imgur.com/Uxy5N.jpg)
+![Reference Screen of FormulaPro](http://i.imgur.com/4326g.jpg)
+![Some solver screen](http://i.imgur.com/yUbY7.jpg)
+![Formulas being displayed inside solver](http://i.imgur.com/lcrYU.jpg)
 
 Please refer to the document linked in the previous paragraph.
 
