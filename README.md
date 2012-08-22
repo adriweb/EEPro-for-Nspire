@@ -28,9 +28,9 @@ This has been officially released (in beta) June 21st 2012 across multiple commu
 http://www.omnimaga.org/index.php?topic=13849 ; https://groups.google.com/forum/?fromgroups#!topic/tinspire/dlqZrAKpulM ; http://tiplanet.org/forum/viewtopic.php?p=126193 ; http://www.inspired-lua.org/2012/06/formulapro-v1-is-here/
 
 ![Home Screen of FormulaPro](http://i.imgur.com/Uxy5N.jpg)
-![Reference Screen of FormulaPro](http://i.imgur.com/4326g.jpg)
+![Reference Screen of FormulaPro](http://i.imgur.com/lcrYU.jpg)
 ![Some solver screen](http://i.imgur.com/yUbY7.jpg)
-![Formulas being displayed inside solver](http://i.imgur.com/lcrYU.jpg)
+![Formulas being displayed inside solver](http://i.imgur.com/4326g.jpg)
 
 Please refer to the document linked in the previous paragraph.
 
