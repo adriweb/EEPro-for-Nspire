@@ -500,6 +500,9 @@ function on.paint(gc)
         errorHandler.display = true
         errorHandler.errorMessage = generalErrMsg
     end
+    if platform.hw and platform.hw() < 4 then 
+    	platform.withGC(on.draw)
+    end
 end
 
 function onpaint(gc)
