@@ -500,7 +500,7 @@ function on.paint(gc)
         errorHandler.display = true
         errorHandler.errorMessage = generalErrMsg
     end
-    if platform.hw and platform.hw() < 4 then 
+    if platform.hw and platform.hw() < 4 and not doNotDisplayIcon then 
     	platform.withGC(on.draw)
     end
 end

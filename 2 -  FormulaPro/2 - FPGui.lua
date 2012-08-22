@@ -343,6 +343,7 @@ function usedFormulas:postPaint(gc)
 end
 
 function usedFormulas:pushed()
+	doNotDisplayIcon = true
 	self.ed	= D2Editor.newRichText ( )
 	self.ed:setReadOnly(true)
 	local cont	= ""
@@ -374,6 +375,7 @@ function usedFormulas.closeEditor()
 	if current_screen() == usedFormulas then
 		remove_screen()
 	end
+	doNotDisplayIcon = false
 	return true
 end
 
@@ -394,6 +396,7 @@ function usedFormulas:removed()
 		usedFormulas.ed:move(-10, -10)
 	end
 	usedFormulas.ed	= nil
+	doNotDisplayIcon = false
 end
 
 function usedFormulas.but.action(self)
