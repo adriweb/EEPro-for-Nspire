@@ -2614,15 +2614,15 @@ function onpaint(gc)
 	end
 end
 
-function on.resize(x, y)
+function on.resize(w, h)
 	-- Global Ratio Constants for On-Calc (shouldn't be used often though...)
-	kXRatio = x/320
-	kYRatio = y/212
+	kXRatio = w/320
+	kYRatio = h/212
 	
-	kXSize, kYSize = x,y
+	kXSize, kYSize = w, h
 	
 	for _,screen in pairs(Screens) do
-		screen:resize(x,y)
+		screen:resize(w,h)
 	end
 end
 
@@ -3706,7 +3706,15 @@ function manualSolver:postPaint(gc)
 	--gc:drawRect(self.x, self.y, self.w, self.h-46)
 end
 
+basicFuncsInited = false
+
 function manualSolver:pushed(cid, sid)
+	
+	if not basicFuncsInited then
+		initBasicFunctions()
+		basicFuncsInited = true
+	end
+	
 	self.pl.widgets	= {}
 	self.pl.focus	= 0
 	self.cid	= cid
@@ -3947,6 +3955,15 @@ end
 ----- LGLP 3 License -----
 --------------------------
 
+function initBasicFunctions()
+	local basicFunctions = {
+		["erf"] = [[Define erf(x)=Func:2/sqrt(pi)*integral(exp(-t*t),t,0,x):EndFunc]],
+		["erfc"] = [[Define erfc(x)=Func:1-erf(x):EndFunc]]
+	}
+	for var,func in pairs(basicFunctions) do
+		math.eval(func..":Lock " .. var) -- defines and prevents against delvar.
+	end
+end
 
 RefBoolAlg = Screen()
 

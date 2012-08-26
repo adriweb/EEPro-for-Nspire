@@ -167,7 +167,15 @@ function manualSolver:postPaint(gc)
 	--gc:drawRect(self.x, self.y, self.w, self.h-46)
 end
 
+basicFuncsInited = false
+
 function manualSolver:pushed(cid, sid)
+	
+	if not basicFuncsInited then
+		initBasicFunctions()
+		basicFuncsInited = true
+	end
+	
 	self.pl.widgets	= {}
 	self.pl.focus	= 0
 	self.cid	= cid

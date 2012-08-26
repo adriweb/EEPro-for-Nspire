@@ -514,15 +514,15 @@ function onpaint(gc)
 	end
 end
 
-function on.resize(x, y)
+function on.resize(w, h)
 	-- Global Ratio Constants for On-Calc (shouldn't be used often though...)
-	kXRatio = x/320
-	kYRatio = y/212
+	kXRatio = w/320
+	kYRatio = h/212
 	
-	kXSize, kYSize = x,y
+	kXSize, kYSize = w, h
 	
 	for _,screen in pairs(Screens) do
-		screen:resize(x,y)
+		screen:resize(w,h)
 	end
 end
 
