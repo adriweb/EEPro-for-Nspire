@@ -1,4 +1,4 @@
-# EEPro for Nspire  *(temporary name)*.
+# FormulaPro.
 
 ### This is a [TI-Planet.org](http://tiplanet.org) project.
 ### Announce topic here : [FR](http://tiplanet.org/forum/viewtopic.php?t=8446) / [EN](http://tiplanet.org/forum/viewtopic.php?f=50&t=8455)
@@ -6,6 +6,33 @@
 
 
 ### Licence : [LGPL3](http://www.gnu.org/licenses/lgpl.html)
+
+##What is FormulaPro ? 
+Here are the technical details : FormulaPro is a TI-Nspire (OS 3.x) document whose main content is a Lua script. Yep, all made in Nspire-Lua (http://www.inspired-lua.org). Indeed, it is the only way so far / right now to "properly" achieve what we do on FormulaPro (completely graphical UI, math calculations...).
+FormulaPro is also free, of course, and open-source (https://github.com/adriweb/EEPro-for-Nspire/) (LGPL license) ! :-)
+
+
+##Hmm ok, but what does it do ?  
+Well, here you go : some of you may already know what's called "EEPro" or "MEPro" for the TI-89 and TI-92. It is an official program that TI puts in the 89 by default. If you don't know it, EEPro-89 is basically a program described by TI like this: "This application solves the problems of electrical engineering. It is composed of three modules: Analysis, Equations (700 equations grouped into 16 subjects) and Reference. " In short, a complete and very powerful application about Electrical Engineering. Well, FormulaPro is the 2nd part ("Equations") of our project to port the EEPro-89 suite to the Nspire. 
+But we improved it, naturally. A lot. (And we already have plans and written code already ready for version 2.0 which will be even more awesome and more powerful.)
+
+What FormulaPro right now is capable of, along with its website, is :
+-to be able to run on any OS 3.x and any Nspire model and to be able to run on the computer software too with auto-resizing frames
+-Mouse and keyboard input support, on both Software and Handheld
+-to be able to let users generate their own pack of equations, smartly (variables and units are bound), within categories and sub-categories,
+-to be able to solve intelligently solve the equations it's given, contrary to the 89 version, where the user had to select what equations had to be used : Indeed, here you just have to enter what you know already, and it will automatically try to solve for what it can. 
+-it can very easily let you chose the unit/subunit you want to enter your data in. (for example Hz/kHz/MHz, °C/°F/°K etc.)
+-it can show you the used formulas of the current sub-category in "PrettyPrint"
+
+
+Great ! How do I use it ?
+-Be sure to run Nspire OS >= 3.0. We recommand version 3.2.
+-You can then either use the "demo" database (a part of the original EE-Pro one) available here (and also attached) : https://github.com/adriweb/EEPro-for-Nspire/blob/master/EEPro.tns?raw=true
+ … or either starting your own database with our online FormulaPro Database maker which lets you easily create categories, subcategories, equations, units and subunits etc. It is available here: http://education.bwns.be/FormulaPro/
+-If you were on the online generator, click the "Generate" button at the bottom of the page.
+-Transfer the .tns to your calculator or in the computer software and open it.
+-Select the category and the subcategory, and begin filling the input fields of the data you already know. Press enter or change focus, and it will start auto-solving. 
+-Enjoy !
 
 
 ## Who .... ?
