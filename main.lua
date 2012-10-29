@@ -2,7 +2,7 @@
 
 aboutWindow	= Dialog("About FormulaPro :", 50, 20, 280, 180)
 
-local aboutstr	= [[FormulaPro v1.3
+local aboutstr	= [[FormulaPro v1.4a
 --------------------
 Jim Bauwens, Adrien "Adriweb" Bertrand
 Thanks also to Levak.

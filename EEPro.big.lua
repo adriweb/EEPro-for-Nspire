@@ -1,6 +1,13 @@
 --------------------------
----- FormulaPro v1.3 ----
------ LGLP 3 License -----
+---- FormulaPro v1.4a ----
+---- (Oct. 29th 2012) ----
+----  LGLP 3 License  ----
+--------------------------
+----   Jim Bauwens    ----
+---- Adrien Bertrand  ----
+--------------------------
+----  TI-Planet.org   ----
+---- Inspired-Lua.org ----
 --------------------------
 
 function utf8(n)
@@ -46,31 +53,60 @@ Constants["q"      ]	= {info="e elementary charge"                , value="1.602
 Constants["pi"     ]	= {info="PI"                                 , value="pi"                    , unit=nil                  }
 Constants[utf8(956).."0"]	= {info="Magnetic permeability constant" , value="4*pi*10^-7"            , unit=nil                  }
 Constants[utf8(960)]	= Constants["pi"]
---------------------------
----- FormulaPro v1.3 ----
------ LGLP 3 License -----
---------------------------
+
+function checkIfExists(table, name)
+    for k,v in pairs(table) do
+        if (v.name == name) or (v == name) then -- lulz lua powa
+            print("Conflict (i.e elements appearing twice) detected when loading Database. Skipping the item.")
+            return true
+        end
+    end
+    return false
+end
+
+function checkIfFormulaExists(table, formula)
+    for k,v in pairs(table) do
+        if (v.formula == formula)  then -- lulz lua powa
+            print("Conflict (i.e formula appearing twice) detected when loading Database. Skipping the item.")
+            return true
+        end
+    end
+    return false
+end
 
 Categories	=	{}
 Formulas	=	{}
 
 function addCat(id,name,info)
-	return table.insert(Categories, id, {id=id, name=name, info=info, sub={}, varlink={}})
+    if not checkIfExists(Categories, name) then
+        return table.insert(Categories, id, {id=id, name=name, info=info, sub={}, varlink={}})
+    else
+        return -1
+    end
 end
 
 function addCatVar(cid, var, info, unit)
-	Categories[cid].varlink[var] = {unit=unit, info=info}
+    Categories[cid].varlink[var] = {unit=unit, info=info }
 end
 
 function addSubCat(cid, id, name, info)
-	return table.insert(Categories[cid].sub, id, {category=cid, id=id, name=name, info=info, formulas={}, variables={}})
+    if not checkIfExists(Categories[cid].sub, name) then
+        return table.insert(Categories[cid].sub, id, {category=cid, id=id, name=name, info=info, formulas={}, variables={}})
+    else
+        return -1
+    end
 end
 
 function aF(cid, sid, formula, variables) --add Formula
 	local fr	=	{category=cid, sub=sid, formula=formula, variables=variables}
 	-- In times like this we are happy that inserting tables just inserts a reference
-	table.insert(Formulas, fr)
-	table.insert(Categories[cid].sub[sid].formulas, fr)
+
+    if not checkIfFormulaExists(Formulas, fr.formula) then
+        table.insert(Formulas, fr)
+    end
+    if not checkIfFormulaExists(Categories[cid].sub[sid].formulas, fr.formula) then
+        table.insert(Categories[cid].sub[sid].formulas, fr)
+    end
 	
 	-- This function might need to be merged with U(...)
 	for variable,_ in pairs(variables) do
@@ -1475,23 +1511,41 @@ aF(16, 13, "TTmax=3*(p/2)*(IIf*Va/"..c_omega.."s)", U("TTmax","p","IIf","Va",c_o
 aF(16, 13, "Pma=Va*Ia*cos("..c_theta..")", U("Pma","Va","Ia",c_theta)) 
 aF(16, 13, "T=Pme/"..c_omega.."m", U("T","Pme",c_omega.."m")) 
 aF(16, 13, "T=3*(p/2)*(Pma/"..c_omega.."s)", U("T","p","Pma",c_omega.."s"))
---------------------------
----- FormulaPro v1.3 ----
------ LGLP 3 License -----
---------------------------
+
+-- This part is supposed to load external formulas stored in a string
+-- (or else, if a better way of storing is found) from a file in MyLib.
+
+function loadExtDB()
+    local err
+    _, err = pcall(function()
+        loadstring(math.eval("formulaproextdb\\categories()"))()
+        loadstring(math.eval("formulaproextdb\\variables()"))()
+        loadstring(math.eval("formulaproextdb\\subcategories()"))()
+        loadstring(math.eval("formulaproextdb\\equations()"))()
+    end)
+
+    if err then
+        print("no external db loaded")
+        -- Display something ?
+        -- or it simply means there is nothing to be loaded.
+    else
+        -- display something that tells the user the external DB has been successfully loaded.
+        print("external db succesfully loaded")
+    end
+end
 
 local mathpi = math.pi
 
-Units	= {}
+Units = {}
 
 function Units.mainToSub(main, sub, n)
-	local c=Units[main][sub]
-	return n*c[1]+c[2]
+    local c = Units[main][sub]
+    return n * c[1] + c[2]
 end
 
 function Units.subToMain(main, sub, n)
-	local c=Units[main][sub]
-	return (n-c[2])/c[1]
+    local c = Units[main][sub]
+    return (n - c[2]) / c[1]
 end
 
 --[[
@@ -1506,213 +1560,213 @@ n subunit = (n-b)/a mainunit
 --]]
 
 
-Mt	= {}
+Mt = {}
 
-Mt.G	= 1/1000000000
-Mt.M	= 1/1000000
-Mt.k	= 1/1000
-Mt.h	= 1/100
-Mt.da	= 1/10
-Mt.d	= 10
-Mt.c	= 100
-Mt.m	= 1000
-Mt.u	= 1000000
-Mt.n	= 1000000000
+Mt.G = 1 / 1000000000
+Mt.M = 1 / 1000000
+Mt.k = 1 / 1000
+Mt.h = 1 / 100
+Mt.da = 1 / 10
+Mt.d = 10
+Mt.c = 100
+Mt.m = 1000
+Mt.u = 1000000
+Mt.n = 1000000000
 
-Mt.us	= utf8(956)
-
-
-Units["W/K"]	= {}
-Units["W/K"]["kW/K"]	= {Mt.k, 0}
-Units["W/K"]["mW/K"]	= {Mt.m, 0}
-
-Units["1/"..utf8(176).."K"]	= {}
-
-Units["m/s"]	= {}
-Units["m/s"]["km/s"]	= {Mt.k, 0}
-Units["m/s"]["cm/s"]	= {Mt.c, 0}
-Units["m/s"]["mm/s"]	= {Mt.m, 0}
-Units["m/s"]["m/h" ]	= {3600, 0}
-Units["m/s"]["km/h"]	= {3.6 , 0}
+Mt.us = utf8(956)
 
 
-Units["m"]	= {}
-Units["m"]["km"      ]	= {Mt.k, 0}
-Units["m"]["dm"      ]	= {Mt.d, 0}
-Units["m"]["cm"      ]	= {Mt.c, 0}
-Units["m"]["mm"      ]	= {Mt.m, 0}
-Units["m"][Mt.us.."m"]	= {Mt.u, 0}
-Units["m"]["nm"      ]	= {Mt.n, 0}
+Units["W/K"] = {}
+Units["W/K"]["kW/K"] = { Mt.k, 0 }
+Units["W/K"]["mW/K"] = { Mt.m, 0 }
+
+Units["1/" .. utf8(176) .. "K"] = {}
+
+Units["m/s"] = {}
+Units["m/s"]["km/s"] = { Mt.k, 0 }
+Units["m/s"]["cm/s"] = { Mt.c, 0 }
+Units["m/s"]["mm/s"] = { Mt.m, 0 }
+Units["m/s"]["m/h"] = { 3600, 0 }
+Units["m/s"]["km/h"] = { 3.6, 0 }
+
+
+Units["m"] = {}
+Units["m"]["km"] = { Mt.k, 0 }
+Units["m"]["dm"] = { Mt.d, 0 }
+Units["m"]["cm"] = { Mt.c, 0 }
+Units["m"]["mm"] = { Mt.m, 0 }
+Units["m"][Mt.us .. "m"] = { Mt.u, 0 }
+Units["m"]["nm"] = { Mt.n, 0 }
 
 
 
 -- these are actually the same type
-Units["Hz"]	= {}
-Units["Hz"]["kHz"]	= {Mt.k, 0}
-Units["Hz"]["MHz"]	= {Mt.M, 0}
-Units["Hz"]["GHz"]	= {Mt.G, 0}
+Units["Hz"] = {}
+Units["Hz"]["kHz"] = { Mt.k, 0 }
+Units["Hz"]["MHz"] = { Mt.M, 0 }
+Units["Hz"]["GHz"] = { Mt.G, 0 }
 
-Units["rad/s"]	= {}
-Units["rad/s"]["RPM"]	= {1/(2*mathpi/60), 0}
+Units["rad/s"] = {}
+Units["rad/s"]["RPM"] = { 1 / (2 * mathpi / 60), 0 }
 
-Units["A/m"]	= {}
-Units["A/m"]["mA/m"]	= {Mt.m, 0}
+Units["A/m"] = {}
+Units["A/m"]["mA/m"] = { Mt.m, 0 }
 
-Units["V/s"]	= {}
-Units["V/s"]["mV/s"]	= {Mt.m, 0}
+Units["V/s"] = {}
+Units["V/s"]["mV/s"] = { Mt.m, 0 }
 
-Units["C/m"]	= {}
-Units["C/m"][Mt.us.."C/m"]	= {Mt.u  , 0}
-Units["C/m"]["C/mm"      ]	= {1/Mt.m, 0}
+Units["C/m"] = {}
+Units["C/m"][Mt.us .. "C/m"] = { Mt.u, 0 }
+Units["C/m"]["C/mm"] = { 1 / Mt.m, 0 }
 
-Units["m2/s"]	= {}
+Units["m2/s"] = {}
 
-Units[utf8(937)]	= {} --Ohm
-Units[utf8(937)]["m"..utf8(937)]	= {Mt.m, 0}
-Units[utf8(937)]["k"..utf8(937)]	= {Mt.k, 0}
-Units[utf8(937)]["M"..utf8(937)]	= {Mt.M, 0}
+Units[utf8(937)] = {} --Ohm
+Units[utf8(937)]["m" .. utf8(937)] = { Mt.m, 0 }
+Units[utf8(937)]["k" .. utf8(937)] = { Mt.k, 0 }
+Units[utf8(937)]["M" .. utf8(937)] = { Mt.M, 0 }
 
-Units["s"]	= {}
-Units["s"]["ms"      ]	= {Mt.m, 0}
-Units["s"][Mt.us.."s"]	= {Mt.u, 0}
-Units["s"]["ns"      ]	= {Mt.n, 0}
+Units["s"] = {}
+Units["s"]["ms"] = { Mt.m, 0 }
+Units["s"][Mt.us .. "s"] = { Mt.u, 0 }
+Units["s"]["ns"] = { Mt.n, 0 }
 
-Units[utf8(937).."/m"]	= {}
-Units[utf8(937).."/m"][utf8(937).."/cm"]	= {1/Mt.c, 0}
-Units[utf8(937).."/m"][utf8(937).."/mm"]	= {1/Mt.m, 0}
+Units[utf8(937) .. "/m"] = {}
+Units[utf8(937) .. "/m"][utf8(937) .. "/cm"] = { 1 / Mt.c, 0 }
+Units[utf8(937) .. "/m"][utf8(937) .. "/mm"] = { 1 / Mt.m, 0 }
 
-Units["1/m3"]	= {}
+Units["1/m3"] = {}
 
-Units["N"]	= {}
-Units["N"]["daN"]	= {Mt.da, 0}
+Units["N"] = {}
+Units["N"]["daN"] = { Mt.da, 0 }
 
-Units["Wb"]	= {}
-Units["Wb"]["mWb"]	= {Mt.m, 0}
-	
-Units["A"]	= {}
-Units["A"]["kA"]	= {Mt.k, 0}
-Units["A"]["mA"]	= {Mt.m, 0}	
-Units["A"][Mt.us.."A"]	= {Mt.u, 0}
+Units["Wb"] = {}
+Units["Wb"]["mWb"] = { Mt.m, 0 }
 
-Units["S/m"]	= {}
-Units["S/m"]["mS/m"]	= {Mt.m  , 0}
-Units["S/m"]["S/mm"]	= {1/Mt.m, 0}
+Units["A"] = {}
+Units["A"]["kA"] = { Mt.k, 0 }
+Units["A"]["mA"] = { Mt.m, 0 }
+Units["A"][Mt.us .. "A"] = { Mt.u, 0 }
 
-Units["C"]	= {}
-Units["C"]["mC"]	= {Mt.m, 0}
-Units["C"][Mt.us.."C"]	= {Mt.u, 0}
+Units["S/m"] = {}
+Units["S/m"]["mS/m"] = { Mt.m, 0 }
+Units["S/m"]["S/mm"] = { 1 / Mt.m, 0 }
 
-Units["m2/(V*s)"]	= {}
+Units["C"] = {}
+Units["C"]["mC"] = { Mt.m, 0 }
+Units["C"][Mt.us .. "C"] = { Mt.u, 0 }
 
-Units["A/V2"]	= {}
-Units["A/V2"]["mA/V2"]	= {Mt.m  , 0}
+Units["m2/(V*s)"] = {}
 
-
-Units["N/m"]	= {}
-Units["N/m"]["daN"]	= {Mt.da, 0}
-
-Units["rad"]	= {}
-Units["rad"]["degree"]	= {180/mathpi, 0}
-
-Units["F"]	= {}
-Units["F"]["kF"]	= {Mt.k, 0}
-Units["F"]["mF"]	= {Mt.m, 0}
-Units["F"][Mt.us.."F"]	= {Mt.u, 0}
-Units["F"]["nF"]	= {Mt.n, 0}
+Units["A/V2"] = {}
+Units["A/V2"]["mA/V2"] = { Mt.m, 0 }
 
 
-Units[utf8(937).."*m"]	= {}
-Units[utf8(937).."*m"][utf8(937).."*cm"]	= {Mt.c, 0}
-Units[utf8(937).."*m"][utf8(937).."*mm"]	= {Mt.m, 0}
+Units["N/m"] = {}
+Units["N/m"]["daN"] = { Mt.da, 0 }
 
-Units["H"]	 = {}
-Units["H"]["mH"]	= {Mt.m, 0}
-Units["H"][Mt.us.."H"]	= {Mt.u, 0}
-Units["H"]["nH"]	= {Mt.n, 0}
+Units["rad"] = {}
+Units["rad"]["degree"] = { 180 / mathpi, 0 }
 
-Units["K"]	= {}
-Units["K"]["°C"]	= {1, -273.15}
-Units["K"]["°F"]	= {9/5, -459.67}
-Units["K"]["°R"]	= {9/5, 0}
+Units["F"] = {}
+Units["F"]["kF"] = { Mt.k, 0 }
+Units["F"]["mF"] = { Mt.m, 0 }
+Units["F"][Mt.us .. "F"] = { Mt.u, 0 }
+Units["F"]["nF"] = { Mt.n, 0 }
 
-Units["J"]	= {}
-Units["J"]["GJ"]	= {Mt.G, 0} 
-Units["J"]["MJ"]	= {Mt.M, 0}
-Units["J"]["kJ"]	= {Mt.k, 0}	
-Units["J"]["kWh"]	= {1/3600000, 0}
 
-Units["1/V"]	= {}
-	
-Units["F/m"]	= {}
-Units["F/m"]["F/cm"]	= {1/Mt.c, 0}
-Units["F/m"]["F/mm"]	= {1/Mt.m, 0}
-Units["F/m"][Mt.us.."F/m"]	= {Mt.u, 0}
+Units[utf8(937) .. "*m"] = {}
+Units[utf8(937) .. "*m"][utf8(937) .. "*cm"] = { Mt.c, 0 }
+Units[utf8(937) .. "*m"][utf8(937) .. "*mm"] = { Mt.m, 0 }
 
-Units["V5"]	= {}
+Units["H"] = {}
+Units["H"]["mH"] = { Mt.m, 0 }
+Units["H"][Mt.us .. "H"] = { Mt.u, 0 }
+Units["H"]["nH"] = { Mt.n, 0 }
 
-Units["H/m"]	= {}
-Units["H/m"]["mH/m"]	= {Mt.m  , 0}
-Units["H/m"]["H/mm"]	= {1/Mt.m, 0}
-Units["H/m"][Mt.us.."H/m"]	= {Mt.u, 0}
+Units["K"] = {}
+Units["K"]["°C"] = { 1, -273.15 }
+Units["K"]["°F"] = { 9 / 5, -459.67 }
+Units["K"]["°R"] = { 9 / 5, 0 }
 
-Units["F/m2"]	= {}
-Units["F/m2"]["F/cm2"]	= {1/Mt.c^2, 0}
-Units["F/m2"]["mF/m2"]	= {Mt.m         , 0}
-Units["F/m2"][Mt.us.."F/m2"]	= {Mt.u , 0}
+Units["J"] = {}
+Units["J"]["GJ"] = { Mt.G, 0 }
+Units["J"]["MJ"] = { Mt.M, 0 }
+Units["J"]["kJ"] = { Mt.k, 0 }
+Units["J"]["kWh"] = { 1 / 3600000, 0 }
 
-Units["N*m"]	= {}
-Units["N*m"]["daN*m"]	= {Mt.da, 0}
-Units["N*m"]["N*cm" ]	= {Mt.c , 0}
-Units["N*m"]["N*mm" ]	= {Mt.m , 0}
+Units["1/V"] = {}
 
-Units["S"]	= {}
-Units["S"]["mS"]	= {Mt.m, 0}
-Units["S"][Mt.us.."S"]	= {Mt.u, 0}
+Units["F/m"] = {}
+Units["F/m"]["F/cm"] = { 1 / Mt.c, 0 }
+Units["F/m"]["F/mm"] = { 1 / Mt.m, 0 }
+Units["F/m"][Mt.us .. "F/m"] = { Mt.u, 0 }
 
-Units["1/m4"]	= {}
+Units["V5"] = {}
 
-Units["A/(m2*K2)"]	= {}
+Units["H/m"] = {}
+Units["H/m"]["mH/m"] = { Mt.m, 0 }
+Units["H/m"]["H/mm"] = { 1 / Mt.m, 0 }
+Units["H/m"][Mt.us .. "H/m"] = { Mt.u, 0 }
 
-Units["T"]	= {}
-Units["T"]["mT"]	= {Mt.m, 0}
-Units["T"][Mt.us.."T"]	= {Mt.u, 0}
-Units["T"]["nT"]	= {Mt.n, 0}
+Units["F/m2"] = {}
+Units["F/m2"]["F/cm2"] = { 1 / Mt.c ^ 2, 0 }
+Units["F/m2"]["mF/m2"] = { Mt.m, 0 }
+Units["F/m2"][Mt.us .. "F/m2"] = { Mt.u, 0 }
 
-Units["W"]	= {}
-Units["W"]["GW"]	= {Mt.G, 0}
-Units["W"]["MW"]	= {Mt.M, 0}
-Units["W"]["kW"]	= {Mt.k, 0}
-Units["W"]["mW"]	= {Mt.m, 0}
-Units["W"][Mt.us.."W"]	= {Mt.u, 0}
+Units["N*m"] = {}
+Units["N*m"]["daN*m"] = { Mt.da, 0 }
+Units["N*m"]["N*cm"] = { Mt.c, 0 }
+Units["N*m"]["N*mm"] = { Mt.m, 0 }
 
-Units["V"]	= {}
-Units["V"]["MV"]	= {Mt.M, 0}
-Units["V"]["kV"]	= {Mt.k, 0}
-Units["V"]["mV"]	= {Mt.m, 0}
-Units["V"][Mt.us.."V"]	= {Mt.u, 0}
+Units["S"] = {}
+Units["S"]["mS"] = { Mt.m, 0 }
+Units["S"][Mt.us .. "S"] = { Mt.u, 0 }
 
-Units["m2"]	= {}
-Units["m2"]["cm2"]	= {Mt.c^2, 0}
-Units["m2"]["mm2"]	= {Mt.m^2, 0}
-Units["m2"]["km2"]	= {Mt.k^2, 0}
+Units["1/m4"] = {}
 
-Units["A/Wb"]	= {}
+Units["A/(m2*K2)"] = {}
 
-Units["Pa"]	= {}
-Units["Pa"]["hPa"]	= {Mt.h    , 0}
-Units["Pa"]["bar"]	= {1/100000, 0}
-Units["Pa"]["atm"]	= {1.01325 , 0}
+Units["T"] = {}
+Units["T"]["mT"] = { Mt.m, 0 }
+Units["T"][Mt.us .. "T"] = { Mt.u, 0 }
+Units["T"]["nT"] = { Mt.n, 0 }
 
-Units["1/K"]	= {}
+Units["W"] = {}
+Units["W"]["GW"] = { Mt.G, 0 }
+Units["W"]["MW"] = { Mt.M, 0 }
+Units["W"]["kW"] = { Mt.k, 0 }
+Units["W"]["mW"] = { Mt.m, 0 }
+Units["W"][Mt.us .. "W"] = { Mt.u, 0 }
 
-Units["V/m"]	= {}
-Units["V/m"]["mV/m"]	= {Mt.m   , 0}
-Units["V/m"]["V/mm"]	= {1/Mt.m , 0}
-Units["V/m"]["V/cm"]	= {1/Mt.c , 0}
+Units["V"] = {}
+Units["V"]["MV"] = { Mt.M, 0 }
+Units["V"]["kV"] = { Mt.k, 0 }
+Units["V"]["mV"] = { Mt.m, 0 }
+Units["V"][Mt.us .. "V"] = { Mt.u, 0 }
 
-Units["C/m2"]	= {}
-Units["C/m2"]["mC/m2"]	= {Mt.m, 0}
-Units["C/m2"][Mt.us.."C/m2"]	= {Mt.u, 0}
+Units["m2"] = {}
+Units["m2"]["cm2"] = { Mt.c ^ 2, 0 }
+Units["m2"]["mm2"] = { Mt.m ^ 2, 0 }
+Units["m2"]["km2"] = { Mt.k ^ 2, 0 }
+
+Units["A/Wb"] = {}
+
+Units["Pa"] = {}
+Units["Pa"]["hPa"] = { Mt.h, 0 }
+Units["Pa"]["bar"] = { 1 / 100000, 0 }
+Units["Pa"]["atm"] = { 1.01325, 0 }
+
+Units["1/K"] = {}
+
+Units["V/m"] = {}
+Units["V/m"]["mV/m"] = { Mt.m, 0 }
+Units["V/m"]["V/mm"] = { 1 / Mt.m, 0 }
+Units["V/m"]["V/cm"] = { 1 / Mt.c, 0 }
+
+Units["C/m2"] = {}
+Units["C/m2"]["mC/m2"] = { Mt.m, 0 }
+Units["C/m2"][Mt.us .. "C/m2"] = { Mt.u, 0 }
 ------------------------------------------------------------------
 --                  Overall Global Variables                    --
 ------------------------------------------------------------------
@@ -1911,6 +1965,7 @@ if not platform.withGC then
     end
 end
 
+
 ----------
 
 local tstart = timer.start
@@ -1920,6 +1975,7 @@ function timer.start(ms)
     end
     timer.isRunning = true
 end
+
 local tstop = timer.stop
 function timer.stop()
     timer.isRunning = false
@@ -1928,9 +1984,9 @@ end
 
 
 if platform.hw then
-	timer.multiplier = platform.hw() < 4 and 3.2 or 1
+    timer.multiplier = platform.hw() < 4 and 3.2 or 1
 else
-	timer.multiplier = platform.isDeviceModeRendering() and 3.2 or 1
+    timer.multiplier = platform.isDeviceModeRendering() and 3.2 or 1
 end
 
 function on.timer()
@@ -1946,16 +2002,16 @@ function on.timer()
     if #timer.tasks > 0 then
         platform.window:invalidate()
     else
-    	--for _,screen in pairs(Screens) do
-    	--	screen:size()
-    	--end
+        --for _,screen in pairs(Screens) do
+        --	screen:size()
+        --end
         timer.stop()
     end
 end
 
 timer.tasks = {}
 
-timer.addTask = function(object, task) timer.start(0.01) table.insert(timer.tasks, {object, task}) end
+timer.addTask = function(object, task) timer.start(0.01) table.insert(timer.tasks, { object, task }) end
 
 function timer.purgeTasks(object)
     local j = 1
@@ -1982,7 +2038,7 @@ function Object:init(x, y, w, h, r)
 end
 
 function Object:PushTask(task, t, ms, callback)
-    table.insert(self.tasks, {task, t, ms, callback})
+    table.insert(self.tasks, { task, t, ms, callback })
     timer.start(0.01)
     if #self.tasks == 1 then
         local ok = task(self, t, ms, callback)
@@ -2000,7 +2056,7 @@ function Object:PopTask()
 end
 
 function Object:purgeTasks()
-    for i=1, #self.tasks do
+    for i = 1, #self.tasks do
         self.tasks[i] = nil
     end
     collectgarbage()
@@ -2014,18 +2070,18 @@ function Object:paint(gc)
 end
 
 speed = 1
-    
+
 function Object:__Animate(t, ms, callback)
     if not ms then ms = 50 end
     if ms < 0 then print("Error: Invalid time divisor (must be >= 0)") return end
     ms = ms / timer.multiplier
     if ms == 0 then ms = 1 end
-    if not t or type(t) ~= "table" then print("Error: Target position is "..type(t)) return end
+    if not t or type(t) ~= "table" then print("Error: Target position is " .. type(t)) return end
     if not t.x then t.x = self.x end
     if not t.y then t.y = self.y end
     if not t.w then t.w = self.w end
     if not t.h then t.h = self.h end
-    if not t.r then t.r = self.r else t.r = math.pi*t.r/180 end
+    if not t.r then t.r = self.r else t.r = math.pi * t.r / 180 end
     local xinc = (t.x - self.x) / ms
     local xside = xinc >= 0 and 1 or -1
     local yinc = (t.y - self.y) / ms
@@ -2037,22 +2093,22 @@ function Object:__Animate(t, ms, callback)
     local rinc = (t.r - self.r) / ms
     local rside = rinc >= 0 and 1 or -1
     timer.addTask(self, function()
-                    local b1, b2, b3, b4, b5 = false, false, false, false, false
-                    if (self.x + xinc * speed) * xside < t.x * xside then self.x = self.x + xinc * speed else b1 = true end
-                    if self.y * yside < t.y * yside then self.y = self.y + yinc * speed else b2 = true end
-                    if self.w * wside < t.w * wside then self.w = self.w + winc * speed else b3 = true end
-                    if self.h * hside < t.h * hside then self.h = self.h + hinc * speed else b4 = true end
-                    if self.r * rside < t.r * rside then self.r = self.r + rinc * speed else b5 = true end
-                    if self.w < 0 then self.w = 0 end
-                    if self.h < 0 then self.h = 0 end
-                    if b1 and b2 and b3 and b4 and b5 then
-                        self.x, self.y, self.w, self.h, self.r = t.x, t.y, t.w, t.h, t.r
-                        self:PopTask()
-                        if callback then callback(self) end
-                        return true
-                    end
-                    return false
-                end)
+        local b1, b2, b3, b4, b5 = false, false, false, false, false
+        if (self.x + xinc * speed) * xside < t.x * xside then self.x = self.x + xinc * speed else b1 = true end
+        if self.y * yside < t.y * yside then self.y = self.y + yinc * speed else b2 = true end
+        if self.w * wside < t.w * wside then self.w = self.w + winc * speed else b3 = true end
+        if self.h * hside < t.h * hside then self.h = self.h + hinc * speed else b4 = true end
+        if self.r * rside < t.r * rside then self.r = self.r + rinc * speed else b5 = true end
+        if self.w < 0 then self.w = 0 end
+        if self.h < 0 then self.h = 0 end
+        if b1 and b2 and b3 and b4 and b5 then
+            self.x, self.y, self.w, self.h, self.r = t.x, t.y, t.w, t.h, t.r
+            self:PopTask()
+            if callback then callback(self) end
+            return true
+        end
+        return false
+    end)
     return true
 end
 
@@ -2063,24 +2119,24 @@ function Object:__Delay(_, ms, callback)
     if ms == 0 then ms = 1 end
     local t = 0
     timer.addTask(self, function()
-            if t < ms then
-                t = t + 1
-                return false
-            else
-                self:PopTask()
-                if callback then callback(self) end
-                return true
-            end
-        end)
+        if t < ms then
+            t = t + 1
+            return false
+        else
+            self:PopTask()
+            if callback then callback(self) end
+            return true
+        end
+    end)
     return true
 end
 
 function Object:__setVisible(t, _, _)
     timer.addTask(self, function()
-                      self.visible = t
-                      self:PopTask()
-                      return true
-                  end)
+        self.visible = t
+        self:PopTask()
+        return true
+    end)
     return true
 end
 
@@ -3432,164 +3488,164 @@ function sDropdown:paint(gc)
 	
 	gc:drawString(textLim(gc, text, self.w-5-22), self.x+5, self.y, "top")
 end
---------------------------
----- FormulaPro v1.3 ----
------ LGLP 3 License -----
---------------------------
+
 
 function math.solve(formula, tosolve)
-	--local eq="max(exp" .. string.uchar(9654) .. "list(solve(" .. formula .. ", " .. tosolve ..")," .. tosolve .."))"
-	local eq="nsolve(" .. formula .. ", " .. tosolve ..")"
-	local res = tostring(math.eval(eq)):gsub(utf8(8722), "-")
-	--print("-", eq, math.eval(eq), tostring(math.eval(eq)), tostring(math.eval(eq)):gsub(utf8(8722), "-"))
-	return tonumber(res)
+    --local eq="max(exp" .. string.uchar(9654) .. "list(solve(" .. formula .. ", " .. tosolve ..")," .. tosolve .."))"
+    local eq = "nsolve(" .. formula .. ", " .. tosolve .. ")"
+    local res = tostring(math.eval(eq)):gsub(utf8(8722), "-")
+    --print("-", eq, math.eval(eq), tostring(math.eval(eq)), tostring(math.eval(eq)):gsub(utf8(8722), "-"))
+    return tonumber(res)
 end
 
 function round(num, idp)
     if num >= 0.001 or num <= -0.001 then
-        local mult = 10^(idp or 0)
+        local mult = 10 ^ (idp or 0)
         if num >= 0 then
             return math.floor(num * mult + 0.5) / mult
         else
             return math.ceil(num * mult - 0.5) / mult
         end
     else
-        return tonumber(string.format("%.0"..(idp+1).."g", num))
+        return tonumber(string.format("%.0" .. (idp + 1) .. "g", num))
     end
 end
+
 math.round = round -- just in case
 
 function find_data(known, cid, sid)
-	local done	= {}
-	
-	for _, var in ipairs(var.list()) do
-		math.eval("delvar " .. var)
-	end
-	
-	for key, value in pairs(known) do
-		var.store(key, value)
-	end
+    local done = {}
 
-	local no
-	local dirty_exit	=	true
-	local tosolve
-	local couldnotsolve	= {}
-	
-	local loops	= 0
-	while dirty_exit do
-		loops	= loops+1
-		if loops == 100 then error("too many loops!") end
-		dirty_exit	=	false
-		
-		for i, formula in ipairs(Formulas) do
-		
-			local skip	= false
-			if couldnotsolve[formula] then
-				skip	= true
-				for k, v in pairs(known) do
-					if not couldnotsolve[formula][k] then
-						skip	= false
-						couldnotsolve[formula] = nil
-						break
-					end
-				end
-			end	
-				
-			if ((not cid) or (cid and formula.category == cid)) and ((not sid) or (formula.category == cid and formula.sub == sid)) and not skip then
-				no=0		
-					
-				for var in pairs(formula.variables) do
-					if not known[var] then
-						no=no+1
-						tosolve	=	var
-						if no==2 then break end
-					end
-				end
-				
-				if no==1 then
-					print("I can solve " .. tosolve .. " for " .. formula.formula)
-					
-					local sol,r	= math.solve(formula.formula, tosolve)
-					if sol then 
-					    sol = round(sol,4)
-						known[tosolve]	=	sol
-						done[formula]=true
-						var.store(tosolve, sol)
-						couldnotsolve[formula]	= nil
-						print(tosolve .. " = " .. sol)
-					else
-						print("Oops! Something went wrong:", r)
-						-- Need to issue a warning dialog
-						couldnotsolve[formula]	= copyTable(known)
-						
-					end	
-					dirty_exit	=	true
-					break
-					
-				elseif no==2 then
-					print("I cannot solve " .. formula.formula .. " because I don't know the value of multiple variables")
-				end
-			end
-		end
-	end
-	
-	return known
+    for _, var in ipairs(var.list()) do
+        math.eval("delvar " .. var)
+    end
+
+    for key, value in pairs(known) do
+        var.store(key, value)
+    end
+
+    local no
+    local dirty_exit = true
+    local tosolve
+    local couldnotsolve = {}
+
+    local loops = 0
+    while dirty_exit do
+        loops = loops + 1
+        if loops == 100 then error("too many loops!") end
+        dirty_exit = false
+
+        for i, formula in ipairs(Formulas) do
+
+            local skip = false
+            if couldnotsolve[formula] then
+                skip = true
+                for k, v in pairs(known) do
+                    if not couldnotsolve[formula][k] then
+                        skip = false
+                        couldnotsolve[formula] = nil
+                        break
+                    end
+                end
+            end
+
+            if ((not cid) or (cid and formula.category == cid)) and ((not sid) or (formula.category == cid and formula.sub == sid)) and not skip then
+                no = 0
+
+                for var in pairs(formula.variables) do
+                    if not known[var] then
+                        no = no + 1
+                        tosolve = var
+                        if no == 2 then break end
+                    end
+                end
+
+                if no == 1 then
+                    print("I can solve " .. tosolve .. " for " .. formula.formula)
+
+                    local sol, r = math.solve(formula.formula, tosolve)
+                    if sol then
+                        sol = round(sol, 4)
+                        known[tosolve] = sol
+                        done[formula] = true
+                        var.store(tosolve, sol)
+                        couldnotsolve[formula] = nil
+                        print(tosolve .. " = " .. sol)
+                    else
+                        print("Oops! Something went wrong:", r)
+                        -- Need to issue a warning dialog
+                        couldnotsolve[formula] = copyTable(known)
+                    end
+                    dirty_exit = true
+                    break
+
+                elseif no == 2 then
+                    print("I cannot solve " .. formula.formula .. " because I don't know the value of multiple variables")
+                end
+            end
+        end
+    end
+
+    return known
 end
 
 
---------------------------
----- FormulaPro v1.3 ----
------ LGLP 3 License -----
---------------------------
+CategorySel = WScreen()
+CategorySel.iconS = 48
 
-CategorySel	= WScreen()
-CategorySel.iconS	= 48
-
-CategorySel.sublist	= sList()
-CategorySel:appendWidget(CategorySel.sublist, 5, 5+24)
+CategorySel.sublist = sList()
+CategorySel:appendWidget(CategorySel.sublist, 5, 5 + 24)
 CategorySel.sublist:setSize(-10, -70)
-CategorySel.sublist.cid	= 0
+CategorySel.sublist.cid = 0
 
 function CategorySel.sublist:action(sid)
-	push_screen(SubCatSel, sid)
+    push_screen(SubCatSel, sid)
+end
+
+function CategorySel:charIn(ch)
+    if ch == "l" then
+        loadExtDB()
+        self:pushed() -- refresh list
+        self:invalidate() -- asks for screen repaint
+    end
 end
 
 function CategorySel:paint(gc)
-	gc:setColorRGB(255,255,255)
-	gc:fillRect(self.x, self.y, self.w, self.h)
-	
-	if not kIsInSubCatScreen then
-        gc:setColorRGB(0,0,0)
+    gc:setColorRGB(255, 255, 255)
+    gc:fillRect(self.x, self.y, self.w, self.h)
+
+    if not kIsInSubCatScreen then
+        gc:setColorRGB(0, 0, 0)
         gc:setFont("sansserif", "r", 16)
-        gc:drawString("FormulaPro", self.x+5, 0, "top")
-        
+        gc:drawString("FormulaPro", self.x + 5, 0, "top")
+
         gc:setFont("sansserif", "r", 12)
-        gc:drawString("v1.3", self.x+.4*self.w, 4, "top")
-        
+        gc:drawString("v1.4a", self.x + .4 * self.w, 4, "top")
+
         gc:setFont("sansserif", "r", 12)
-        gc:drawString("by TI-Planet", self.x+self.w-gc:getStringWidth("by TI-Planet")-5, 4, "top")
-        
-        gc:setColorRGB(220,220,220)
-        gc:setFont("sansserif", "r", 8)	
-        gc:drawRect(5, self.h-46+10, self.w-10, 25+6)
-        gc:setColorRGB(128,128,128)
+        gc:drawString("by TI-Planet", self.x + self.w - gc:getStringWidth("by TI-Planet") - 5, 4, "top")
+
+        gc:setColorRGB(220, 220, 220)
+        gc:setFont("sansserif", "r", 8)
+        gc:drawRect(5, self.h - 46 + 10, self.w - 10, 25 + 6)
+        gc:setColorRGB(128, 128, 128)
     end
-		
-	local splinfo	= Categories[self.sublist.sel].info:split("\n")
-	for i, str in ipairs(splinfo) do
-		gc:drawString(str, self.x+7, self.h-56+12 + i*10, "top")
-	end
-	self.sublist:giveFocus()
+
+    local splinfo = Categories[self.sublist.sel].info:split("\n")
+    for i, str in ipairs(splinfo) do
+        gc:drawString(str, self.x + 7, self.h - 56 + 12 + i * 10, "top")
+    end
+    self.sublist:giveFocus()
 end
 
 function CategorySel:pushed()
-	local items	= {}
-	for cid, cat in ipairs(Categories) do
-		table.insert(items, cat.name)
-	end
+    local items = {}
+    for cid, cat in ipairs(Categories) do
+        table.insert(items, cat.name)
+    end
 
-	self.sublist.items	= items
-	self.sublist:giveFocus()
+    self.sublist.items = items
+    self.sublist:giveFocus()
 end
 
 function CategorySel:tabKey()
@@ -3598,56 +3654,56 @@ end
 
 
 
-SubCatSel	= WScreen()
-SubCatSel.sel	= 1
+SubCatSel = WScreen()
+SubCatSel.sel = 1
 
-SubCatSel.sublist	= sList()
-SubCatSel:appendWidget(SubCatSel.sublist, 5, 5+24)
-SubCatSel.back	=	sButton(utf8(9664).." Back")
+SubCatSel.sublist = sList()
+SubCatSel:appendWidget(SubCatSel.sublist, 5, 5 + 24)
+SubCatSel.back = sButton(utf8(9664) .. " Back")
 SubCatSel:appendWidget(SubCatSel.back, 5, -5)
 SubCatSel.sublist:setSize(-10, -66)
-SubCatSel.sublist.cid	= 0
+SubCatSel.sublist.cid = 0
 
-function SubCatSel.back:action() 
-	SubCatSel:escapeKey()	
+function SubCatSel.back:action()
+    SubCatSel:escapeKey()
 end
 
 function SubCatSel.sublist:action(sub)
-	local cid	= self.parent.cid
-	if #Categories[cid].sub[sub].formulas>0 then
-		push_screen(manualSolver, cid, sub)
-	end
+    local cid = self.parent.cid
+    if #Categories[cid].sub[sub].formulas > 0 then
+        push_screen(manualSolver, cid, sub)
+    end
 end
 
 function SubCatSel:paint(gc)
-	gc:setColorRGB(255,255,255)
-	gc:fillRect(self.x, self.y, self.w, self.h)
-	gc:setColorRGB(0,0,0)
-	gc:setFont("sansserif", "r", 16)
-	gc:drawString(Categories[self.cid].name, self.x+5, 0, "top")	
+    gc:setColorRGB(255, 255, 255)
+    gc:fillRect(self.x, self.y, self.w, self.h)
+    gc:setColorRGB(0, 0, 0)
+    gc:setFont("sansserif", "r", 16)
+    gc:drawString(Categories[self.cid].name, self.x + 5, 0, "top")
 end
 
 function SubCatSel:pushed(sel)
 
     kIsInSubCatScreen = true
-	self.cid	= sel
-	local items	= {}
-	for sid, subcat in ipairs(Categories[sel].sub) do
-		table.insert(items, subcat.name .. (#subcat.formulas == 0 and " (Empty)" or ""))
-	end
+    self.cid = sel
+    local items = {}
+    for sid, subcat in ipairs(Categories[sel].sub) do
+        table.insert(items, subcat.name .. (#subcat.formulas == 0 and " (Empty)" or ""))
+    end
 
-	if self.sublist.cid ~= sel then
-		self.sublist.cid	= sel
-		self.sublist:reset()
-	end
+    if self.sublist.cid ~= sel then
+        self.sublist.cid = sel
+        self.sublist:reset()
+    end
 
-	self.sublist.items	= items
-	self.sublist:giveFocus()
+    self.sublist.items = items
+    self.sublist:giveFocus()
 end
 
 function SubCatSel:escapeKey()
     kIsInSubCatScreen = false
-	only_screen_back(CategorySel)
+    only_screen_back(CategorySel)
 end
 
 
@@ -3656,383 +3712,377 @@ end
 -- Manual solver --
 -------------------
 
-manualSolver	= WScreen()
-manualSolver.pl	= sScreen(-20, -50)
+manualSolver = WScreen()
+manualSolver.pl = sScreen(-20, -50)
 manualSolver:appendWidget(manualSolver.pl, 2, 4)
 
-manualSolver.sb	= scrollBar(-50)
+manualSolver.sb = scrollBar(-50)
 manualSolver:appendWidget(manualSolver.sb, -2, 3)
 
-manualSolver.back	=	sButton(utf8(9664).." Back")
+manualSolver.back = sButton(utf8(9664) .. " Back")
 manualSolver:appendWidget(manualSolver.back, 5, -5)
 
-manualSolver.usedFormulas	=	sButton("Formulas")
+manualSolver.usedFormulas = sButton("Formulas")
 manualSolver:appendWidget(manualSolver.usedFormulas, -5, -5)
 
 function manualSolver.back:action()
-	manualSolver:escapeKey()
+    manualSolver:escapeKey()
 end
 
 function manualSolver.usedFormulas:action()
-	push_screen_direct(usedFormulas)
+    push_screen_direct(usedFormulas)
 end
 
 function manualSolver.sb:action(top)
-	self.parent.pl:setY(4-top*30)
+    self.parent.pl:setY(4 - top * 30)
 end
 
 function manualSolver:paint(gc)
-	gc:setColorRGB(224,224,224)
-	gc:fillRect(self.x, self.y, self.w, self.h)
-	gc:setColorRGB(128,128,128)
-	gc:fillRect(self.x+5, self.y+self.h-42, self.w-10, 2)
-	self.sb:update(math.floor(-(self.pl.oy-4)/30+.5))
-	
-	gc:setFont("sansserif", "r", 10)
-	local name	= self.sub.name
-	local len	= gc:getStringWidth(name)
-	local x	= self.x+(self.w-len)/2
-	
-	--gc:setColorRGB(255,255,255)
-	--gc:fillRect(x-3, 10, len+6, 18)
-	
-	gc:setColorRGB(0,0,0)
-	gc:drawString(name, x, self.h-28, "top")
-	--gc:drawRect(x-3, 10, len+6, 18)
+    gc:setColorRGB(224, 224, 224)
+    gc:fillRect(self.x, self.y, self.w, self.h)
+    gc:setColorRGB(128, 128, 128)
+    gc:fillRect(self.x + 5, self.y + self.h - 42, self.w - 10, 2)
+    self.sb:update(math.floor(-(self.pl.oy - 4) / 30 + .5))
+
+    gc:setFont("sansserif", "r", 10)
+    local name = self.sub.name
+    local len = gc:getStringWidth(name)
+    local x = self.x + (self.w - len) / 2
+
+    --gc:setColorRGB(255,255,255)
+    --gc:fillRect(x-3, 10, len+6, 18)
+
+    gc:setColorRGB(0, 0, 0)
+    gc:drawString(name, x, self.h - 28, "top")
+    --gc:drawRect(x-3, 10, len+6, 18)
 end
 
 function manualSolver:postPaint(gc)
-	--gc:setColorRGB(128,128,128)
-	--gc:drawRect(self.x, self.y, self.w, self.h-46)
+    --gc:setColorRGB(128,128,128)
+    --gc:drawRect(self.x, self.y, self.w, self.h-46)
 end
 
 basicFuncsInited = false
 
 function manualSolver:pushed(cid, sid)
-	
-	if not basicFuncsInited then
-		initBasicFunctions()
-		basicFuncsInited = true
-	end
-	
-	self.pl.widgets	= {}
-	self.pl.focus	= 0
-	self.cid	= cid
-	self.sid	= sid
-	self.sub	= Categories[cid].sub[sid]
-	self.pl.oy = 0
-	self.known	= {}
-	self.inputs	= {}
-	self.constants = {}
-	
-	local inp, lbl
-	local i	= 0
-	local nodropdown, lastdropdown
-	for variable,_ in pairs(self.sub.variables) do
-		
-		
-		if not Constants[variable] or Categories[cid].varlink[variable] then
-			i=i+1
-			inp	= sInput()
-			inp.value	= ""
-			--inp.number	= true
-			
-			function inp:enterKey()
-                if not tonumber(self.value) and #self.value > 0 then
-			    	if not manualSolver:preSolve(self) then 
-			    	    self.value = self.value .. "   " .. utf8(8658) .. " Invalid input"
-			    	end
-			    end
-                manualSolver:solve()
-				self.parent:switchFocus(1)
-			end
-			
-			self.inputs[variable]	= inp
-			inp.ww	= -145
-			inp.focusDown	= 4
-			inp.focusUp	= -2
-			lbl	= sLabel(variable, inp)
 
-			self.pl:appendWidget(inp, 60, i*30-28)		
-			self.pl:appendWidget(lbl, 2, i*30-28)
-			self.pl:appendWidget(sLabel(":", inp), 50, i*30-28)
-			
-			print(variable)
-			local variabledata	= Categories[cid].varlink[variable]
-			inp.placeholder	= variabledata.info
-			
-			if nodropdown then
-				inp.focusUp	= -1
-			end
-			
-			if variabledata then
-			    if variabledata.unit ~= "unitless" then
+    if not basicFuncsInited then
+        initBasicFunctions()
+        basicFuncsInited = true
+    end
+
+    self.pl.widgets = {}
+    self.pl.focus = 0
+    self.cid = cid
+    self.sid = sid
+    self.sub = Categories[cid].sub[sid]
+    self.pl.oy = 0
+    self.known = {}
+    self.inputs = {}
+    self.constants = {}
+
+    local inp, lbl
+    local i = 0
+    local nodropdown, lastdropdown
+    for variable, _ in pairs(self.sub.variables) do
+
+
+        if not Constants[variable] or Categories[cid].varlink[variable] then
+            i = i + 1
+            inp = sInput()
+            inp.value = ""
+            --inp.number	= true
+
+            function inp:enterKey()
+                if not tonumber(self.value) and #self.value > 0 then
+                    if not manualSolver:preSolve(self) then
+                        self.value = self.value .. "   " .. utf8(8658) .. " Invalid input"
+                    end
+                end
+                manualSolver:solve()
+                self.parent:switchFocus(1)
+            end
+
+            self.inputs[variable] = inp
+            inp.ww = -145
+            inp.focusDown = 4
+            inp.focusUp = -2
+            lbl = sLabel(variable, inp)
+
+            self.pl:appendWidget(inp, 60, i * 30 - 28)
+            self.pl:appendWidget(lbl, 2, i * 30 - 28)
+            self.pl:appendWidget(sLabel(":", inp), 50, i * 30 - 28)
+
+            print(variable)
+            local variabledata = Categories[cid].varlink[variable]
+            inp.placeholder = variabledata.info
+
+            if nodropdown then
+                inp.focusUp = -1
+            end
+
+            if variabledata then
+                if variabledata.unit ~= "unitless" then
                     --unitlbl	= sLabel(variabledata.unit:gsub("([^%d]+)(%d)", numberToSub))
-                    local itms	= {variabledata.unit}
-                    for k,_ in pairs(Units[variabledata.unit]) do 
+                    local itms = { variabledata.unit }
+                    for k, _ in pairs(Units[variabledata.unit]) do
                         table.insert(itms, k)
                     end
-                    inp.dropdown	= sDropdown(itms)
-                    inp.dropdown.unitmode	= true
-                    inp.dropdown.change	= self.update
-                    inp.dropdown.focusUp	= nodropdown and -5 or -4
-                    inp.dropdown.focusDown	= 2
-                    self.pl:appendWidget(inp.dropdown, -2, i*30-28)
-                    nodropdown	= false
-                    lastdropdown	= inp.dropdown
+                    inp.dropdown = sDropdown(itms)
+                    inp.dropdown.unitmode = true
+                    inp.dropdown.change = self.update
+                    inp.dropdown.focusUp = nodropdown and -5 or -4
+                    inp.dropdown.focusDown = 2
+                    self.pl:appendWidget(inp.dropdown, -2, i * 30 - 28)
+                    nodropdown = false
+                    lastdropdown = inp.dropdown
                 else
-                    self.pl:appendWidget(sLabel("Unitless"), -32, i*30-28)
+                    self.pl:appendWidget(sLabel("Unitless"), -32, i * 30 - 28)
                 end
-			else 
-				nodropdown	= true
-				inp.focusDown	= 1
-				if lastdropdown then 
-					lastdropdown.focusDown = 1
-					lastdropdown = false
-				end			
-			end
-			
-			inp.getFocus = manualSolver.update
-		else
-			self.constants[variable]	= math.eval(Constants[variable].value)
-			--var.store(variable, self.known[variable])
-		end
+            else
+                nodropdown = true
+                inp.focusDown = 1
+                if lastdropdown then
+                    lastdropdown.focusDown = 1
+                    lastdropdown = false
+                end
+            end
 
-	end
-	inp.focusDown	= 1
-	
-	manualSolver.sb:update(0, math.floor(self.pl.h/30+.5), i)
-	self.pl:giveFocus()
+            inp.getFocus = manualSolver.update
+        else
+            self.constants[variable] = math.eval(Constants[variable].value)
+            --var.store(variable, self.known[variable])
+        end
+    end
+    inp.focusDown = 1
 
-	self.pl.focus	= 1
-	self.pl:getWidget().hasFocus	= true
-	self.pl:getWidget():getFocus()
-	
+    manualSolver.sb:update(0, math.floor(self.pl.h / 30 + .5), i)
+    self.pl:giveFocus()
+
+    self.pl.focus = 1
+    self.pl:getWidget().hasFocus = true
+    self.pl:getWidget():getFocus()
 end
 
 function manualSolver.update()
-	manualSolver:solve()
+    manualSolver:solve()
 end
 
 function manualSolver:preSolve(input)
     local res, err
     res, err = math.eval(input.value)
-    res = res and round(res,4)
+    res = res and round(res, 4)
     print("Presolve : ", input.value .. " = " .. tostring(res), "(err ? = " .. tostring(err) .. ")")
     input.value = res and tostring(res) or input.value
     return res and 1 or false
 end
 
 function manualSolver:solve()
-	local inputed	= {}
-	local disabled	= {}
-	
-	for variable, input in pairs(self.inputs) do
-		local variabledata	= Categories[self.cid].varlink[variable]
-		if input.disabled then 
-			inputed[variable] = nil
-			input.value = ""
-		end
-		
-		input:enable()
-		if input.value ~= "" then
-		    local tmpstr = input.value:gsub(utf8(8722), "-")
-			inputed[variable]	= tonumber(tmpstr)
-			if input.dropdown and input.dropdown.rvalue ~= variabledata.unit then
-				inputed[variable]	= Units.subToMain(variabledata.unit, input.dropdown.rvalue, inputed[variable])
-			end
-		end
-	end
-	
-	local invs = copyTable(inputed)
-	for k,v in pairs(self.constants) do
-		invs[k]=v
-	end
-	self.known	= find_data(invs, self.cid, self.sid)
-	
-	for variable, value in pairs(self.known) do
-		if (not inputed[variable] and self.inputs[variable]) then
-			local variabledata	= Categories[self.cid].varlink[variable]
-			local result	= tostring(value)
-			local input	= self.inputs[variable]
-			
-			if input.dropdown and input.dropdown.rvalue ~= variabledata.unit then
-				result	= Units.mainToSub(variabledata.unit, input.dropdown.rvalue, result)
-			end
-			
-			input.value	= result
-			input:disable()
-		end
-	end
+    local inputed = {}
+    local disabled = {}
+
+    for variable, input in pairs(self.inputs) do
+        local variabledata = Categories[self.cid].varlink[variable]
+        if input.disabled then
+            inputed[variable] = nil
+            input.value = ""
+        end
+
+        input:enable()
+        if input.value ~= "" then
+            local tmpstr = input.value:gsub(utf8(8722), "-")
+            inputed[variable] = tonumber(tmpstr)
+            if input.dropdown and input.dropdown.rvalue ~= variabledata.unit then
+                inputed[variable] = Units.subToMain(variabledata.unit, input.dropdown.rvalue, inputed[variable])
+            end
+        end
+    end
+
+    local invs = copyTable(inputed)
+    for k, v in pairs(self.constants) do
+        invs[k] = v
+    end
+    self.known = find_data(invs, self.cid, self.sid)
+
+    for variable, value in pairs(self.known) do
+        if (not inputed[variable] and self.inputs[variable]) then
+            local variabledata = Categories[self.cid].varlink[variable]
+            local result = tostring(value)
+            local input = self.inputs[variable]
+
+            if input.dropdown and input.dropdown.rvalue ~= variabledata.unit then
+                result = Units.mainToSub(variabledata.unit, input.dropdown.rvalue, result)
+            end
+
+            input.value = result
+            input:disable()
+        end
+    end
 end
 
 function manualSolver:escapeKey()
-	only_screen_back(SubCatSel, self.cid)
+    only_screen_back(SubCatSel, self.cid)
 end
 
 function manualSolver:contextMenu()
-	push_screen_direct(usedFormulas)
+    push_screen_direct(usedFormulas)
 end
 
-usedFormulas	= Dialog("Used formulas",10, 10, -20, -20)
+usedFormulas = Dialog("Used formulas", 10, 10, -20, -20)
 
-usedFormulas.but	= sButton("Close")
+usedFormulas.but = sButton("Close")
 
-usedFormulas:appendWidget(usedFormulas.but,-10,-5)
+usedFormulas:appendWidget(usedFormulas.but, -10, -5)
 
 function usedFormulas:postPaint(gc)
-	if self.ed then
-		self.ed:move(self.x + 5, self.y+30)
-		self.ed:resize(self.w-9, self.h-74)
-	end
-	
-	nativeBar(gc, self, self.h-40)
+    if self.ed then
+        self.ed:move(self.x + 5, self.y + 30)
+        self.ed:resize(self.w - 9, self.h - 74)
+    end
+
+    nativeBar(gc, self, self.h - 40)
 end
 
 function usedFormulas:pushed()
-	doNotDisplayIcon = true
-	self.ed	= D2Editor.newRichText ( )
-	self.ed:setReadOnly(true)
-	local cont	= ""
-	
-	local fmls	= #manualSolver.sub.formulas
-	for k,v in ipairs(manualSolver.sub.formulas) do
-		cont = cont .. k .. ": \\0el {" .. v.formula .. "} "  .. (k<fmls and "\n" or "")
-	end
-	
-	if self.ed.setExpression then
-		self.ed:setExpression(cont, 1)
-		self.ed:registerFilter{escapeKey=usedFormulas.closeEditor, enterKey=usedFormulas.closeEditor, tabKey=usedFormulas.leaveEditor}
-		self.ed:setFocus(true)
-	else
-		self.ed:setText(cont, 1)
-	end
-	
-	self.but:giveFocus()
+    doNotDisplayIcon = true
+    self.ed = D2Editor.newRichText()
+    self.ed:setReadOnly(true)
+    local cont = ""
+
+    local fmls = #manualSolver.sub.formulas
+    for k, v in ipairs(manualSolver.sub.formulas) do
+        cont = cont .. k .. ": \\0el {" .. v.formula .. "} " .. (k < fmls and "\n" or "")
+    end
+
+    if self.ed.setExpression then
+        self.ed:setExpression(cont, 1)
+        self.ed:registerFilter{ escapeKey = usedFormulas.closeEditor, enterKey = usedFormulas.closeEditor, tabKey = usedFormulas.leaveEditor }
+        self.ed:setFocus(true)
+    else
+        self.ed:setText(cont, 1)
+    end
+
+    self.but:giveFocus()
 end
 
 function usedFormulas.leaveEditor()
-	platform.window:setFocus(true)
-	usedFormulas.but:giveFocus()
-	return true
+    platform.window:setFocus(true)
+    usedFormulas.but:giveFocus()
+    return true
 end
 
 function usedFormulas.closeEditor()
-	platform.window:setFocus(true)
-	if current_screen() == usedFormulas then
-		remove_screen()
-	end
-	doNotDisplayIcon = false
-	return true
+    platform.window:setFocus(true)
+    if current_screen() == usedFormulas then
+        remove_screen()
+    end
+    doNotDisplayIcon = false
+    return true
 end
 
 function usedFormulas:screenLoseFocus()
-	self:removed()
+    self:removed()
 end
 
 function usedFormulas:screenGetFocus()
-	self:pushed()
+    self:pushed()
 end
 
 function usedFormulas:removed()
-	if usedFormulas.ed.setVisible then
-		usedFormulas.ed:setVisible(false)
-	else
-		usedFormulas.ed:setText("")
-		usedFormulas.ed:resize(1,1)
-		usedFormulas.ed:move(-10, -10)
-	end
-	usedFormulas.ed	= nil
-	doNotDisplayIcon = false
+    if usedFormulas.ed.setVisible then
+        usedFormulas.ed:setVisible(false)
+    else
+        usedFormulas.ed:setText("")
+        usedFormulas.ed:resize(1, 1)
+        usedFormulas.ed:move(-10, -10)
+    end
+    usedFormulas.ed = nil
+    doNotDisplayIcon = false
 end
 
 function usedFormulas.but.action(self)
-	remove_screen()
+    remove_screen()
 end	
 
---------------------------
----- FormulaPro v1.3 ----
------ LGLP 3 License -----
---------------------------
 
 function initBasicFunctions()
-	local basicFunctions = {
-		["erf"] = [[Define erf(x)=Func:2/sqrt(pi)*integral(exp(-t*t),t,0,x):EndFunc]],
-		["erfc"] = [[Define erfc(x)=Func:1-erf(x):EndFunc]],
-		["ni"] = [[Define ni(ttt)=Func:7.7835*10^21*ttt^(3/2)*exp((4.73*10^-4*ttt^2/(ttt+636)-1.17)/(1.72143086667*10^-4*ttt)):EndFunc]],
-		["eegalv"] = [[Define eegalv(rrx,rr2,rr3,rr4,rrg,rrs,vs)=Func:Local rra,rrb,rrc,vb,rg34,rx2ab: rg34:=rrg+rr3+rr4:  rra:=((rrg*rr3)/(rg34)): rrb:=((rrg*rr4)/(rg34)): rrc:=((rr3*rr4)/(rg34)): rx2ab:=rrx+rr2+rra+rrb: rra:=((rrg*rr3)/(rg34)): vb:=((((vs*(rrx+rra)*(rr2+rrb))/(rx2ab)))/(rrs+rrc+(((rrx+rra)*(rr2+rrb))/(rx2ab)))): vb*(((rx)/(rrx+rra))-((rr2)/(rr2+rrb))):Return :EndFunc]],
-	}
-	for var,func in pairs(basicFunctions) do
-		math.eval(func..":Lock " .. var) -- defines and prevents against delvar.
-	end
+    local basicFunctions = {
+        ["erf"] = [[Define erf(x)=Func:2/sqrt(pi)*integral(exp(-t*t),t,0,x):EndFunc]],
+        ["erfc"] = [[Define erfc(x)=Func:1-erf(x):EndFunc]],
+        ["ni"] = [[Define ni(ttt)=Func:7.7835*10^21*ttt^(3/2)*exp((4.73*10^-4*ttt^2/(ttt+636)-1.17)/(1.72143086667*10^-4*ttt)):EndFunc]],
+        ["eegalv"] = [[Define eegalv(rrx,rr2,rr3,rr4,rrg,rrs,vs)=Func:Local rra,rrb,rrc,vb,rg34,rx2ab: rg34:=rrg+rr3+rr4:  rra:=((rrg*rr3)/(rg34)): rrb:=((rrg*rr4)/(rg34)): rrc:=((rr3*rr4)/(rg34)): rx2ab:=rrx+rr2+rra+rrb: rra:=((rrg*rr3)/(rg34)): vb:=((((vs*(rrx+rra)*(rr2+rrb))/(rx2ab)))/(rrs+rrc+(((rrx+rra)*(rr2+rrb))/(rx2ab)))): vb*(((rx)/(rrx+rra))-((rr2)/(rr2+rrb))):Return :EndFunc]],
+    }
+    for var, func in pairs(basicFunctions) do
+        math.eval(func .. ":Lock " .. var) -- defines and prevents against delvar.
+    end
 end
 
 RefBoolAlg = Screen()
 
 RefBoolAlg.data = {
-{"x+0=x","x.1=x","Identity"},
-{"x+x'=1","x.x'=0","Inverse"},
-{"x+x=x","x.x=x","Idempotent"},
-{"x+1=1","x.0=0","Null Element"},
-{"(x')'=x","(x')'=x","Involution"},
-{"x+y=y+x","x.y=y.x","Commutative"},
-{"x+(y+z)=(x+y)+z","x.(y.z)=(x.y).z","Associative"},
-{"x.(y+z)=(x.y)+(x.z)","x+(y.z)=(x+y).(x+z)","Distributive"},
-{"x+(x.y)=x","x.(x+y)=x","Absorption"},
-{"(x+y+z)'=x'.y'.z'","(x.y.z)'=x'+y'+z'","DeMorgan's Law"},
-{"(x.y)+(x'.z)+(y.z)=(x.y)+(x'.z)","(x+y).(x'+z).(y+z)=(x+y).(x'+z)","Consensus"}
+    { "x+0=x", "x.1=x", "Identity" },
+    { "x+x'=1", "x.x'=0", "Inverse" },
+    { "x+x=x", "x.x=x", "Idempotent" },
+    { "x+1=1", "x.0=0", "Null Element" },
+    { "(x')'=x", "(x')'=x", "Involution" },
+    { "x+y=y+x", "x.y=y.x", "Commutative" },
+    { "x+(y+z)=(x+y)+z", "x.(y.z)=(x.y).z", "Associative" },
+    { "x.(y+z)=(x.y)+(x.z)", "x+(y.z)=(x+y).(x+z)", "Distributive" },
+    { "x+(x.y)=x", "x.(x+y)=x", "Absorption" },
+    { "(x+y+z)'=x'.y'.z'", "(x.y.z)'=x'+y'+z'", "DeMorgan's Law" },
+    { "(x.y)+(x'.z)+(y.z)=(x.y)+(x'.z)", "(x+y).(x'+z).(y+z)=(x+y).(x'+z)", "Consensus" }
 }
 
 RefBoolAlg.tmpScroll = 1
 RefBoolAlg.dual = false
 
 function RefBoolAlg:arrowKey(arrw)
-  if pww()<330 then
-	if arrw == "up" then
-		RefBoolAlg.tmpScroll = RefBoolAlg.tmpScroll - test(RefBoolAlg.tmpScroll>1)
-	end
-	if arrw == "down" then
-		RefBoolAlg.tmpScroll = RefBoolAlg.tmpScroll + test(RefBoolAlg.tmpScroll<(table.getn(RefBoolAlg.data)-7))
-	end
-	screenRefresh()
-  end
+    if pww() < 330 then
+        if arrw == "up" then
+            RefBoolAlg.tmpScroll = RefBoolAlg.tmpScroll - test(RefBoolAlg.tmpScroll > 1)
+        end
+        if arrw == "down" then
+            RefBoolAlg.tmpScroll = RefBoolAlg.tmpScroll + test(RefBoolAlg.tmpScroll < (table.getn(RefBoolAlg.data) - 7))
+        end
+        screenRefresh()
+    end
 end
 
 function RefBoolAlg:enterKey()
-	RefBoolAlg.dual = not RefBoolAlg.dual
-	RefBoolAlg:invalidate()
+    RefBoolAlg.dual = not RefBoolAlg.dual
+    RefBoolAlg:invalidate()
 end
 
 function RefBoolAlg:escapeKey()
-	only_screen_back(Ref)
+    only_screen_back(Ref)
 end
 
 function RefBoolAlg:paint(gc)
-	gc:setColorRGB(255,255,255)
-	gc:fillRect(self.x, self.y, self.w, self.h)
-	gc:setColorRGB(0,0,0)
-	
-	msg = "Boolean Algebra : "
-	gc:setFont("sansserif","b",12)
-	if RefBoolAlg.tmpScroll > 1 and pww()<330 then
-		gc:drawString(utf8(9650),gc:getStringWidth(utf8(9664))+7,0,"top")
-	end
-	if RefBoolAlg.tmpScroll < table.getn(RefBoolAlg.data)-7 and pww()<330 then
-		gc:drawString(utf8(9660),pww()-4*gc:getStringWidth(utf8(9654))-2,0,"top")
-	end
-	drawXCenteredString(gc,msg,0)
-	gc:setFont("sansserif","i",12)
-	drawXCenteredString(gc,"Press Enter for Dual ",15)
-	gc:setFont("sansserif","r",12)
-	
-	local tmp = 0
-	for k=RefBoolAlg.tmpScroll,table.getn(RefBoolAlg.data) do
-		tmp = tmp + 1
-		gc:setFont("sansserif","b",12)
-		gc:drawString(RefBoolAlg.data[k][3], 3, 10+22*tmp, "top")
-		gc:setFont("sansserif","r",12)
-		gc:drawString(RefBoolAlg.data[k][1+test(RefBoolAlg.dual)], 125-32*test(k==11)*test(pww()<330)+30*test(pww()>330)+12, 10+22*tmp, "top")
-	end
+    gc:setColorRGB(255, 255, 255)
+    gc:fillRect(self.x, self.y, self.w, self.h)
+    gc:setColorRGB(0, 0, 0)
+
+    msg = "Boolean Algebra : "
+    gc:setFont("sansserif", "b", 12)
+    if RefBoolAlg.tmpScroll > 1 and pww() < 330 then
+        gc:drawString(utf8(9650), gc:getStringWidth(utf8(9664)) + 7, 0, "top")
+    end
+    if RefBoolAlg.tmpScroll < table.getn(RefBoolAlg.data) - 7 and pww() < 330 then
+        gc:drawString(utf8(9660), pww() - 4 * gc:getStringWidth(utf8(9654)) - 2, 0, "top")
+    end
+    drawXCenteredString(gc, msg, 0)
+    gc:setFont("sansserif", "i", 12)
+    drawXCenteredString(gc, "Press Enter for Dual ", 15)
+    gc:setFont("sansserif", "r", 12)
+
+    local tmp = 0
+    for k = RefBoolAlg.tmpScroll, table.getn(RefBoolAlg.data) do
+        tmp = tmp + 1
+        gc:setFont("sansserif", "b", 12)
+        gc:drawString(RefBoolAlg.data[k][3], 3, 10 + 22 * tmp, "top")
+        gc:setFont("sansserif", "r", 12)
+        gc:drawString(RefBoolAlg.data[k][1 + test(RefBoolAlg.dual)], 125 - 32 * test(k == 11) * test(pww() < 330) + 30 * test(pww() > 330) + 12, 10 + 22 * tmp, "top")
+    end
 end
 
 
@@ -4512,7 +4562,6 @@ end
 Ref.escapeKey = Ref.tabKey
 
 Ref.addRefs()
-
 
 
 

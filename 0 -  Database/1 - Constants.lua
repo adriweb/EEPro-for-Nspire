@@ -1,6 +1,13 @@
 --------------------------
----- FormulaPro v1.3 ----
------ LGLP 3 License -----
+---- FormulaPro v1.4a ----
+---- (Oct. 29th 2012) ----
+----  LGLP 3 License  ----
+--------------------------
+----   Jim Bauwens    ----
+---- Adrien Bertrand  ----
+--------------------------
+----  TI-Planet.org   ----
+---- Inspired-Lua.org ----
 --------------------------
 
 function utf8(n)
