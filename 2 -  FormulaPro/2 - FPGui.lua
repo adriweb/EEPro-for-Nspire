@@ -156,6 +156,8 @@ function manualSolver:paint(gc)
     gc:setFont("sansserif", "r", 10)
     local name = self.sub.name
     local len = gc:getStringWidth(name)
+    if len >= .7*self.w then name = string.sub(name, 1, -10) .. ". " end
+    local len = gc:getStringWidth(name)
     local x = self.x + (self.w - len) / 2
 
     --gc:setColorRGB(255,255,255)

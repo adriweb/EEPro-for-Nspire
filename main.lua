@@ -8,7 +8,10 @@ Jim Bauwens, Adrien "Adriweb" Bertrand
 Thanks also to Levak.
 LGPL3 License.
 More info and contact : 
-tiplanet.org  -  inspired-lua.org]]
+tiplanet.org  -  inspired-lua.org
+
+
+Tip : Press [Tab] for Reference !]]
 
 local aboutButton	= sButton("OK")
 

@@ -332,11 +332,15 @@ function WidgetManager:arrowKey(arrow)
 	self:invalidate()
 end
 
-function WidgetManager:enterKey()	
-	if self.focus~=0 then
-		self:getWidget():enterKey()
-	end
-	self:invalidate()
+function WidgetManager:enterKey()
+    if self.focus~=0 then
+        self:getWidget():enterKey()
+    else
+        if self.widgets and self.widgets[1] then   -- ugh, quite a bad hack for the mouseUp at (0,0) when cursor isn't shown (grrr TI) :/
+            self.widgets[1]:enterKey()
+        end
+    end
+    self:invalidate()
 end
 
 function WidgetManager:clearKey()	
@@ -405,11 +409,16 @@ function WidgetManager:mouseDown(x, y)
 end
 
 function WidgetManager:mouseUp(x, y)
-	if self.focus~=0 then
-		self:getWidget():mouseUp(x, y)
-	end
-	self:invalidate()
+    if self.focus~=0 then
+        --self:getWidget():mouseUp(x, y)
+    end
+    for _, widget in pairs(self.widgets) do
+        widget:mouseUp(x,y) -- well, mouseUp is a release of a button, so everything previously "clicked" should be released, for every widget, even if the mouse has moved (and thus changed widget)
+        -- eventually, a better way for this would be to keep track of the last widget active and do it to this one only...
+    end
+    self:invalidate()
 end
+
 function WidgetManager:mouseMove(x, y)
 	if self.focus~=0 then
 		self:getWidget():mouseMove(x, y)
@@ -535,6 +544,6 @@ function on.charIn(ch)		current_screen():charIn(ch)		 end
 function on.backspaceKey()	current_screen():backspaceKey()  end
 function on.contextMenu()	current_screen():contextMenu()   end
 function on.mouseDown(x,y)	current_screen():mouseDown(x,y)	 end
-function on.mouseUp(x,y)	current_screen():mouseUp(x,y)	 end
+function on.mouseUp(x,y)	if (x == 0 and y == 0) then current_screen():enterKey() else current_screen():mouseUp(x,y) end	 end
 function on.mouseMove(x,y)	current_screen():mouseMove(x,y)  end
 function on.clearKey()    	current_screen():clearKey()      end
