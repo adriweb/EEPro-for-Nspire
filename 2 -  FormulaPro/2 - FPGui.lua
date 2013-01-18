@@ -29,7 +29,7 @@ function CategorySel:paint(gc)
         gc:drawString("FormulaPro", self.x + 5, 0, "top")
 
         gc:setFont("sansserif", "r", 12)
-        gc:drawString("v1.4a", self.x + .4 * self.w, 4, "top")
+        gc:drawString("v1.4b", self.x + .4 * self.w, 4, "top")
 
         gc:setFont("sansserif", "r", 12)
         gc:drawString("by TI-Planet", self.x + self.w - gc:getStringWidth("by TI-Planet") - 5, 4, "top")
