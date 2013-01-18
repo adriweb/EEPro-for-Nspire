@@ -1,6 +1,6 @@
 --------------------------
----- FormulaPro v1.4a ----
----- (Oct. 29th 2012) ----
+---- FormulaPro v1.4b ----
+---- (Jan 18th, 2013) ----
 ----  LGLP 3 License  ----
 --------------------------
 ----   Jim Bauwens    ----
@@ -67,7 +67,7 @@ end
 function checkIfFormulaExists(table, formula)
     for k,v in pairs(table) do
         if (v.formula == formula)  then -- lulz lua powa
-            print("Conflict (i.e formula appearing twice) detected when loading Database. Skipping the item.")
+            print("Conflict (i.e formula appearing twice) detected when loading Database. Skipping formula.")
             return true
         end
     end
@@ -78,11 +78,10 @@ Categories	=	{}
 Formulas	=	{}
 
 function addCat(id,name,info)
-    if not checkIfExists(Categories, name) then
-        return table.insert(Categories, id, {id=id, name=name, info=info, sub={}, varlink={}})
-    else
-        return -1
+    if checkIfExists(Categories, name) then
+        print("Warning ! This category appears to exist already ! Adding anyway....")
     end
+    return table.insert(Categories, id, {id=id, name=name, info=info, sub={}, varlink={}})
 end
 
 function addCatVar(cid, var, info, unit)
@@ -90,20 +89,20 @@ function addCatVar(cid, var, info, unit)
 end
 
 function addSubCat(cid, id, name, info)
-    if not checkIfExists(Categories[cid].sub, name) then
-        return table.insert(Categories[cid].sub, id, {category=cid, id=id, name=name, info=info, formulas={}, variables={}})
-    else
-        return -1
+    if checkIfExists(Categories[cid].sub, name) then
+        print("Warning ! This subcategory appears to exist already ! Adding anyway....")
     end
+    return table.insert(Categories[cid].sub, id, {category=cid, id=id, name=name, info=info, formulas={}, variables={}})
 end
 
 function aF(cid, sid, formula, variables) --add Formula
 	local fr	=	{category=cid, sub=sid, formula=formula, variables=variables}
 	-- In times like this we are happy that inserting tables just inserts a reference
 
-    if not checkIfFormulaExists(Formulas, fr.formula) then
+    -- commented out this check because only the subcategory duplicates should be avoided, and not on the whole db.
+    --if not checkIfFormulaExists(Formulas, fr.formula) then
         table.insert(Formulas, fr)
-    end
+    --end
     if not checkIfFormulaExists(Categories[cid].sub[sid].formulas, fr.formula) then
         table.insert(Categories[cid].sub[sid].formulas, fr)
     end
@@ -2488,11 +2487,15 @@ function WidgetManager:arrowKey(arrow)
 	self:invalidate()
 end
 
-function WidgetManager:enterKey()	
-	if self.focus~=0 then
-		self:getWidget():enterKey()
-	end
-	self:invalidate()
+function WidgetManager:enterKey()
+    if self.focus~=0 then
+        self:getWidget():enterKey()
+    else
+        if self.widgets and self.widgets[1] then   -- ugh, quite a bad hack for the mouseUp at (0,0) when cursor isn't shown (grrr TI) :/
+            self.widgets[1]:enterKey()
+        end
+    end
+    self:invalidate()
 end
 
 function WidgetManager:clearKey()	
@@ -2561,11 +2564,16 @@ function WidgetManager:mouseDown(x, y)
 end
 
 function WidgetManager:mouseUp(x, y)
-	if self.focus~=0 then
-		self:getWidget():mouseUp(x, y)
-	end
-	self:invalidate()
+    if self.focus~=0 then
+        --self:getWidget():mouseUp(x, y)
+    end
+    for _, widget in pairs(self.widgets) do
+        widget:mouseUp(x,y) -- well, mouseUp is a release of a button, so everything previously "clicked" should be released, for every widget, even if the mouse has moved (and thus changed widget)
+        -- eventually, a better way for this would be to keep track of the last widget active and do it to this one only...
+    end
+    self:invalidate()
 end
+
 function WidgetManager:mouseMove(x, y)
 	if self.focus~=0 then
 		self:getWidget():mouseMove(x, y)
@@ -2691,7 +2699,7 @@ function on.charIn(ch)		current_screen():charIn(ch)		 end
 function on.backspaceKey()	current_screen():backspaceKey()  end
 function on.contextMenu()	current_screen():contextMenu()   end
 function on.mouseDown(x,y)	current_screen():mouseDown(x,y)	 end
-function on.mouseUp(x,y)	current_screen():mouseUp(x,y)	 end
+function on.mouseUp(x,y)	if (x == 0 and y == 0) then current_screen():enterKey() else current_screen():mouseUp(x,y) end	 end
 function on.mouseMove(x,y)	current_screen():mouseMove(x,y)  end
 function on.clearKey()    	current_screen():clearKey()      end
 
@@ -2864,8 +2872,10 @@ function sInput:paint(gc)
 	gc:drawRect(x, y, self.w, self.h)
 	
 	if self.hasFocus then
-		gc:drawRect(x-1, y-1, self.w+2, self.h+2)
-	end
+        gc:setColorRGB(40, 148, 184)
+        gc:drawRect(x-1, y-1, self.w+2, self.h+2)
+        gc:setColorRGB(0, 0, 0)
+    end
 		
 	local text	=	self.value
 	local	p	=	0
@@ -3001,49 +3011,80 @@ end
 sButton	=	class(Widget)
 
 function sButton:init(text, action)
-	self.text	=	text
-	self.action	=	action
-	
-	self.dh	=	27
-	self.dw	=	48
-		
-	self.bordercolor	=	{136,136,136}
-	self.font	=	{"sansserif", "r", 10}
-	
+    self.text	=	text
+    self.action	=	action
+    self.pushed = false
+
+    self.dh	=	27
+    self.dw	=	48
+
+    self.bordercolor	=	{136,136,136}
+    self.font	=	{"sansserif", "r", 10}
 end
 
 function sButton:paint(gc)
-	gc:setFont(uCol(self.font))
-	self.ww	=	gc:getStringWidth(self.text)+8
-	self:size()
+    gc:setFont(uCol(self.font))
+    self.ww	=	gc:getStringWidth(self.text)+8
+    self:size()
 
-	gc:setColorRGB(248,252,248)
-	gc:fillRect(self.x+2, self.y+2, self.w-4, self.h-4)
-	gc:setColorRGB(0,0,0)
-	
-	gc:drawString(self.text, self.x+4, self.y+4, "top")
-		
-	gc:setColorRGB(uCol(self.bordercolor))
-	gc:fillRect(self.x + 2, self.y, self.w-4, 2)
-	gc:fillRect(self.x + 2, self.y+self.h-2, self.w-4, 2)
-	
-	gc:fillRect(self.x, self.y+2, 1, self.h-4)
-	gc:fillRect(self.x+1, self.y+1, 1, self.h-2)
-	gc:fillRect(self.x+self.w-1, self.y+2, 1, self.h-4)
-	gc:fillRect(self.x+self.w-2, self.y+1, 1, self.h-2)
-	
-	if self.hasFocus then
-		gc:setColorRGB(40, 148, 184)
-		gc:drawRect(self.x-2, self.y-2, self.w+3, self.h+3)
-		gc:drawRect(self.x-3, self.y-3, self.w+5, self.h+5)
-	end
+    if self.pushed and self.forcePushed then
+        self.y = self.y + 2
+    end
+
+    gc:setColorRGB(248,252,248)
+    gc:fillRect(self.x+2, self.y+2, self.w-4, self.h-4)
+    gc:setColorRGB(0,0,0)
+
+    gc:drawString(self.text, self.x+4, self.y+4, "top")
+
+    if self.hasFocus then
+        gc:setColorRGB(40, 148, 184)
+        gc:setPen("medium", "smooth")
+    else
+        gc:setColorRGB(uCol(self.bordercolor))
+        gc:setPen("thin", "smooth")
+    end
+    gc:fillRect(self.x + 2, self.y, self.w-4, 2)
+    gc:fillRect(self.x + 2, self.y+self.h-2, self.w-4, 2)
+    gc:fillRect(self.x, self.y+2, 1, self.h-4)
+    gc:fillRect(self.x+1, self.y+1, 1, self.h-2)
+    gc:fillRect(self.x+self.w-1, self.y+2, 1, self.h-4)
+    gc:fillRect(self.x+self.w-2, self.y+1, 1, self.h-2)
+
+    if self.hasFocus then
+        gc:setColorRGB(40, 148, 184)
+        -- old way of indicating focus :
+        --gc:drawRect(self.x-2, self.y-2, self.w+3, self.h+3)
+        --gc:drawRect(self.x-3, self.y-3, self.w+5, self.h+5)
+    end
+end
+
+function sButton:mouseMove(x,y)
+    local isIn = (x>self.x and x<(self.x+self.w) and y>self.y and y<(self.y+self.h))
+    self.pushed = self.forcePushed and isIn
+    platform.window:invalidate()
 end
 
 function sButton:enterKey()
-	if self.action then self.action() end
+    if self.action then self.action() end
 end
 
-sButton.mouseUp	=	sButton.enterKey
+function sButton:mouseDown(x,y)
+    if (x>self.x and x<(self.x+self.w) and y>self.y and y<(self.y+self.h)) then
+        self.pushed = true
+        self.forcePushed = true
+    end
+    platform.window:invalidate()
+end
+
+function sButton:mouseUp(x,y)
+    self.pushed = false
+    self.forcePushed = false
+    if (x>self.x and x<(self.x+self.w) and y>self.y and y<(self.y+self.h)) then
+        self:enterKey()
+    end
+    platform.window:invalidate()
+end
 
 
 ------------------------------------------------------------------
@@ -3470,8 +3511,10 @@ function sDropdown:paint(gc)
 	gc:drawRect(self.x, self.y, self.w-1, self.h-1)
 	
 	if self.hasFocus then
-		gc:drawRect(self.x-1, self.y-1, self.w+1, self.h+1)
-	end
+        gc:setColorRGB(40, 148, 184)
+        gc:drawRect(self.x-1, self.y-1, self.w+1, self.h+1)
+        gc:setColorRGB(0, 0, 0)
+    end
 	
 	gc:setColorRGB(192, 192, 192)
 	gc:fillRect(self.x+self.w-21, self.y+1, 20, 19)
@@ -3746,6 +3789,8 @@ function manualSolver:paint(gc)
 
     gc:setFont("sansserif", "r", 10)
     local name = self.sub.name
+    local len = gc:getStringWidth(name)
+    if len >= .7*self.w then name = string.sub(name, 1, -10) .. ". " end
     local len = gc:getStringWidth(name)
     local x = self.x + (self.w - len) / 2
 
@@ -4567,13 +4612,16 @@ Ref.addRefs()
 
 aboutWindow	= Dialog("About FormulaPro :", 50, 20, 280, 180)
 
-local aboutstr	= [[FormulaPro v1.3
+local aboutstr	= [[FormulaPro v1.4b
 --------------------
 Jim Bauwens, Adrien "Adriweb" Bertrand
 Thanks also to Levak.
 LGPL3 License.
 More info and contact : 
-tiplanet.org  -  inspired-lua.org]]
+tiplanet.org  -  inspired-lua.org
+
+
+Tip : Press [Tab] for Reference !]]
 
 local aboutButton	= sButton("OK")
 

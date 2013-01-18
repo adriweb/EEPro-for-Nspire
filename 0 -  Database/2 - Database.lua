@@ -12,7 +12,7 @@ end
 function checkIfFormulaExists(table, formula)
     for k,v in pairs(table) do
         if (v.formula == formula)  then -- lulz lua powa
-            print("Conflict (i.e formula appearing twice) detected when loading Database. Skipping the item.")
+            print("Conflict (i.e formula appearing twice) detected when loading Database. Skipping formula.")
             return true
         end
     end
@@ -23,11 +23,10 @@ Categories	=	{}
 Formulas	=	{}
 
 function addCat(id,name,info)
-    if not checkIfExists(Categories, name) then
-        return table.insert(Categories, id, {id=id, name=name, info=info, sub={}, varlink={}})
-    else
-        return -1
+    if checkIfExists(Categories, name) then
+        print("Warning ! This category appears to exist already ! Adding anyway....")
     end
+    return table.insert(Categories, id, {id=id, name=name, info=info, sub={}, varlink={}})
 end
 
 function addCatVar(cid, var, info, unit)
@@ -35,20 +34,20 @@ function addCatVar(cid, var, info, unit)
 end
 
 function addSubCat(cid, id, name, info)
-    if not checkIfExists(Categories[cid].sub, name) then
-        return table.insert(Categories[cid].sub, id, {category=cid, id=id, name=name, info=info, formulas={}, variables={}})
-    else
-        return -1
+    if checkIfExists(Categories[cid].sub, name) then
+        print("Warning ! This subcategory appears to exist already ! Adding anyway....")
     end
+    return table.insert(Categories[cid].sub, id, {category=cid, id=id, name=name, info=info, formulas={}, variables={}})
 end
 
 function aF(cid, sid, formula, variables) --add Formula
 	local fr	=	{category=cid, sub=sid, formula=formula, variables=variables}
 	-- In times like this we are happy that inserting tables just inserts a reference
 
-    if not checkIfFormulaExists(Formulas, fr.formula) then
+    -- commented out this check because only the subcategory duplicates should be avoided, and not on the whole db.
+    --if not checkIfFormulaExists(Formulas, fr.formula) then
         table.insert(Formulas, fr)
-    end
+    --end
     if not checkIfFormulaExists(Categories[cid].sub[sid].formulas, fr.formula) then
         table.insert(Categories[cid].sub[sid].formulas, fr)
     end
