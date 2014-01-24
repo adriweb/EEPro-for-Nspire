@@ -44,3 +44,7 @@ Then, the *big* part is the Analysis one, which we'll focus on later. (See the [
 
 
 __Contact : info @ tiplanet . org__
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/adriweb/eepro-for-nspire/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
