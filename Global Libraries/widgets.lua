@@ -1,4 +1,3 @@
-
 function uCol(col)
 	return col[1] or 0, col[2] or 0, col[3] or 0
 end
@@ -150,6 +149,7 @@ function sInput:init()
 	
 	self.value	=	""	
 	self.bgcolor	=	{255,255,255}
+    self.focuscolor = platform.isColorDisplay() and {40,148,184} or {0,0,0}
 	self.disabledcolor	= {128,128,128}
 	self.font	=	{"sansserif", "r", 10}
 	self.disabled	= false
@@ -168,7 +168,7 @@ function sInput:paint(gc)
 	gc:drawRect(x, y, self.w, self.h)
 	
 	if self.hasFocus then
-        gc:setColorRGB(40, 148, 184)
+        gc:setColorRGB(uCol(self.focuscolor))
         gc:drawRect(x-1, y-1, self.w+2, self.h+2)
         gc:setColorRGB(0, 0, 0)
     end
@@ -314,13 +314,14 @@ function sButton:init(text, action)
     self.dh	=	27
     self.dw	=	48
 
-    self.bordercolor	=	{136,136,136}
-    self.font	=	{"sansserif", "r", 10}
+    self.bordercolor = platform.isColorDisplay() and {136,136,136} or {160,160,160}
+    self.focuscolor = platform.isColorDisplay() and {40,148,184} or {0,0,0}
+    self.font = {"sansserif", "r", 10}
 end
 
 function sButton:paint(gc)
     gc:setFont(uCol(self.font))
-    self.ww	=	gc:getStringWidth(self.text)+8
+    self.ww	=	gc:getStringWidth(self.text)+10
     self:size()
 
     if self.pushed and self.forcePushed then
@@ -331,10 +332,10 @@ function sButton:paint(gc)
     gc:fillRect(self.x+2, self.y+2, self.w-4, self.h-4)
     gc:setColorRGB(0,0,0)
 
-    gc:drawString(self.text, self.x+4, self.y+4, "top")
+    gc:drawString(self.text, self.x+5, self.y+3, "top")
 
     if self.hasFocus then
-        gc:setColorRGB(40, 148, 184)
+        gc:setColorRGB(uCol(self.focuscolor))
         gc:setPen("medium", "smooth")
     else
         gc:setColorRGB(uCol(self.bordercolor))
@@ -348,10 +349,10 @@ function sButton:paint(gc)
     gc:fillRect(self.x+self.w-2, self.y+1, 1, self.h-2)
 
     if self.hasFocus then
-        gc:setColorRGB(40, 148, 184)
+        gc:setColorRGB(uCol(self.focuscolor))
         -- old way of indicating focus :
-        --gc:drawRect(self.x-2, self.y-2, self.w+3, self.h+3)
-        --gc:drawRect(self.x-3, self.y-3, self.w+5, self.h+5)
+        -- gc:drawRect(self.x-2, self.y-2, self.w+3, self.h+3)
+        -- gc:drawRect(self.x-3, self.y-3, self.w+5, self.h+5)
     end
 end
 
@@ -712,6 +713,8 @@ function sDropdown:init(items)
 	self.rvalue	= items[1] or ""
 	self.rvaluen=self.valuen
 	
+    self.focuscolor = platform.isColorDisplay() and {40,148,184} or {0,0,0}
+	
 	self.sList.parentWidget = self
 	self.screen.parentWidget = self
 	--self.screen.focus=1
@@ -807,7 +810,7 @@ function sDropdown:paint(gc)
 	gc:drawRect(self.x, self.y, self.w-1, self.h-1)
 	
 	if self.hasFocus then
-        gc:setColorRGB(40, 148, 184)
+        gc:setColorRGB(uCol(self.focuscolor))
         gc:drawRect(self.x-1, self.y-1, self.w+1, self.h+1)
         gc:setColorRGB(0, 0, 0)
     end
@@ -827,4 +830,3 @@ function sDropdown:paint(gc)
 	
 	gc:drawString(textLim(gc, text, self.w-5-22), self.x+5, self.y, "top")
 end
-

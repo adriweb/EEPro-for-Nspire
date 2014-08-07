@@ -1,6 +1,6 @@
 --------------------------
----- FormulaPro v1.4b ----
----- (Jan 18th, 2013) ----
+---- FormulaPro 1.41b ----
+----  (Aug. 7, 2014)  ----
 ----  LGLP 3 License  ----
 --------------------------
 ----   Jim Bauwens    ----
@@ -10,16 +10,14 @@
 ---- Inspired-Lua.org ----
 --------------------------
 
-function utf8(n)
-	return string.uchar(n)
+local utf8 = string.uchar
+
+SubNumbers = {185, 178, 179, 8308, 8309, 8310, 8311, 8312, 8313}
+function numberToSub(w, n)
+	return w .. utf8(SubNumbers[tonumber(n)])
 end
 
-SubNumbers={185, 178, 179, 8308, 8309, 8310, 8311, 8312, 8313}
-function numberToSub(w,n)
-	return w..utf8(SubNumbers[tonumber(n)])
-end
-
-Constants	= {}
+Constants = {}
 Constants["g"      ]	= {info="Acceleration due to gravity"        , value="9.81"                  , unit="m*s^-2"             }
 Constants["mu"     ]	= {info="Atomic mass unit"                   , value="1.66 * 10^-27"         , unit="kg"                 }
 Constants["u"      ]	= Constants["mu"]

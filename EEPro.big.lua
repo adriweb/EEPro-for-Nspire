@@ -1,6 +1,6 @@
 --------------------------
----- FormulaPro v1.4b ----
----- (Jan 18th, 2013) ----
+---- FormulaPro 1.41b ----
+----  (Aug. 7, 2014)  ----
 ----  LGLP 3 License  ----
 --------------------------
 ----   Jim Bauwens    ----
@@ -10,16 +10,14 @@
 ---- Inspired-Lua.org ----
 --------------------------
 
-function utf8(n)
-	return string.uchar(n)
+local utf8 = string.uchar
+
+SubNumbers = {185, 178, 179, 8308, 8309, 8310, 8311, 8312, 8313}
+function numberToSub(w, n)
+	return w .. utf8(SubNumbers[tonumber(n)])
 end
 
-SubNumbers={185, 178, 179, 8308, 8309, 8310, 8311, 8312, 8313}
-function numberToSub(w,n)
-	return w..utf8(SubNumbers[tonumber(n)])
-end
-
-Constants	= {}
+Constants = {}
 Constants["g"      ]	= {info="Acceleration due to gravity"        , value="9.81"                  , unit="m*s^-2"             }
 Constants["mu"     ]	= {info="Atomic mass unit"                   , value="1.66 * 10^-27"         , unit="kg"                 }
 Constants["u"      ]	= Constants["mu"]
@@ -1846,10 +1844,6 @@ function deepcopy(t) -- This function recursively copies a table's contents, and
 	return res
 end -- from http://snippets.luacode.org/snippets/Deep_copy_of_a_Lua_Table_2
 
-function utf8(nbr)
-	return string.uchar(nbr)
-end
-
 function test(arg)
 	return arg and 1 or 0
 end
@@ -2702,7 +2696,6 @@ function on.mouseDown(x,y)	current_screen():mouseDown(x,y)	 end
 function on.mouseUp(x,y)	if (x == 0 and y == 0) then current_screen():enterKey() else current_screen():mouseUp(x,y) end	 end
 function on.mouseMove(x,y)	current_screen():mouseMove(x,y)  end
 function on.clearKey()    	current_screen():clearKey()      end
-
 function uCol(col)
 	return col[1] or 0, col[2] or 0, col[3] or 0
 end
@@ -2854,6 +2847,7 @@ function sInput:init()
 	
 	self.value	=	""	
 	self.bgcolor	=	{255,255,255}
+    self.focuscolor = platform.isColorDisplay() and {40,148,184} or {0,0,0}
 	self.disabledcolor	= {128,128,128}
 	self.font	=	{"sansserif", "r", 10}
 	self.disabled	= false
@@ -2872,7 +2866,7 @@ function sInput:paint(gc)
 	gc:drawRect(x, y, self.w, self.h)
 	
 	if self.hasFocus then
-        gc:setColorRGB(40, 148, 184)
+        gc:setColorRGB(uCol(self.focuscolor))
         gc:drawRect(x-1, y-1, self.w+2, self.h+2)
         gc:setColorRGB(0, 0, 0)
     end
@@ -3018,13 +3012,14 @@ function sButton:init(text, action)
     self.dh	=	27
     self.dw	=	48
 
-    self.bordercolor	=	{136,136,136}
-    self.font	=	{"sansserif", "r", 10}
+    self.bordercolor = platform.isColorDisplay() and {136,136,136} or {160,160,160}
+    self.focuscolor = platform.isColorDisplay() and {40,148,184} or {0,0,0}
+    self.font = {"sansserif", "r", 10}
 end
 
 function sButton:paint(gc)
     gc:setFont(uCol(self.font))
-    self.ww	=	gc:getStringWidth(self.text)+8
+    self.ww	=	gc:getStringWidth(self.text)+10
     self:size()
 
     if self.pushed and self.forcePushed then
@@ -3035,10 +3030,10 @@ function sButton:paint(gc)
     gc:fillRect(self.x+2, self.y+2, self.w-4, self.h-4)
     gc:setColorRGB(0,0,0)
 
-    gc:drawString(self.text, self.x+4, self.y+4, "top")
+    gc:drawString(self.text, self.x+5, self.y+3, "top")
 
     if self.hasFocus then
-        gc:setColorRGB(40, 148, 184)
+        gc:setColorRGB(uCol(self.focuscolor))
         gc:setPen("medium", "smooth")
     else
         gc:setColorRGB(uCol(self.bordercolor))
@@ -3052,10 +3047,10 @@ function sButton:paint(gc)
     gc:fillRect(self.x+self.w-2, self.y+1, 1, self.h-2)
 
     if self.hasFocus then
-        gc:setColorRGB(40, 148, 184)
+        gc:setColorRGB(uCol(self.focuscolor))
         -- old way of indicating focus :
-        --gc:drawRect(self.x-2, self.y-2, self.w+3, self.h+3)
-        --gc:drawRect(self.x-3, self.y-3, self.w+5, self.h+5)
+        -- gc:drawRect(self.x-2, self.y-2, self.w+3, self.h+3)
+        -- gc:drawRect(self.x-3, self.y-3, self.w+5, self.h+5)
     end
 end
 
@@ -3416,6 +3411,8 @@ function sDropdown:init(items)
 	self.rvalue	= items[1] or ""
 	self.rvaluen=self.valuen
 	
+    self.focuscolor = platform.isColorDisplay() and {40,148,184} or {0,0,0}
+	
 	self.sList.parentWidget = self
 	self.screen.parentWidget = self
 	--self.screen.focus=1
@@ -3511,7 +3508,7 @@ function sDropdown:paint(gc)
 	gc:drawRect(self.x, self.y, self.w-1, self.h-1)
 	
 	if self.hasFocus then
-        gc:setColorRGB(40, 148, 184)
+        gc:setColorRGB(uCol(self.focuscolor))
         gc:drawRect(self.x-1, self.y-1, self.w+1, self.h+1)
         gc:setColorRGB(0, 0, 0)
     end
@@ -3531,8 +3528,6 @@ function sDropdown:paint(gc)
 	
 	gc:drawString(textLim(gc, text, self.w-5-22), self.x+5, self.y, "top")
 end
-
-
 function math.solve(formula, tosolve)
     --local eq="max(exp" .. string.uchar(9654) .. "list(solve(" .. formula .. ", " .. tosolve ..")," .. tosolve .."))"
     local eq = "nsolve(" .. formula .. ", " .. tosolve .. ")"
@@ -3663,7 +3658,7 @@ function CategorySel:paint(gc)
         gc:drawString("FormulaPro", self.x + 5, 0, "top")
 
         gc:setFont("sansserif", "r", 12)
-        gc:drawString("v1.4b", self.x + .4 * self.w, 4, "top")
+        gc:drawString("v1.41b", self.x + .4 * self.w, 4, "top")
 
         gc:setFont("sansserif", "r", 12)
         gc:drawString("by TI-Planet", self.x + self.w - gc:getStringWidth("by TI-Planet") - 5, 4, "top")
@@ -3763,10 +3758,10 @@ manualSolver.sb = scrollBar(-50)
 manualSolver:appendWidget(manualSolver.sb, -2, 3)
 
 manualSolver.back = sButton(utf8(9664) .. " Back")
-manualSolver:appendWidget(manualSolver.back, 5, -5)
+manualSolver:appendWidget(manualSolver.back, 5, -6)
 
 manualSolver.usedFormulas = sButton("Formulas")
-manualSolver:appendWidget(manualSolver.usedFormulas, -5, -5)
+manualSolver:appendWidget(manualSolver.usedFormulas, -5, -6)
 
 function manualSolver.back:action()
     manualSolver:escapeKey()
@@ -3792,13 +3787,13 @@ function manualSolver:paint(gc)
     local len = gc:getStringWidth(name)
     if len >= .7*self.w then name = string.sub(name, 1, -10) .. ". " end
     local len = gc:getStringWidth(name)
-    local x = self.x + (self.w - len) / 2
+    local x = self.x + (self.w - len) / 2 - 4
 
     --gc:setColorRGB(255,255,255)
     --gc:fillRect(x-3, 10, len+6, 18)
 
     gc:setColorRGB(0, 0, 0)
-    gc:drawString(name, x, self.h - 28, "top")
+    gc:drawString(name, x, self.h - 30, "top")
     --gc:drawRect(x-3, 10, len+6, 18)
 end
 
@@ -4612,7 +4607,7 @@ Ref.addRefs()
 
 aboutWindow	= Dialog("About FormulaPro :", 50, 20, 280, 180)
 
-local aboutstr	= [[FormulaPro v1.4b
+local aboutstr	= [[FormulaPro v1.41b
 --------------------
 Jim Bauwens, Adrien "Adriweb" Bertrand
 Thanks also to Levak.

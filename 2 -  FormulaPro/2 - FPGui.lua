@@ -29,7 +29,7 @@ function CategorySel:paint(gc)
         gc:drawString("FormulaPro", self.x + 5, 0, "top")
 
         gc:setFont("sansserif", "r", 12)
-        gc:drawString("v1.4b", self.x + .4 * self.w, 4, "top")
+        gc:drawString("v1.41b", self.x + .4 * self.w, 4, "top")
 
         gc:setFont("sansserif", "r", 12)
         gc:drawString("by TI-Planet", self.x + self.w - gc:getStringWidth("by TI-Planet") - 5, 4, "top")
@@ -129,10 +129,10 @@ manualSolver.sb = scrollBar(-50)
 manualSolver:appendWidget(manualSolver.sb, -2, 3)
 
 manualSolver.back = sButton(utf8(9664) .. " Back")
-manualSolver:appendWidget(manualSolver.back, 5, -5)
+manualSolver:appendWidget(manualSolver.back, 5, -6)
 
 manualSolver.usedFormulas = sButton("Formulas")
-manualSolver:appendWidget(manualSolver.usedFormulas, -5, -5)
+manualSolver:appendWidget(manualSolver.usedFormulas, -5, -6)
 
 function manualSolver.back:action()
     manualSolver:escapeKey()
@@ -158,13 +158,13 @@ function manualSolver:paint(gc)
     local len = gc:getStringWidth(name)
     if len >= .7*self.w then name = string.sub(name, 1, -10) .. ". " end
     local len = gc:getStringWidth(name)
-    local x = self.x + (self.w - len) / 2
+    local x = self.x + (self.w - len) / 2 - 4
 
     --gc:setColorRGB(255,255,255)
     --gc:fillRect(x-3, 10, len+6, 18)
 
     gc:setColorRGB(0, 0, 0)
-    gc:drawString(name, x, self.h - 28, "top")
+    gc:drawString(name, x, self.h - 30, "top")
     --gc:drawRect(x-3, 10, len+6, 18)
 end
 

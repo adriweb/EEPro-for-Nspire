@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # Jim and Adriweb
-# Building FormulaPro Nspire v1.4alpha....
+# Building FormulaPro Nspire v1.41b....
 
-echo "Building FormulaPro Nspire v1.4alpha..."
+echo "Building FormulaPro Nspire v1.41b..."
 echo "Building the database"
 
 cd 0\ -\ \ Database
