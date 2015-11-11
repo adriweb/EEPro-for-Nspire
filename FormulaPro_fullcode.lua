@@ -1,6 +1,6 @@
 --------------------------
----- FormulaPro 1.41b ----
-----  (Aug. 7, 2014)  ----
+---- FormulaPro 1.42b ----
+----  (Nov 11, 2015)  ----
 ----  LGLP 3 License  ----
 --------------------------
 ----   Jim Bauwens    ----
@@ -2682,6 +2682,10 @@ function on.resize(w, h)
 	for _,screen in pairs(Screens) do
 		screen:resize(w,h)
 	end
+
+	-- No better place?
+	toolpalette.enableCopy(true)
+	toolpalette.enablePaste(true)
 end
 
 function on.arrowKey(arrw)	current_screen():arrowKey(arrw)  end
@@ -3658,7 +3662,7 @@ function CategorySel:paint(gc)
         gc:drawString("FormulaPro", self.x + 5, 0, "top")
 
         gc:setFont("sansserif", "r", 12)
-        gc:drawString("v1.41b", self.x + .4 * self.w, 4, "top")
+        gc:drawString("v1.42b", self.x + .4 * self.w, 4, "top")
 
         gc:setFont("sansserif", "r", 12)
         gc:drawString("by TI-Planet", self.x + self.w - gc:getStringWidth("by TI-Planet") - 5, 4, "top")
@@ -4607,7 +4611,7 @@ Ref.addRefs()
 
 aboutWindow	= Dialog("About FormulaPro :", 50, 20, 280, 180)
 
-local aboutstr	= [[FormulaPro v1.41b
+local aboutstr	= [[FormulaPro v1.42b
 --------------------
 Jim Bauwens, Adrien "Adriweb" Bertrand
 Thanks also to Levak.

@@ -533,6 +533,10 @@ function on.resize(w, h)
 	for _,screen in pairs(Screens) do
 		screen:resize(w,h)
 	end
+
+	-- No better place?
+	toolpalette.enableCopy(true)
+	toolpalette.enablePaste(true)
 end
 
 function on.arrowKey(arrw)	current_screen():arrowKey(arrw)  end

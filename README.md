@@ -23,7 +23,7 @@ We welcome everybody, so if you want to help us, contact us by email (see down t
 The only requirement to run the .tns files is to have an Nspire OS >= 3.0. You can find the latest updates [here](http://education.ti.com). Version 3.9 is preferred to enjoy the latest features, and 3.1/3.6 if you want to keep Ndless.
 
 ## What we have done, so far :
-Well, "FormulaPro", the formulas/equation part (2nd part of EEPro). Its latest stable version is 1.41b
+Well, "FormulaPro", the formulas/equation part (2nd part of EEPro). Its latest stable version is 1.42b
 This has been officially released (in beta) June 21st 2012 across multiple community websites :
 http://www.omnimaga.org/index.php?topic=13849 ; https://groups.google.com/forum/?fromgroups#!topic/tinspire/dlqZrAKpulM ; http://tiplanet.org/forum/viewtopic.php?p=126193 ; http://www.inspired-lua.org/2012/06/formulapro-v1-is-here/
 
