@@ -16,7 +16,7 @@ Many thanks too to Critor, Excale, NeoCrisis ... and TI of course :)
 We welcome everybody, so if you want to help us, contact us by email (see down there)
 
 ## What .... ?
-###Please READ (and comment if you want) this reference document : [Link](https://docs.google.com/document/d/1LBjZiKBB3k_bAIDWjTVRH9zTrX5DUQZ6BOXLhKveqJk/edit).
+### Please READ (and comment if you want) this reference document : [Link](https://docs.google.com/document/d/1LBjZiKBB3k_bAIDWjTVRH9zTrX5DUQZ6BOXLhKveqJk/edit).
 
 ![The overall organization](http://i.imgur.com/UhHn7.png)
  
@@ -25,7 +25,10 @@ The only requirement to run the .tns files is to have an Nspire OS >= 3.0. You c
 ## What we have done, so far :
 Well, "FormulaPro", the formulas/equation part (2nd part of EEPro). Its latest stable version is 1.42b
 This has been officially released (in beta) June 21st 2012 across multiple community websites :
-http://www.omnimaga.org/index.php?topic=13849 ; https://groups.google.com/forum/?fromgroups#!topic/tinspire/dlqZrAKpulM ; http://tiplanet.org/forum/viewtopic.php?p=126193 ; http://www.inspired-lua.org/2012/06/formulapro-v1-is-here/
+* http://www.omnimaga.org/index.php?topic=13849
+* https://groups.google.com/forum/?fromgroups#!topic/tinspire/dlqZrAKpulM 
+* http://tiplanet.org/forum/viewtopic.php?p=126193 
+* http://www.inspired-lua.org/2012/06/formulapro-v1-is-here/
 
 ![Home Screen of FormulaPro](http://i.imgur.com/Uxy5N.jpg)
 ![Reference Screen of FormulaPro](http://i.imgur.com/lcrYU.jpg)
